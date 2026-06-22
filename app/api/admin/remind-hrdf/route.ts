@@ -1,0 +1,32 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getSession } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+
+export async function POST(request: NextRequest) {
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { bookingId } = await request.json().catch(() => ({}));
+  if (!bookingId) return NextResponse.json({ error: "bookingId required" }, { status: 400 });
+
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { program: { select: { title: true } } },
+  });
+  if (!booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+
+  // Send notification to HR
+  await prisma.notification.create({
+    data: {
+      userId: booking.hrId,
+      type: "HRDF_DEADLINE",
+      title: `⏰ HRDF Claim Reminder: ${booking.program.title}`,
+      body: `Admin reminds you to submit the HRDF claim for "${booking.program.title}" — completed ${Math.floor((Date.now() - new Date(booking.programDate).getTime()) / 86400000)} days ago. Submit before it expires.`,
+      link: `/hr/bookings/${booking.id}`,
+    },
+  });
+
+  return NextResponse.json({ success: true, reminded: true });
+}

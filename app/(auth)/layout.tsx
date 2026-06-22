@@ -1,0 +1,14 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login — TrainHub MY",
+  description: "Sign in to TrainHub Malaysia",
+};
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      {children}
+    </div>
+  );
+}

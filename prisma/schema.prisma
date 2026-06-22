@@ -1,0 +1,624 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── User & Auth ───────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("HR") // ADMIN | TRAINER | HR
+  companyId    String?
+  company      Company? @relation(fields: [companyId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  trainerProfile    TrainerProfile?
+  programs          Program[]
+  bookingsAsHR      Booking[]        @relation("HRBookings")
+  reimbursements    Reimbursement[]
+  sentMessages      Message[]        @relation("SenderMessages")
+  receivedMessages  Message[]        @relation("ReceiverMessages")
+  reviews           Review[]         @relation("HRReviews")
+  leavesApproved    Leave[]          @relation("ApprovedBy")
+  votes             ProgramVote[]
+  tickets           SupportTicket[]
+  changelogs        Changelog[]
+  availabilities    TrainerAvailability[]
+  teamBuildingReqs  TeamBuildingRequest[]
+  trainingPlans     TrainingPlanItem[]
+  notifications     Notification[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Company {
+  id             String   @id @default(cuid())
+  name           String
+  address        String?
+  state          String?
+  regNumber      String?
+  createdAt      DateTime @default(now())
+
+  users          User[]
+  bookings       Booking[]
+  employees      Employee[]
+  invoices       Invoice[]
+  tickets        SupportTicket[]
+  teamBuildingReqs TeamBuildingRequest[]
+  trainingPlans  TrainingPlanItem[]
+}
+
+// ─── Trainer ───────────────────────────────────────────────
+
+model TrainerProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  bio         String?
+  expertise   String   @default("[]") // JSON array
+  accreditations String? @default("[]") // JSON array: "HRDF Accredited", "MBOT Certified", etc.
+  bankName    String?
+  bankAccount String?
+  hourlyRate  Float    @default(0)
+  rating      Float    @default(0)
+  totalPrograms Int    @default(0)
+  createdAt   DateTime @default(now())
+
+  reviews     Review[] @relation("TrainerReviews")
+}
+
+// ─── Training Programs ─────────────────────────────────────
+
+model Program {
+  id              String   @id @default(cuid())
+  trainerId       String
+  trainer         User     @relation(fields: [trainerId], references: [id])
+  title           String
+  description     String
+  category        String   // Leadership, Technical, Soft Skills, Compliance, Team Building, etc.
+  durationHours   Float    @default(4)
+  maxParticipants Int      @default(20)
+  pricePerPax     Float    @default(0)
+  locationType    String   @default("onsite") // onsite | online | hybrid
+  syllabus        String?  // JSON array of topics
+  status          String   @default("DRAFT") // DRAFT | PUBLISHED | ARCHIVED
+  featured        Boolean  @default(false)
+  featuredAt      DateTime?
+  proposalUrl     String?
+  proposalLabel   String?
+  thumbnailUrl    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  modules         Module[]
+  bookings        Booking[]
+  votes           ProgramVote[]
+  itinerary       ItineraryItem[]
+
+  @@index([trainerId])
+  @@index([status])
+  @@index([category])
+}
+
+model Module {
+  id            String   @id @default(cuid())
+  programId     String
+  program       Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  title         String
+  description   String?
+  orderIndex    Int      @default(0)
+  durationMins  Int      @default(60)
+
+  quizzes       Quiz[]
+  materials     Material[]
+
+  @@index([programId])
+}
+
+model Quiz {
+  id            String   @id @default(cuid())
+  moduleId      String
+  module        Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title         String
+  description   String?
+  passingScore  Float    @default(50)
+  timeLimitMins Int      @default(30)
+  createdAt     DateTime @default(now())
+
+  questions     Question[]
+  participants  Participant[]
+
+  @@index([moduleId])
+}
+
+model Question {
+  id            String   @id @default(cuid())
+  quizId        String
+  quiz          Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  text          String
+  type          String   @default("MCQ") // MCQ | TRUE_FALSE | SHORT_ANSWER
+  options       String   @default("[]")  // JSON array for MCQ options
+  correctAnswer String
+  points        Int      @default(1)
+  orderIndex    Int      @default(0)
+
+  @@index([quizId])
+}
+
+model Material {
+  id          String   @id @default(cuid())
+  moduleId    String
+  module      Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title       String
+  fileUrl     String
+  fileType    String   @default("pdf") // pdf | ppt | video | doc | image
+  orderIndex  Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([moduleId])
+}
+
+// ─── Bookings ──────────────────────────────────────────────
+
+model Booking {
+  id           String   @id @default(cuid())
+  programId    String
+  program      Program  @relation(fields: [programId], references: [id])
+  hrId         String
+  hr           User     @relation("HRBookings", fields: [hrId], references: [id])
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id])
+  programDate  DateTime
+  totalFee     Float    @default(0)
+  depositPaid  Float    @default(0)
+  depositStatus String  @default("UNPAID") // UNPAID | PAID | REFUNDED
+  status       String   @default("PENDING") // PENDING | CONFIRMED | COMPLETED | CANCELLED
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // HRDF claim tracking — dual party
+  hrdfScheme              String?   // SBL | SBL_KHAS
+  employerHrdfSubmitted   Boolean   @default(false)
+  employerHrdfSubmittedAt DateTime?
+  trainerHrdfSubmitted    Boolean   @default(false)
+  trainerHrdfSubmittedAt  DateTime?
+  trainerDocumentsUrl     String?
+
+  // Venue / location
+  venuePreference String?  // "as_program" | "online" | "onsite" — HR's choice
+  venueAddress    String?  // confirmed venue address (nullable = TBD)
+  venueConfirmed  Boolean  @default(false)
+
+  participants     Participant[]
+  evaluations      Evaluation[]
+  invoices         Invoice[]
+  reimbursements   Reimbursement[]
+  messages         Message[]
+  reviews          Review[]
+  trainingPlanItems TrainingPlanItem[]
+
+  @@index([programId])
+  @@index([hrId])
+  @@index([companyId])
+  @@index([status])
+}
+
+model Participant {
+  id               String   @id @default(cuid())
+  bookingId        String
+  booking          Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  employeeId       String?
+  employee         Employee? @relation(fields: [employeeId], references: [id])
+  name             String
+  email            String?
+  icNumber         String?
+  department       String?
+  attendanceStatus String   @default("PENDING") // PENDING | PRESENT | ABSENT
+  quizId           String?
+  quiz             Quiz?    @relation(fields: [quizId], references: [id])
+  quizScore        Float?
+  certificateUrl   String?
+  createdAt        DateTime @default(now())
+
+  @@index([bookingId])
+}
+
+// ─── Evaluations ───────────────────────────────────────────
+
+model Evaluation {
+  id           String   @id @default(cuid())
+  bookingId    String
+  booking      Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  title        String
+  questions    String   @default("[]") // JSON: [{question, type: RATING|TEXT, maxRating}]
+  sentAt       DateTime?
+  responses    String   @default("[]") // JSON: [{participantId, answers: [{questionIdx, rating, comment}]}]
+  summaryScore Float?
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+
+  @@index([bookingId])
+}
+
+// ─── Financials ────────────────────────────────────────────
+
+model Invoice {
+  id            String    @id @default(cuid())
+  bookingId     String
+  booking       Booking   @relation(fields: [bookingId], references: [id])
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  invoiceNumber String    @unique
+  amount        Float     @default(0)
+  status        String    @default("PENDING") // PENDING | SENT | PAID | OVERDUE | CANCELLED
+  issuedAt      DateTime  @default(now())
+  dueDate       DateTime?
+  paidAt        DateTime?
+  // Financial breakdown
+  programFee    Float?    // Amount HR pays for the training
+  trainerFee    Float?    // Amount trainer receives
+  hrdfFee       Float?    // HRD Corp levy (1% of program fee, if applicable)
+  platformFee   Float?    // Platform commission
+  sst           Float?    // SST 8% on platform fee
+  netPay        Float?    // Final amount trainer receives
+  createdAt     DateTime  @default(now())
+
+  @@index([bookingId])
+  @@index([companyId])
+}
+
+model Reimbursement {
+  id          String   @id @default(cuid())
+  bookingId   String
+  booking     Booking  @relation(fields: [bookingId], references: [id])
+  trainerId   String
+  trainer     User     @relation(fields: [trainerId], references: [id])
+  amount      Float
+  description String?
+  receiptUrl  String?
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | PAID
+  adminNotes  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([trainerId])
+}
+
+// ─── Employee Records (HR's internal database) ─────────────
+
+model Employee {
+  id             String   @id @default(cuid())
+  companyId      String
+  company        Company  @relation(fields: [companyId], references: [id])
+  name           String
+  icNumber       String?
+  email          String?
+  phone          String?
+  department     String?
+  position       String?
+  dateJoined     DateTime?
+  employmentType String   @default("PERMANENT") // PERMANENT | CONTRACT | PART_TIME | INTERN | PROBATION
+  status         String   @default("ACTIVE")    // ACTIVE | INACTIVE | TERMINATED | RESIGNED
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  participants   Participant[]
+  leaves         Leave[]
+  attendances    Attendance[]
+  payrolls       Payroll[]
+  claims         Claim[]
+
+  @@index([companyId])
+  @@index([icNumber])
+}
+
+// ─── HR Modules: Leave, Attendance, Payroll, Claims ────────
+
+model Leave {
+  id          String   @id @default(cuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  type        String   // ANNUAL | MEDICAL | HOSPITALISATION | MATERNITY | PATERNITY | HAJJ | COMPASSIONATE | MARRIAGE | UNPAID | REPLACEMENT
+  startDate   DateTime
+  endDate     DateTime
+  days        Float
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | CANCELLED
+  reason      String?
+  approvedById String?
+  approvedBy  User?    @relation("ApprovedBy", fields: [approvedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([employeeId])
+}
+
+model Attendance {
+  id          String   @id @default(cuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  date        DateTime
+  clockIn     DateTime?
+  clockOut    DateTime?
+  status      String   @default("PRESENT") // PRESENT | LATE | ABSENT | HALF_DAY | ON_LEAVE | PUBLIC_HOLIDAY
+  location    String?   // GPS coordinates or description
+  createdAt   DateTime @default(now())
+
+  @@index([employeeId])
+  @@index([date])
+}
+
+model Payroll {
+  id            String   @id @default(cuid())
+  employeeId    String
+  employee      Employee @relation(fields: [employeeId], references: [id])
+  periodStart   DateTime
+  periodEnd     DateTime
+  basicSalary   Float    @default(0)
+  allowances    Float    @default(0)
+  deductions    Float    @default(0)
+  overtimePay   Float    @default(0)
+  epfEmployee   Float    @default(0)
+  epfEmployer   Float    @default(0)
+  socsoEmployee Float    @default(0)
+  socsoEmployer Float    @default(0)
+  eisEmployee   Float    @default(0)
+  eisEmployer   Float    @default(0)
+  pcb           Float    @default(0)
+  zakat         Float    @default(0)
+  tabungHaji    Float    @default(0)
+  netPay        Float    @default(0)
+  status        String   @default("DRAFT") // DRAFT | FINALISED | PAID
+  createdAt     DateTime @default(now())
+
+  @@index([employeeId])
+}
+
+model Claim {
+  id          String   @id @default(cuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  type        String   // MILEAGE | TRAVEL | MEAL | MEDICAL | OPTICAL | DENTAL | OTHER
+  amount      Float
+  description String?
+  receiptUrl  String?
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | PAID
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([employeeId])
+}
+
+// ─── Communication & Reviews ───────────────────────────────
+
+model Message {
+  id        String   @id @default(cuid())
+  senderId  String
+  sender    User     @relation("SenderMessages", fields: [senderId], references: [id])
+  receiverId String
+  receiver  User     @relation("ReceiverMessages", fields: [receiverId], references: [id])
+  bookingId String?
+  booking   Booking? @relation(fields: [bookingId], references: [id])
+  content   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([bookingId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  hrId      String
+  hr        User     @relation("HRReviews", fields: [hrId], references: [id])
+  trainerId String
+  trainer   TrainerProfile @relation("TrainerReviews", fields: [trainerId], references: [id])
+  rating    Int      // 1-5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@unique([bookingId])
+  @@index([trainerId])
+}
+
+// ─── Program Voting ──────────────────────────────────────────
+
+model ProgramVote {
+  id        String   @id @default(cuid())
+  hrId      String
+  hr        User     @relation(fields: [hrId], references: [id])
+  programId String
+  program   Program  @relation(fields: [programId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([hrId, programId])
+  @@index([programId])
+}
+
+// ─── Support Tickets ────────────────────────────────────────
+
+model SupportTicket {
+  id          String   @id @default(cuid())
+  hrId        String
+  hr          User     @relation(fields: [hrId], references: [id])
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  subject     String
+  description String
+  category    String   @default("GENERAL")
+  priority    String   @default("MEDIUM")
+  status      String   @default("OPEN")
+  adminNotes  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([hrId])
+  @@index([companyId])
+  @@index([status])
+}
+
+// ─── Changelog ───────────────────────────────────────────────
+
+model Changelog {
+  id        String   @id @default(cuid())
+  version   String
+  title     String
+  type      String   @default("FEATURE")
+  details   String?
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+}
+
+// ─── Program Itinerary ──────────────────────────────────────
+
+model ItineraryItem {
+  id         String  @id @default(cuid())
+  programId  String
+  program    Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  type       String  @default("MODULE") // REGISTRATION | MEAL | MODULE | BREAK | CLOSING
+  title      String
+  startTime  String  // "08:30"
+  endTime    String  // "09:00"
+  orderIndex Int     @default(0)
+
+  @@index([programId])
+}
+
+// ─── Team Building Requests ──────────────────────────────
+
+model TeamBuildingRequest {
+  id              String   @id @default(cuid())
+  hrId            String
+  hr              User     @relation(fields: [hrId], references: [id])
+  companyId       String
+  company         Company  @relation(fields: [companyId], references: [id])
+
+  eventName       String?
+  hqLocation      String
+  teamSize        Int
+  avgAge          Float
+  ageMin          Int
+  ageMax          Int
+
+  activityId      String
+  activityName    String
+  activityCategory String
+  venueId         String
+  venueName       String
+  venueAddress    String
+
+  startDate       DateTime
+  isConsecutive   Boolean  @default(false)
+  batchCount      Int      @default(1)
+
+  activityCost    Float
+  accommodationCost Float  @default(0)
+  totalCost       Float
+  hrdfClaimable   Float
+
+  status          String   @default("SUBMITTED") // SUBMITTED | REVIEWING | APPROVED | REJECTED | COMPLETED
+
+  // HRDF tracking — both parties
+  hrdfScheme      String?  // SBL (employer claims) | SBL_KHAS (trainer claims)
+  employerHrdfSubmitted   Boolean  @default(false)
+  employerHrdfSubmittedAt DateTime?
+  trainerHrdfSubmitted    Boolean  @default(false)
+  trainerHrdfSubmittedAt  DateTime?
+  trainerDocumentsUrl     String?   // trainer uploads invoice, attendance, eval for employer claim
+
+  adminNotes      String?
+  invoiceUrl      String?
+  proposalUrl     String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([hrId])
+  @@index([companyId])
+  @@index([status])
+}
+
+// ─── Training Plan Items (HR annual planning) ──────────────
+
+model TrainingPlanItem {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  hrId        String
+  hr          User     @relation(fields: [hrId], references: [id])
+
+  title       String
+  category    String   // Leadership, Technical, Soft Skills, Compliance, Team Building, HR Operations
+  department  String?  // Target department
+  targetCount Int      @default(1)
+
+  targetMonth Int      // 0-11 (Jan-Dec)
+  targetYear  Int
+
+  estimatedCost Float  @default(0)
+  priority    String   @default("MEDIUM") // HIGH | MEDIUM | LOW
+
+  status      String   @default("DRAFT") // DRAFT | MATCHED | SCHEDULED | COMPLETED | CANCELLED
+
+  bookingId   String?
+  booking     Booking? @relation(fields: [bookingId], references: [id])
+
+  matchedProgramId String?
+
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([companyId])
+  @@index([status])
+  @@index([targetYear, targetMonth])
+}
+
+// ─── Notifications ─────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // PLAN_APPROVED | PLAN_REJECTED | BOOKING_CONFIRMED | BOOKING_COMPLETED | HRDF_DEADLINE | BOOKING_CREATED | MESSAGE
+  title     String
+  body      String?
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([read])
+}
+
+// ─── Trainer Availability ──────────────────────────────────
+
+model TrainerAvailability {
+  id        String   @id @default(cuid())
+  trainerId String
+  trainer   User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  date      DateTime
+  status    String   @default("AVAILABLE") // AVAILABLE | UNAVAILABLE
+  reason    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([trainerId, date])
+  @@index([trainerId])
+  @@index([date])
+}
