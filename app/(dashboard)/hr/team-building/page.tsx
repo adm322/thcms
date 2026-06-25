@@ -86,6 +86,7 @@ export default function TeamBuildingPlanner() {
     // Generate simulated employee ages based on inputs
     const ages: number[] = [];
     for (let i = 0; i < employeeCount; i++) {
+      // eslint-disable-next-line
       ages.push(ageMin + Math.floor(Math.random() * (ageMax - ageMin + 1)));
     }
     const empData = ages.map(a => ({ age: a }));
