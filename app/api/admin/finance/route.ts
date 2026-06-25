@@ -28,15 +28,21 @@ export async function GET() {
   });
 
   // Update invoices with calculated breakdowns if not set
+  const updates = [];
   for (const inv of invoices) {
     if (inv.platformFee == null) {
       const bd = calcBreakdown(inv);
-      await prisma.invoice.update({
-        where: { id: inv.id },
-        data: { programFee: bd.programFee, trainerFee: bd.trainerFee, hrdfFee: bd.hrdfFee, platformFee: bd.platformFee, sst: bd.sst, netPay: bd.netPay },
-      });
+      updates.push(
+        prisma.invoice.update({
+          where: { id: inv.id },
+          data: { programFee: bd.programFee, trainerFee: bd.trainerFee, hrdfFee: bd.hrdfFee, platformFee: bd.platformFee, sst: bd.sst, netPay: bd.netPay },
+        })
+      );
       Object.assign(inv, bd);
     }
+  }
+  if (updates.length > 0) {
+    await prisma.$transaction(updates);
   }
 
   // Calculate with computed values
