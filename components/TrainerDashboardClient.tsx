@@ -69,6 +69,8 @@ export function TrainerDashboardClient({ initialData }: { initialData: any }) {
   const actions: any[] = initialData.actData?.actions || [];
   const reviews: any[] = (initialData.evals || []).slice(0, 3);
 
+  const [now] = useState(() => Date.now());
+
   const [availDays, setAvailDays] = useState<{ date: string; day: number; status: string; label?: string }[]>(
     initialData.availData?.days?.filter((day: any) => day.date >= new Date().toISOString().slice(0, 10)).slice(0, 14) || []
   );
@@ -202,7 +204,7 @@ export function TrainerDashboardClient({ initialData }: { initialData: any }) {
                 <div className="divide-y">
                   {upcoming.map((b: any, i: number) => {
                     const date = new Date(b.date);
-                    const daysUntil = Math.ceil((date.getTime() - Date.now()) / 86400000);
+                    const daysUntil = Math.ceil((date.getTime() - now) / 86400000);
                     return (
                       <Link key={b.id} href={`/trainer/bookings/${b.id}`}
                         className="flex items-center gap-4 px-5 py-3 hover:bg-accent/50 transition-colors"

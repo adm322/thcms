@@ -17,6 +17,7 @@ import {
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ParticipantVoting from "@/components/ParticipantVoting";
 
 export default async function ParticipantDashboard() {
   const session = await getSession();
@@ -163,6 +164,9 @@ export default async function ParticipantDashboard() {
           </TabsTrigger>
           <TabsTrigger value="achievements">
             Achievements & Certificates ({completedClasses.length})
+          </TabsTrigger>
+          <TabsTrigger value="voting">
+            Request Training
           </TabsTrigger>
         </TabsList>
 
@@ -346,6 +350,11 @@ export default async function ParticipantDashboard() {
               })}
             </div>
           )}
+        </TabsContent>
+
+        {/* Tab 3: Request Training */}
+        <TabsContent value="voting" className="space-y-4 outline-none">
+          <ParticipantVoting />
         </TabsContent>
       </Tabs>
     </div>
