@@ -117,8 +117,6 @@ export async function DELETE(
   // Modules cascade to quizzes, questions, materials
   const modules = await prisma.module.findMany({ where: { programId: id }, select: { id: true } });
   for (const m of modules) {
-    // Participants reference quizzes
-    await prisma.participant.updateMany({ where: { quizId: { in: (await prisma.quiz.findMany({ where: { moduleId: m.id }, select: { id: true } })).map(q => q.id) } }, data: { quizId: null } });
     await prisma.question.deleteMany({ where: { quiz: { moduleId: m.id } } });
     await prisma.quiz.deleteMany({ where: { moduleId: m.id } });
     await prisma.material.deleteMany({ where: { moduleId: m.id } });

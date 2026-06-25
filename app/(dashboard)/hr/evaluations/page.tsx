@@ -16,9 +16,9 @@ export default function HREvaluations() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Evaluations</h1>
-      <div className="space-y-2">
+      <div className="space-y-3">
         {evals.map((e) => (
-          <Link key={e.id} href={`/hr/evaluations/${e.id}/summary`}>
+          <Link key={e.id} href={`/hr/evaluations/${e.id}/summary`} className="block">
             <Card className="hover:bg-accent/50 cursor-pointer">
               <CardContent className="flex items-center justify-between py-4">
                 <div>

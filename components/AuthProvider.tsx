@@ -1,13 +1,13 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export interface AuthUser {
   id: string;
   email: string;
   name: string;
-  role: "ADMIN" | "TRAINER" | "HR";
+  role: "ADMIN" | "TRAINER" | "HR" | "PARTICIPANT";
   companyId?: string | null;
 }
 
@@ -33,7 +33,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const pathname = usePathname();
 
   const fetchUser = useCallback(async () => {
     try {
@@ -51,10 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // ponytail: fetch once on mount only — JWT cookie is validated server-side per request
   useEffect(() => {
-    setLoading(true);
     fetchUser();
-  }, [fetchUser, pathname]); // Re-fetch on route change
+  }, [fetchUser]);
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });

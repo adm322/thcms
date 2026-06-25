@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Trash2, Plus, Save, X, GripVertical, HelpCircle, Sparkles } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 const QUESTION_TYPES = ["MCQ", "TRUE_FALSE", "SHORT_ANSWER"];
 
@@ -98,7 +99,14 @@ function QuestionEditor({ quizId }: { quizId: string }) {
             {form.type === "MCQ" && form.options.map((opt: string, i: number) => (
               <div key={i} className="flex gap-2">
                 <Input value={opt} onChange={(e) => { const o = [...form.options]; o[i] = e.target.value; setForm({ ...form, options: o }); }} placeholder={`Option ${i + 1}`} />
-                <Button variant="ghost" size="icon" onClick={() => setForm({ ...form, correctAnswer: opt })} title="Set correct">{form.correctAnswer === opt ? "✅" : "⬜"}</Button>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="ghost" size="icon" onClick={() => setForm({ ...form, correctAnswer: opt })}>
+                      {form.correctAnswer === opt ? "✅" : "⬜"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Set correct</TooltipContent>
+                </Tooltip>
               </div>
             ))}
             {form.type === "TRUE_FALSE" && (

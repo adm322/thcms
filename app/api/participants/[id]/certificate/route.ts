@@ -15,12 +15,25 @@ export async function GET(
           program: { select: { title: true, trainer: { select: { name: true } } } },
         },
       },
+      quizResults: true,
     },
   });
 
-  if (!participant || participant.quizScore == null) {
-    return NextResponse.json({ error: "Certificate not available" }, { status: 404 });
+  if (!participant || participant.attendanceStatus !== "PRESENT") {
+    return NextResponse.json({ error: "Certificate not available. Attendance required." }, { status: 403 });
   }
+
+  const programQuizzesCount = await prisma.quiz.count({
+    where: { module: { program: { bookings: { some: { id: participant.bookingId } } } } }
+  });
+
+  if (programQuizzesCount > 0 && participant.quizResults.length < programQuizzesCount) {
+    return NextResponse.json({ error: "Certificate not available. Please complete all course checkpoint quizzes." }, { status: 403 });
+  }
+
+  const avgScore = participant.quizResults.length > 0 
+    ? Math.round(participant.quizResults.reduce((sum, r) => sum + r.score, 0) / participant.quizResults.length) 
+    : null;
 
   const date = new Date(participant.booking.programDate);
 
@@ -45,7 +58,7 @@ export async function GET(
   <p style="font-size:14px;color:#888;">has successfully completed</p>
   <p class="program">${participant.booking.program.title}</p>
   <p class="trainer">Trainer: ${participant.booking.program.trainer.name}</p>
-  <p class="score">Quiz Score: ${participant.quizScore}%</p>
+  ${avgScore !== null ? `<p class="score">Average Quiz Score: ${avgScore}%</p>` : ""}
   <p class="date">${date.toLocaleDateString("en-MY", { day:"numeric", month:"long", year:"numeric" })}</p>
   <p class="brand">TrainHub Malaysia — HR & Training Platform</p>
 </div>

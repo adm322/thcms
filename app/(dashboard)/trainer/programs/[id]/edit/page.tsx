@@ -34,6 +34,7 @@ export default function EditProgram({ params }: { params: Promise<{ id: string }
           status: data.status,
           proposalUrl: data.proposalUrl || "",
           proposalLabel: data.proposalLabel || "",
+          thumbnailUrl: data.thumbnailUrl || "",
           itinerary: data.itinerary || [],
         });
       })
@@ -130,6 +131,10 @@ export default function EditProgram({ params }: { params: Promise<{ id: string }
             <div className="space-y-2">
               <label className="text-sm font-medium">Proposal Label</label>
               <Input value={form.proposalLabel || ""} onChange={(e) => setForm({ ...form, proposalLabel: e.target.value })} placeholder="e.g. Full training proposal with pricing" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Thumbnail URL</label>
+              <Input value={form.thumbnailUrl || ""} onChange={(e) => setForm({ ...form, thumbnailUrl: e.target.value })} placeholder="/thumbnails/custom.svg or https://..." />
             </div>
           </div>
 

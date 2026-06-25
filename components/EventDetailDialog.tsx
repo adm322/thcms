@@ -180,7 +180,7 @@ export function EventDetailDialog({ event, open, onClose, onStatusChange }: Even
 
         <Separator />
 
-        <DialogFooter className="flex gap-2 sm:gap-2">
+        <DialogFooter className="flex flex-col sm:flex-row sm:justify-end gap-2">
           {event.status === "PENDING" && (
             <>
               <Button

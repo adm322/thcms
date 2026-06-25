@@ -6,16 +6,16 @@ import { useLang } from "@/components/LanguageProvider";
 import { Sidebar } from "@/components/Sidebar";
 import { NotificationBell } from "@/components/NotificationBell";
 import { NextActionBanner } from "@/components/NextActionBanner";
-import { DevSwitcher } from "@/components/DevSwitcher";
 import { Loader2, Menu, X, Sun, Moon } from "lucide-react";
 import { useRouter } from "next/navigation";
+
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const { lang, setLang } = useLang();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -69,11 +69,8 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div>
-      {/* Dev Mode — in-flow at top, pushes all content down */}
-      <DevSwitcher currentEmail={user?.email} />
-
-      <div className="flex h-screen w-full overflow-hidden">
+    <div className="flex flex-col h-screen w-full overflow-hidden">
+      <div className="flex flex-1 w-full overflow-hidden">
 
       {/* === DESKTOP SIDEBAR (always visible on lg+) === */}
       <div className="hidden lg:flex lg:w-60 lg:flex-shrink-0">
@@ -130,11 +127,7 @@ export default function DashboardLayout({
           </button>
           <span className="text-sm text-muted-foreground hidden sm:inline">{user?.name}</span>
           <button
-            onClick={async () => {
-              await fetch("/api/auth/logout", { method: "POST" });
-              router.push("/login");
-              router.refresh();
-            }}
+            onClick={logout}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors ml-2"
           >
             Sign out
@@ -152,7 +145,9 @@ export default function DashboardLayout({
         </main>
 
         {/* Floating action widget */}
-        <NextActionBanner role={user.role as "HR" | "ADMIN" | "TRAINER"} />
+        {user.role !== "PARTICIPANT" && (
+          <NextActionBanner role={user.role as "HR" | "ADMIN" | "TRAINER"} />
+        )}
       </div>
     </div>
     </div>

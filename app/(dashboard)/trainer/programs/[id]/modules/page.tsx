@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, GripVertical, Trash2, Save } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 export default function ManageModules({ params }: { params: Promise<{ id: string }> }) {
   const { id: programId } = use(params);
@@ -90,11 +91,25 @@ export default function ManageModules({ params }: { params: Promise<{ id: string
               </div>
               <div className="flex items-center gap-1 flex-shrink-0">
                 {isEditing ? (
-                  <Button variant="ghost" size="icon" onClick={() => saveModule(mod.id)} title="Save"><Save className="h-4 w-4 text-emerald-600" /></Button>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Button variant="ghost" size="icon" onClick={() => saveModule(mod.id)}>
+                        <Save className="h-4 w-4 text-emerald-600" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Save</TooltipContent>
+                  </Tooltip>
                 ) : (
                   <Button variant="ghost" size="sm" onClick={() => startEdit(mod)}>Edit</Button>
                 )}
-                <Button variant="ghost" size="icon" onClick={() => deleteModule(mod.id)} title="Delete"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="ghost" size="icon" onClick={() => deleteModule(mod.id)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Delete</TooltipContent>
+                </Tooltip>
               </div>
             </CardContent>
           </Card>

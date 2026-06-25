@@ -14,7 +14,7 @@ model User {
   email        String   @unique
   passwordHash String
   name         String
-  role         String   @default("HR") // ADMIN | TRAINER | HR
+  role         String   @default("HR") // ADMIN | TRAINER | HR | PARTICIPANT
   companyId    String?
   company      Company? @relation(fields: [companyId], references: [id])
   createdAt    DateTime @default(now())
@@ -36,6 +36,7 @@ model User {
   teamBuildingReqs  TeamBuildingRequest[]
   trainingPlans     TrainingPlanItem[]
   notifications     Notification[]
+  participantProfile Participant[]
 
   @@index([email])
   @@index([role])
@@ -127,18 +128,35 @@ model Module {
 
 model Quiz {
   id            String   @id @default(cuid())
-  moduleId      String
-  module        Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId      String?
+  module        Module?  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   title         String
   description   String?
   passingScore  Float    @default(50)
   timeLimitMins Int      @default(30)
+  standalone    Boolean  @default(false)
+  shareToken    String?  @unique
   createdAt     DateTime @default(now())
 
   questions     Question[]
-  participants  Participant[]
+  quizResults   QuizResult[]
 
   @@index([moduleId])
+  @@index([shareToken])
+}
+
+model QuizResult {
+  id            String      @id @default(cuid())
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  quizId        String
+  quiz          Quiz        @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  score         Float
+  createdAt     DateTime    @default(now())
+
+  @@unique([participantId, quizId])
+  @@index([participantId])
+  @@index([quizId])
 }
 
 model Question {
@@ -198,6 +216,7 @@ model Booking {
   venuePreference String?  // "as_program" | "online" | "onsite" — HR's choice
   venueAddress    String?  // confirmed venue address (nullable = TBD)
   venueConfirmed  Boolean  @default(false)
+  meetingLink     String?  // zoom or google meet link
 
   participants     Participant[]
   evaluations      Evaluation[]
@@ -219,18 +238,19 @@ model Participant {
   booking          Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   employeeId       String?
   employee         Employee? @relation(fields: [employeeId], references: [id])
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id])
   name             String
   email            String?
   icNumber         String?
   department       String?
   attendanceStatus String   @default("PENDING") // PENDING | PRESENT | ABSENT
-  quizId           String?
-  quiz             Quiz?    @relation(fields: [quizId], references: [id])
-  quizScore        Float?
+  quizResults      QuizResult[]
   certificateUrl   String?
   createdAt        DateTime @default(now())
 
   @@index([bookingId])
+  @@index([userId])
 }
 
 // ─── Evaluations ───────────────────────────────────────────
@@ -604,6 +624,18 @@ model Notification {
 
   @@index([userId])
   @@index([read])
+}
+
+// ─── Code of Conduct ──────────────────────────────────────────
+
+model CodeOfConduct {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   // markdown or text
+  version   String   @default("1.0")
+  status    String   @default("ACTIVE") // ACTIVE | ARCHIVED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // ─── Trainer Availability ──────────────────────────────────

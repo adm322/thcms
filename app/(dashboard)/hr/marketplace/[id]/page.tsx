@@ -20,6 +20,7 @@ export default function MarketplaceDetail({ params }: { params: Promise<{ id: st
   const [programDate, setProgramDate] = useState("");
   const [venuePref, setVenuePref] = useState("as_program");
   const [venueAddr, setVenueAddr] = useState("");
+  const [meetingLink, setMeetingLink] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -35,6 +36,17 @@ export default function MarketplaceDetail({ params }: { params: Promise<{ id: st
       setError("Please select a program date.");
       return;
     }
+
+    const isHybrid = program?.locationType === "hybrid" || venuePref === "hybrid";
+    const isOnline = venuePref === "online" || (venuePref === "as_program" && program?.locationType === "online");
+
+    if (isHybrid || isOnline) {
+      if (!meetingLink || (!meetingLink.includes("zoom.us") && !meetingLink.includes("meet.google.com"))) {
+        setError("A valid Zoom or Google Meet link is required for online or hybrid sessions.");
+        return;
+      }
+    }
+
     setBooking(true);
     setError("");
 
@@ -48,6 +60,7 @@ export default function MarketplaceDetail({ params }: { params: Promise<{ id: st
           programDate,
           venuePreference: venuePref,
           venueAddress: venuePref === "online" ? null : (venueAddr || null),
+          meetingLink: (isHybrid || isOnline) ? meetingLink : null,
         }),
       });
 
@@ -268,6 +281,17 @@ export default function MarketplaceDetail({ params }: { params: Promise<{ id: st
                     placeholder="Venue address or TBD..."
                     className="text-xs mt-2"
                   />
+                )}
+                {(venuePref === "online" || program.locationType === "hybrid" || (venuePref === "as_program" && program.locationType === "online")) && (
+                  <div className="space-y-1.5 mt-2">
+                    <label className="text-xs font-semibold text-muted-foreground">Virtual Meeting Link (Zoom / Google Meet)</label>
+                    <Input
+                      value={meetingLink}
+                      onChange={(e) => setMeetingLink(e.target.value)}
+                      placeholder="https://zoom.us/j/... or https://meet.google.com/..."
+                      className="text-xs"
+                    />
+                  </div>
                 )}
               </div>
 

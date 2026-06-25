@@ -491,6 +491,14 @@ export type EvaluationUncheckedUpdateManyWithoutBookingNestedInput = {
   deleteMany?: Prisma.EvaluationScalarWhereInput | Prisma.EvaluationScalarWhereInput[]
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EvaluationCreateWithoutBookingInput = {
   id?: string
   title: string

@@ -57,6 +57,7 @@ export type BookingMinAggregateOutputType = {
   venuePreference: string | null
   venueAddress: string | null
   venueConfirmed: boolean | null
+  meetingLink: string | null
 }
 
 export type BookingMaxAggregateOutputType = {
@@ -80,6 +81,7 @@ export type BookingMaxAggregateOutputType = {
   venuePreference: string | null
   venueAddress: string | null
   venueConfirmed: boolean | null
+  meetingLink: string | null
 }
 
 export type BookingCountAggregateOutputType = {
@@ -103,6 +105,7 @@ export type BookingCountAggregateOutputType = {
   venuePreference: number
   venueAddress: number
   venueConfirmed: number
+  meetingLink: number
   _all: number
 }
 
@@ -138,6 +141,7 @@ export type BookingMinAggregateInputType = {
   venuePreference?: true
   venueAddress?: true
   venueConfirmed?: true
+  meetingLink?: true
 }
 
 export type BookingMaxAggregateInputType = {
@@ -161,6 +165,7 @@ export type BookingMaxAggregateInputType = {
   venuePreference?: true
   venueAddress?: true
   venueConfirmed?: true
+  meetingLink?: true
 }
 
 export type BookingCountAggregateInputType = {
@@ -184,6 +189,7 @@ export type BookingCountAggregateInputType = {
   venuePreference?: true
   venueAddress?: true
   venueConfirmed?: true
+  meetingLink?: true
   _all?: true
 }
 
@@ -294,6 +300,7 @@ export type BookingGroupByOutputType = {
   venuePreference: string | null
   venueAddress: string | null
   venueConfirmed: boolean
+  meetingLink: string | null
   _count: BookingCountAggregateOutputType | null
   _avg: BookingAvgAggregateOutputType | null
   _sum: BookingSumAggregateOutputType | null
@@ -340,6 +347,7 @@ export type BookingWhereInput = {
   venuePreference?: Prisma.StringNullableFilter<"Booking"> | string | null
   venueAddress?: Prisma.StringNullableFilter<"Booking"> | string | null
   venueConfirmed?: Prisma.BoolFilter<"Booking"> | boolean
+  meetingLink?: Prisma.StringNullableFilter<"Booking"> | string | null
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   hr?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
@@ -373,6 +381,7 @@ export type BookingOrderByWithRelationInput = {
   venuePreference?: Prisma.SortOrderInput | Prisma.SortOrder
   venueAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   venueConfirmed?: Prisma.SortOrder
+  meetingLink?: Prisma.SortOrderInput | Prisma.SortOrder
   program?: Prisma.ProgramOrderByWithRelationInput
   hr?: Prisma.UserOrderByWithRelationInput
   company?: Prisma.CompanyOrderByWithRelationInput
@@ -409,6 +418,7 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   venuePreference?: Prisma.StringNullableFilter<"Booking"> | string | null
   venueAddress?: Prisma.StringNullableFilter<"Booking"> | string | null
   venueConfirmed?: Prisma.BoolFilter<"Booking"> | boolean
+  meetingLink?: Prisma.StringNullableFilter<"Booking"> | string | null
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   hr?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
@@ -442,6 +452,7 @@ export type BookingOrderByWithAggregationInput = {
   venuePreference?: Prisma.SortOrderInput | Prisma.SortOrder
   venueAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   venueConfirmed?: Prisma.SortOrder
+  meetingLink?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BookingCountOrderByAggregateInput
   _avg?: Prisma.BookingAvgOrderByAggregateInput
   _max?: Prisma.BookingMaxOrderByAggregateInput
@@ -473,6 +484,7 @@ export type BookingScalarWhereWithAggregatesInput = {
   venuePreference?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   venueAddress?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   venueConfirmed?: Prisma.BoolWithAggregatesFilter<"Booking"> | boolean
+  meetingLink?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
 }
 
 export type BookingCreateInput = {
@@ -493,6 +505,7 @@ export type BookingCreateInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -526,6 +539,7 @@ export type BookingUncheckedCreateInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -553,6 +567,7 @@ export type BookingUpdateInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -586,6 +601,7 @@ export type BookingUncheckedUpdateInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -616,6 +632,7 @@ export type BookingCreateManyInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
 }
 
 export type BookingUpdateManyMutationInput = {
@@ -636,6 +653,7 @@ export type BookingUpdateManyMutationInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingUncheckedUpdateManyInput = {
@@ -659,6 +677,7 @@ export type BookingUncheckedUpdateManyInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingListRelationFilter = {
@@ -692,6 +711,7 @@ export type BookingCountOrderByAggregateInput = {
   venuePreference?: Prisma.SortOrder
   venueAddress?: Prisma.SortOrder
   venueConfirmed?: Prisma.SortOrder
+  meetingLink?: Prisma.SortOrder
 }
 
 export type BookingAvgOrderByAggregateInput = {
@@ -720,6 +740,7 @@ export type BookingMaxOrderByAggregateInput = {
   venuePreference?: Prisma.SortOrder
   venueAddress?: Prisma.SortOrder
   venueConfirmed?: Prisma.SortOrder
+  meetingLink?: Prisma.SortOrder
 }
 
 export type BookingMinOrderByAggregateInput = {
@@ -743,6 +764,7 @@ export type BookingMinOrderByAggregateInput = {
   venuePreference?: Prisma.SortOrder
   venueAddress?: Prisma.SortOrder
   venueConfirmed?: Prisma.SortOrder
+  meetingLink?: Prisma.SortOrder
 }
 
 export type BookingSumOrderByAggregateInput = {
@@ -1006,6 +1028,7 @@ export type BookingCreateWithoutHrInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
@@ -1037,6 +1060,7 @@ export type BookingUncheckedCreateWithoutHrInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1095,6 +1119,7 @@ export type BookingScalarWhereInput = {
   venuePreference?: Prisma.StringNullableFilter<"Booking"> | string | null
   venueAddress?: Prisma.StringNullableFilter<"Booking"> | string | null
   venueConfirmed?: Prisma.BoolFilter<"Booking"> | boolean
+  meetingLink?: Prisma.StringNullableFilter<"Booking"> | string | null
 }
 
 export type BookingCreateWithoutCompanyInput = {
@@ -1115,6 +1140,7 @@ export type BookingCreateWithoutCompanyInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
@@ -1146,6 +1172,7 @@ export type BookingUncheckedCreateWithoutCompanyInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1198,6 +1225,7 @@ export type BookingCreateWithoutProgramInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
@@ -1229,6 +1257,7 @@ export type BookingUncheckedCreateWithoutProgramInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1281,6 +1310,7 @@ export type BookingCreateWithoutParticipantsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -1313,6 +1343,7 @@ export type BookingUncheckedCreateWithoutParticipantsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
@@ -1355,6 +1386,7 @@ export type BookingUpdateWithoutParticipantsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -1387,6 +1419,7 @@ export type BookingUncheckedUpdateWithoutParticipantsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
@@ -1413,6 +1446,7 @@ export type BookingCreateWithoutEvaluationsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -1445,6 +1479,7 @@ export type BookingUncheckedCreateWithoutEvaluationsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
@@ -1487,6 +1522,7 @@ export type BookingUpdateWithoutEvaluationsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -1519,6 +1555,7 @@ export type BookingUncheckedUpdateWithoutEvaluationsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
@@ -1545,6 +1582,7 @@ export type BookingCreateWithoutInvoicesInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -1577,6 +1615,7 @@ export type BookingUncheckedCreateWithoutInvoicesInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
@@ -1619,6 +1658,7 @@ export type BookingUpdateWithoutInvoicesInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -1651,6 +1691,7 @@ export type BookingUncheckedUpdateWithoutInvoicesInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
@@ -1677,6 +1718,7 @@ export type BookingCreateWithoutReimbursementsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -1709,6 +1751,7 @@ export type BookingUncheckedCreateWithoutReimbursementsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1751,6 +1794,7 @@ export type BookingUpdateWithoutReimbursementsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -1783,6 +1827,7 @@ export type BookingUncheckedUpdateWithoutReimbursementsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -1809,6 +1854,7 @@ export type BookingCreateWithoutMessagesInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -1841,6 +1887,7 @@ export type BookingUncheckedCreateWithoutMessagesInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1883,6 +1930,7 @@ export type BookingUpdateWithoutMessagesInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -1915,6 +1963,7 @@ export type BookingUncheckedUpdateWithoutMessagesInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -1941,6 +1990,7 @@ export type BookingCreateWithoutReviewsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -1973,6 +2023,7 @@ export type BookingUncheckedCreateWithoutReviewsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -2015,6 +2066,7 @@ export type BookingUpdateWithoutReviewsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -2047,6 +2099,7 @@ export type BookingUncheckedUpdateWithoutReviewsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -2073,6 +2126,7 @@ export type BookingCreateWithoutTrainingPlanItemsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
   hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
@@ -2105,6 +2159,7 @@ export type BookingUncheckedCreateWithoutTrainingPlanItemsInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -2147,6 +2202,7 @@ export type BookingUpdateWithoutTrainingPlanItemsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
@@ -2179,6 +2235,7 @@ export type BookingUncheckedUpdateWithoutTrainingPlanItemsInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -2207,6 +2264,7 @@ export type BookingCreateManyHrInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
 }
 
 export type BookingUpdateWithoutHrInput = {
@@ -2227,6 +2285,7 @@ export type BookingUpdateWithoutHrInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
@@ -2258,6 +2317,7 @@ export type BookingUncheckedUpdateWithoutHrInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -2287,6 +2347,7 @@ export type BookingUncheckedUpdateManyWithoutHrInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingCreateManyCompanyInput = {
@@ -2309,6 +2370,7 @@ export type BookingCreateManyCompanyInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
 }
 
 export type BookingUpdateWithoutCompanyInput = {
@@ -2329,6 +2391,7 @@ export type BookingUpdateWithoutCompanyInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
@@ -2360,6 +2423,7 @@ export type BookingUncheckedUpdateWithoutCompanyInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -2389,6 +2453,7 @@ export type BookingUncheckedUpdateManyWithoutCompanyInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingCreateManyProgramInput = {
@@ -2411,6 +2476,7 @@ export type BookingCreateManyProgramInput = {
   venuePreference?: string | null
   venueAddress?: string | null
   venueConfirmed?: boolean
+  meetingLink?: string | null
 }
 
 export type BookingUpdateWithoutProgramInput = {
@@ -2431,6 +2497,7 @@ export type BookingUpdateWithoutProgramInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
@@ -2462,6 +2529,7 @@ export type BookingUncheckedUpdateWithoutProgramInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -2491,6 +2559,7 @@ export type BookingUncheckedUpdateManyWithoutProgramInput = {
   venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -2599,6 +2668,7 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   venuePreference?: boolean
   venueAddress?: boolean
   venueConfirmed?: boolean
+  meetingLink?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   hr?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -2633,6 +2703,7 @@ export type BookingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   venuePreference?: boolean
   venueAddress?: boolean
   venueConfirmed?: boolean
+  meetingLink?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   hr?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -2659,6 +2730,7 @@ export type BookingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   venuePreference?: boolean
   venueAddress?: boolean
   venueConfirmed?: boolean
+  meetingLink?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   hr?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -2685,9 +2757,10 @@ export type BookingSelectScalar = {
   venuePreference?: boolean
   venueAddress?: boolean
   venueConfirmed?: boolean
+  meetingLink?: boolean
 }
 
-export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "programId" | "hrId" | "companyId" | "programDate" | "totalFee" | "depositPaid" | "depositStatus" | "status" | "createdAt" | "updatedAt" | "hrdfScheme" | "employerHrdfSubmitted" | "employerHrdfSubmittedAt" | "trainerHrdfSubmitted" | "trainerHrdfSubmittedAt" | "trainerDocumentsUrl" | "venuePreference" | "venueAddress" | "venueConfirmed", ExtArgs["result"]["booking"]>
+export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "programId" | "hrId" | "companyId" | "programDate" | "totalFee" | "depositPaid" | "depositStatus" | "status" | "createdAt" | "updatedAt" | "hrdfScheme" | "employerHrdfSubmitted" | "employerHrdfSubmittedAt" | "trainerHrdfSubmitted" | "trainerHrdfSubmittedAt" | "trainerDocumentsUrl" | "venuePreference" | "venueAddress" | "venueConfirmed" | "meetingLink", ExtArgs["result"]["booking"]>
 export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   hr?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2747,6 +2820,7 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     venuePreference: string | null
     venueAddress: string | null
     venueConfirmed: boolean
+    meetingLink: string | null
   }, ExtArgs["result"]["booking"]>
   composites: {}
 }
@@ -3200,6 +3274,7 @@ export interface BookingFieldRefs {
   readonly venuePreference: Prisma.FieldRef<"Booking", 'String'>
   readonly venueAddress: Prisma.FieldRef<"Booking", 'String'>
   readonly venueConfirmed: Prisma.FieldRef<"Booking", 'Boolean'>
+  readonly meetingLink: Prisma.FieldRef<"Booking", 'String'>
 }
     
 

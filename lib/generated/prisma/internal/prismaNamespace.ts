@@ -390,6 +390,7 @@ export const ModelName = {
   Program: 'Program',
   Module: 'Module',
   Quiz: 'Quiz',
+  QuizResult: 'QuizResult',
   Question: 'Question',
   Material: 'Material',
   Booking: 'Booking',
@@ -411,6 +412,7 @@ export const ModelName = {
   TeamBuildingRequest: 'TeamBuildingRequest',
   TrainingPlanItem: 'TrainingPlanItem',
   Notification: 'Notification',
+  CodeOfConduct: 'CodeOfConduct',
   TrainerAvailability: 'TrainerAvailability'
 } as const
 
@@ -427,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "company" | "trainerProfile" | "program" | "module" | "quiz" | "question" | "material" | "booking" | "participant" | "evaluation" | "invoice" | "reimbursement" | "employee" | "leave" | "attendance" | "payroll" | "claim" | "message" | "review" | "programVote" | "supportTicket" | "changelog" | "itineraryItem" | "teamBuildingRequest" | "trainingPlanItem" | "notification" | "trainerAvailability"
+    modelProps: "user" | "company" | "trainerProfile" | "program" | "module" | "quiz" | "quizResult" | "question" | "material" | "booking" | "participant" | "evaluation" | "invoice" | "reimbursement" | "employee" | "leave" | "attendance" | "payroll" | "claim" | "message" | "review" | "programVote" | "supportTicket" | "changelog" | "itineraryItem" | "teamBuildingRequest" | "trainingPlanItem" | "notification" | "codeOfConduct" | "trainerAvailability"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -872,6 +874,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.QuizCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.QuizCountAggregateOutputType> | number
+        }
+      }
+    }
+    QuizResult: {
+      payload: Prisma.$QuizResultPayload<ExtArgs>
+      fields: Prisma.QuizResultFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.QuizResultFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.QuizResultFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>
+        }
+        findFirst: {
+          args: Prisma.QuizResultFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.QuizResultFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>
+        }
+        findMany: {
+          args: Prisma.QuizResultFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>[]
+        }
+        create: {
+          args: Prisma.QuizResultCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>
+        }
+        createMany: {
+          args: Prisma.QuizResultCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.QuizResultCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>[]
+        }
+        delete: {
+          args: Prisma.QuizResultDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>
+        }
+        update: {
+          args: Prisma.QuizResultUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>
+        }
+        deleteMany: {
+          args: Prisma.QuizResultDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.QuizResultUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.QuizResultUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>[]
+        }
+        upsert: {
+          args: Prisma.QuizResultUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QuizResultPayload>
+        }
+        aggregate: {
+          args: Prisma.QuizResultAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateQuizResult>
+        }
+        groupBy: {
+          args: Prisma.QuizResultGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QuizResultGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.QuizResultCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QuizResultCountAggregateOutputType> | number
         }
       }
     }
@@ -2429,6 +2505,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CodeOfConduct: {
+      payload: Prisma.$CodeOfConductPayload<ExtArgs>
+      fields: Prisma.CodeOfConductFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CodeOfConductFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CodeOfConductFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>
+        }
+        findFirst: {
+          args: Prisma.CodeOfConductFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CodeOfConductFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>
+        }
+        findMany: {
+          args: Prisma.CodeOfConductFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>[]
+        }
+        create: {
+          args: Prisma.CodeOfConductCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>
+        }
+        createMany: {
+          args: Prisma.CodeOfConductCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CodeOfConductCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>[]
+        }
+        delete: {
+          args: Prisma.CodeOfConductDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>
+        }
+        update: {
+          args: Prisma.CodeOfConductUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>
+        }
+        deleteMany: {
+          args: Prisma.CodeOfConductDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CodeOfConductUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CodeOfConductUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>[]
+        }
+        upsert: {
+          args: Prisma.CodeOfConductUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodeOfConductPayload>
+        }
+        aggregate: {
+          args: Prisma.CodeOfConductAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCodeOfConduct>
+        }
+        groupBy: {
+          args: Prisma.CodeOfConductGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CodeOfConductGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CodeOfConductCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CodeOfConductCountAggregateOutputType> | number
+        }
+      }
+    }
     TrainerAvailability: {
       payload: Prisma.$TrainerAvailabilityPayload<ExtArgs>
       fields: Prisma.TrainerAvailabilityFieldRefs
@@ -2625,10 +2775,23 @@ export const QuizScalarFieldEnum = {
   description: 'description',
   passingScore: 'passingScore',
   timeLimitMins: 'timeLimitMins',
+  standalone: 'standalone',
+  shareToken: 'shareToken',
   createdAt: 'createdAt'
 } as const
 
 export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
+
+
+export const QuizResultScalarFieldEnum = {
+  id: 'id',
+  participantId: 'participantId',
+  quizId: 'quizId',
+  score: 'score',
+  createdAt: 'createdAt'
+} as const
+
+export type QuizResultScalarFieldEnum = (typeof QuizResultScalarFieldEnum)[keyof typeof QuizResultScalarFieldEnum]
 
 
 export const QuestionScalarFieldEnum = {
@@ -2678,7 +2841,8 @@ export const BookingScalarFieldEnum = {
   trainerDocumentsUrl: 'trainerDocumentsUrl',
   venuePreference: 'venuePreference',
   venueAddress: 'venueAddress',
-  venueConfirmed: 'venueConfirmed'
+  venueConfirmed: 'venueConfirmed',
+  meetingLink: 'meetingLink'
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
@@ -2688,13 +2852,12 @@ export const ParticipantScalarFieldEnum = {
   id: 'id',
   bookingId: 'bookingId',
   employeeId: 'employeeId',
+  userId: 'userId',
   name: 'name',
   email: 'email',
   icNumber: 'icNumber',
   department: 'department',
   attendanceStatus: 'attendanceStatus',
-  quizId: 'quizId',
-  quizScore: 'quizScore',
   certificateUrl: 'certificateUrl',
   createdAt: 'createdAt'
 } as const
@@ -3001,6 +3164,19 @@ export const NotificationScalarFieldEnum = {
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+export const CodeOfConductScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  version: 'version',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CodeOfConductScalarFieldEnum = (typeof CodeOfConductScalarFieldEnum)[keyof typeof CodeOfConductScalarFieldEnum]
+
+
 export const TrainerAvailabilityScalarFieldEnum = {
   id: 'id',
   trainerId: 'trainerId',
@@ -3186,6 +3362,7 @@ export type GlobalOmitConfig = {
   program?: Prisma.ProgramOmit
   module?: Prisma.ModuleOmit
   quiz?: Prisma.QuizOmit
+  quizResult?: Prisma.QuizResultOmit
   question?: Prisma.QuestionOmit
   material?: Prisma.MaterialOmit
   booking?: Prisma.BookingOmit
@@ -3207,6 +3384,7 @@ export type GlobalOmitConfig = {
   teamBuildingRequest?: Prisma.TeamBuildingRequestOmit
   trainingPlanItem?: Prisma.TrainingPlanItemOmit
   notification?: Prisma.NotificationOmit
+  codeOfConduct?: Prisma.CodeOfConductOmit
   trainerAvailability?: Prisma.TrainerAvailabilityOmit
 }
 

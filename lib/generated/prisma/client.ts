@@ -72,6 +72,11 @@ export type Module = Prisma.ModuleModel
  */
 export type Quiz = Prisma.QuizModel
 /**
+ * Model QuizResult
+ * 
+ */
+export type QuizResult = Prisma.QuizResultModel
+/**
  * Model Question
  * 
  */
@@ -176,6 +181,11 @@ export type TrainingPlanItem = Prisma.TrainingPlanItemModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model CodeOfConduct
+ * 
+ */
+export type CodeOfConduct = Prisma.CodeOfConductModel
 /**
  * Model TrainerAvailability
  * 

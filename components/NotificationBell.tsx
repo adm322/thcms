@@ -45,7 +45,10 @@ export function NotificationBell() {
 
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000); // refresh every 30s
+    // ponytail: only poll when the tab is visible
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") fetchNotifications();
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -98,7 +101,7 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border bg-card shadow-2xl z-50 overflow-hidden">
+        <div className="fixed right-4 left-4 top-16 sm:absolute sm:top-auto sm:right-0 sm:left-auto sm:w-96 sm:mt-2 rounded-xl border bg-card shadow-2xl z-50 overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b">
             <h3 className="text-sm font-bold">Notifications</h3>

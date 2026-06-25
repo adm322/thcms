@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { CreateProgramSchema } from "@/lib/validations";
 
 export async function GET() {
   const session = await getSession();
@@ -46,11 +47,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  if (!body?.title) {
-    return NextResponse.json({ error: "Title is required" }, { status: 400 });
+  const result = CreateProgramSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json(
+      { error: result.error.issues[0].message },
+      { status: 400 }
+    );
   }
 
-  const { title, description, category, durationHours, maxParticipants, pricePerPax, locationType, syllabus } = body;
+  const { title, description, category, durationHours, maxParticipants, pricePerPax, locationType, syllabus } = result.data;
 
   const program = await prisma.program.create({
     data: {

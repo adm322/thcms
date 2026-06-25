@@ -8,9 +8,9 @@ const JWT_SECRET = new TextEncoder().encode(
 const COOKIE_NAME = "trainhub_session";
 
 // Routes that don't require authentication
-const PUBLIC_PATHS = ["/login", "/api/auth"];
+const PUBLIC_PATHS = ["/login", "/api/auth", "/quiz", "/class", "/api/quiz", "/api/attendance"];
 // Public assets
-  const PUBLIC_PREFIXES = ["/_next", "/favicon.ico", "/images", "/thumbnails", "/uploads", "/materials"];
+const PUBLIC_PREFIXES = ["/_next", "/favicon.ico", "/images", "/thumbnails", "/uploads", "/materials"];
 
 async function getSessionUser(request: NextRequest) {
   const token = request.cookies.get(COOKIE_NAME)?.value;
@@ -21,7 +21,7 @@ async function getSessionUser(request: NextRequest) {
       id: string;
       email: string;
       name: string;
-      role: "ADMIN" | "TRAINER" | "HR";
+      role: "ADMIN" | "TRAINER" | "HR" | "PARTICIPANT";
       companyId?: string | null;
     };
   } catch {
@@ -66,6 +66,9 @@ export async function proxy(request: NextRequest) {
   if (pathname.startsWith("/hr") && user.role !== "HR") {
     return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
   }
+  if (pathname.startsWith("/participant") && user.role !== "PARTICIPANT") {
+    return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
+  }
 
   // API role enforcement
   if (pathname.startsWith("/api/admin") && user.role !== "ADMIN") {
@@ -89,6 +92,8 @@ function getDashboardPath(role: string): string {
       return "/trainer";
     case "HR":
       return "/hr";
+    case "PARTICIPANT":
+      return "/participant";
     default:
       return "/";
   }

@@ -47,11 +47,17 @@ export default function AdminTrainerDetail({ params }: { params: Promise<{ id: s
       <Card>
         <CardHeader><CardTitle className="text-base">Programs ({trainer.programs.length})</CardTitle></CardHeader>
         <CardContent>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {trainer.programs.map((p: any) => (
-              <div key={p.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
-                <div><p className="text-sm font-medium">{p.title}</p><p className="text-xs text-muted-foreground">{p.category} • {p.bookings} bookings • {p.modules} modules</p></div>
-                <div className="flex items-center gap-3"><Badge variant={p.status === "PUBLISHED" ? "default" : "secondary"}>{p.status}</Badge><span className="text-sm font-medium">RM {p.revenue.toLocaleString()}</span></div>
+              <div key={p.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border px-4 py-3">
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground leading-snug">{p.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{p.category} · {p.bookings} bookings · {p.modules} modules</p>
+                </div>
+                <div className="flex items-center justify-between sm:justify-end gap-3 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-border w-full sm:w-auto">
+                  <Badge variant={p.status === "PUBLISHED" ? "default" : "secondary"} className="text-[10px] font-mono tracking-wider uppercase py-0.5 px-2 rounded-full">{p.status}</Badge>
+                  <span className="text-sm font-bold text-foreground font-mono">RM {p.revenue.toLocaleString()}</span>
+                </div>
               </div>
             ))}
           </div>

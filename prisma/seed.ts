@@ -531,7 +531,7 @@ async function main() {
   });
   for (const e of allEmployees.petronas.slice(0, 10)) {
     await prisma.participant.create({
-      data: { bookingId: b1.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 60 + Math.floor(Math.random() * 35) },
+      data: { bookingId: b1.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -544,7 +544,7 @@ async function main() {
   });
   for (const e of allEmployees.maybank.slice(0, 8)) {
     await prisma.participant.create({
-      data: { bookingId: b2.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 55 + Math.floor(Math.random() * 40) },
+      data: { bookingId: b2.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -557,7 +557,7 @@ async function main() {
   });
   for (const e of allEmployees.topGlove.slice(0, 8)) {
     await prisma.participant.create({
-      data: { bookingId: b3.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 65 + Math.floor(Math.random() * 30) },
+      data: { bookingId: b3.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -570,7 +570,7 @@ async function main() {
   });
   for (const e of allEmployees.airAsia.slice(0, 10)) {
     await prisma.participant.create({
-      data: { bookingId: b4.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: e.name.includes("Captain") ? "ABSENT" : "PRESENT", quizScore: 50 + Math.floor(Math.random() * 45) },
+      data: { bookingId: b4.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: e.name.includes("Captain") ? "ABSENT" : "PRESENT"},
     });
   }
 
@@ -596,7 +596,7 @@ async function main() {
   });
   for (const e of allEmployees.airAsia.slice(5, 10)) {
     await prisma.participant.create({
-      data: { bookingId: b6.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 65 + Math.floor(Math.random() * 30) },
+      data: { bookingId: b6.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -661,7 +661,7 @@ async function main() {
   });
   for (const e of allEmployees.petronas.slice(0, 10)) {
     await prisma.participant.create({
-      data: { bookingId: b12.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 55 + Math.floor(Math.random() * 40) },
+      data: { bookingId: b12.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -674,7 +674,7 @@ async function main() {
   });
   for (const e of allEmployees.telekom.slice(0, 12)) {
     await prisma.participant.create({
-      data: { bookingId: b13.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 60 + Math.floor(Math.random() * 35) },
+      data: { bookingId: b13.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -687,7 +687,7 @@ async function main() {
   });
   for (const e of allEmployees.simeDarby.slice(0, 10)) {
     await prisma.participant.create({
-      data: { bookingId: b14.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 65 + Math.floor(Math.random() * 30) },
+      data: { bookingId: b14.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -700,7 +700,7 @@ async function main() {
   });
   for (const e of allEmployees.topGlove.slice(0, 8)) {
     await prisma.participant.create({
-      data: { bookingId: b15.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 60 + Math.floor(Math.random() * 35) },
+      data: { bookingId: b15.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 
@@ -713,7 +713,7 @@ async function main() {
   });
   for (const e of allEmployees.airAsia.slice(0, 5)) {
     await prisma.participant.create({
-      data: { bookingId: b16.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT", quizScore: 55 + Math.floor(Math.random() * 40) },
+      data: { bookingId: b16.id, employeeId: e.id, name: e.name, email: e.email, icNumber: e.icNumber, department: e.department, attendanceStatus: "PRESENT"},
     });
   }
 

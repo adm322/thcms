@@ -57,6 +57,7 @@ export const ModelName = {
   Program: 'Program',
   Module: 'Module',
   Quiz: 'Quiz',
+  QuizResult: 'QuizResult',
   Question: 'Question',
   Material: 'Material',
   Booking: 'Booking',
@@ -78,6 +79,7 @@ export const ModelName = {
   TeamBuildingRequest: 'TeamBuildingRequest',
   TrainingPlanItem: 'TrainingPlanItem',
   Notification: 'Notification',
+  CodeOfConduct: 'CodeOfConduct',
   TrainerAvailability: 'TrainerAvailability'
 } as const
 
@@ -180,10 +182,23 @@ export const QuizScalarFieldEnum = {
   description: 'description',
   passingScore: 'passingScore',
   timeLimitMins: 'timeLimitMins',
+  standalone: 'standalone',
+  shareToken: 'shareToken',
   createdAt: 'createdAt'
 } as const
 
 export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
+
+
+export const QuizResultScalarFieldEnum = {
+  id: 'id',
+  participantId: 'participantId',
+  quizId: 'quizId',
+  score: 'score',
+  createdAt: 'createdAt'
+} as const
+
+export type QuizResultScalarFieldEnum = (typeof QuizResultScalarFieldEnum)[keyof typeof QuizResultScalarFieldEnum]
 
 
 export const QuestionScalarFieldEnum = {
@@ -233,7 +248,8 @@ export const BookingScalarFieldEnum = {
   trainerDocumentsUrl: 'trainerDocumentsUrl',
   venuePreference: 'venuePreference',
   venueAddress: 'venueAddress',
-  venueConfirmed: 'venueConfirmed'
+  venueConfirmed: 'venueConfirmed',
+  meetingLink: 'meetingLink'
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
@@ -243,13 +259,12 @@ export const ParticipantScalarFieldEnum = {
   id: 'id',
   bookingId: 'bookingId',
   employeeId: 'employeeId',
+  userId: 'userId',
   name: 'name',
   email: 'email',
   icNumber: 'icNumber',
   department: 'department',
   attendanceStatus: 'attendanceStatus',
-  quizId: 'quizId',
-  quizScore: 'quizScore',
   certificateUrl: 'certificateUrl',
   createdAt: 'createdAt'
 } as const
@@ -554,6 +569,19 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const CodeOfConductScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  version: 'version',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CodeOfConductScalarFieldEnum = (typeof CodeOfConductScalarFieldEnum)[keyof typeof CodeOfConductScalarFieldEnum]
 
 
 export const TrainerAvailabilityScalarFieldEnum = {

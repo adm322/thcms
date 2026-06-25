@@ -14,13 +14,15 @@ export async function GET(
     where: { id: quizId },
     include: { module: { select: { program: { select: { trainerId: true } } } } },
   });
-  if (!quiz || quiz.module.program.trainerId !== session.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!quiz || (quiz.standalone ? false : quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const participants = await prisma.participant.findMany({
+  const results = await prisma.quizResult.findMany({
     where: { quizId },
-    select: { id: true, name: true, department: true, attendanceStatus: true, quizScore: true },
-    orderBy: { name: "asc" },
+    include: { participant: { select: { id: true, name: true, department: true, attendanceStatus: true } } },
+    orderBy: { participant: { name: "asc" } },
   });
+
+  const participants = results.map(r => ({ ...r.participant, quizScore: r.score }));
 
   return NextResponse.json(participants);
 }

@@ -240,7 +240,7 @@ export default function AdminTrainingPlansPage() {
 
       {/* ─── Platform Summary Bar ─────────────────────────── */}
       {summary && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <Card>
             <CardContent className="py-4 flex items-center gap-3">
               <Building2 className="h-5 w-5 text-muted-foreground" />
@@ -298,28 +298,30 @@ export default function AdminTrainingPlansPage() {
               {/* Company header */}
               <button
                 onClick={() => setExpandedCompany(isExpanded ? null : company.companyId)}
-                className="w-full flex items-center justify-between p-5 hover:bg-accent/30 transition-colors rounded-t-xl"
+                className="w-full flex flex-col sm:flex-row sm:items-center justify-between p-5 hover:bg-accent/30 transition-colors rounded-t-xl gap-4"
               >
-                <div className="flex items-center gap-4">
-                  {isExpanded ? <ChevronDown className="h-5 w-5 text-muted-foreground" /> : <ChevronRight className="h-5 w-5 text-muted-foreground" />}
+                <div className="flex items-center gap-3 text-left w-full sm:w-auto">
+                  {isExpanded ? <ChevronDown className="h-5 w-5 text-muted-foreground flex-shrink-0" /> : <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />}
                   <div>
-                    <p className="text-base font-bold">{company.companyName}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-base font-bold leading-tight">{company.companyName}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {company.employeeCount} employees · {company.planCount} plan items
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="text-muted-foreground">
-                    <Badge variant="secondary" className="mr-1">{company.draftPlans}</Badge> draft
-                  </span>
-                  <span className="text-muted-foreground">
-                    <Badge variant="secondary" className="mr-1">{company.matchedPlans}</Badge> matched
-                  </span>
-                  <span className="text-muted-foreground">
-                    <Badge variant="default" className="mr-1">{company.scheduledPlans}</Badge> scheduled
-                  </span>
-                  <span className="font-semibold">RM {company.plannedCost.toLocaleString()}</span>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs sm:text-sm pt-3 sm:pt-0 border-t sm:border-t-0 border-border w-full sm:w-auto justify-between sm:justify-end">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-muted-foreground text-[11px] sm:text-xs">
+                      <Badge variant="secondary" className="mr-1 text-[10px] py-0 px-1.5">{company.draftPlans}</Badge> draft
+                    </span>
+                    <span className="text-muted-foreground text-[11px] sm:text-xs">
+                      <Badge variant="secondary" className="mr-1 text-[10px] py-0 px-1.5">{company.matchedPlans}</Badge> matched
+                    </span>
+                    <span className="text-muted-foreground text-[11px] sm:text-xs">
+                      <Badge variant="default" className="mr-1 text-[10px] py-0 px-1.5">{company.scheduledPlans}</Badge> scheduled
+                    </span>
+                  </div>
+                  <span className="font-bold text-foreground font-mono">RM {company.plannedCost.toLocaleString()}</span>
                 </div>
               </button>
 
@@ -462,43 +464,46 @@ export default function AdminTrainingPlansPage() {
                         <p className="text-sm text-muted-foreground">No plan items for this year.</p>
                       )}
                       {company.items.map((item) => (
-                        <div key={item.id} className="flex items-start rounded-lg border px-4 py-3 gap-2">
-                          {/* Checkbox */}
-                          <input
-                            type="checkbox"
-                            checked={selectedItems.has(item.id)}
-                            onChange={() => toggleItem(item.id)}
-                            className="mt-1.5 h-3.5 w-3.5 rounded border-border accent-primary cursor-pointer"
-                          />
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <Badge className={`text-[10px] ${CATEGORY_COLORS[item.category] || ""}`}>
-                                {item.category}
-                              </Badge>
-                              <Badge className={`text-[10px] ${PRIORITY_COLORS[item.priority]}`}>
-                                {item.priority}
-                              </Badge>
-                              <Badge variant="outline" className="text-[10px]" title={PIPELINE_TOOLTIPS[item.status] || ""}>{STATUS_LABELS[item.status]}</Badge>
-                              {item.booking && (
-                                <Badge variant="default" className="text-[10px] bg-emerald-100 text-emerald-700">
-                                  Booked
+                        <div key={item.id} className="flex flex-col sm:flex-row sm:items-start rounded-lg border px-4 py-3 gap-3">
+                          <div className="flex items-start gap-2 flex-1 min-w-0">
+                            {/* Checkbox */}
+                            <input
+                              type="checkbox"
+                              checked={selectedItems.has(item.id)}
+                              onChange={() => toggleItem(item.id)}
+                              className="mt-1 h-3.5 w-3.5 rounded border-border accent-primary cursor-pointer flex-shrink-0"
+                            />
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <Badge className={`text-[10px] ${CATEGORY_COLORS[item.category] || ""}`}>
+                                  {item.category}
                                 </Badge>
+                                <Badge className={`text-[10px] ${PRIORITY_COLORS[item.priority]}`}>
+                                  {item.priority}
+                                </Badge>
+                                <Badge variant="outline" className="text-[10px]" title={PIPELINE_TOOLTIPS[item.status] || ""}>{STATUS_LABELS[item.status]}</Badge>
+                                {item.booking && (
+                                  <Badge variant="default" className="text-[10px] bg-emerald-100 text-emerald-700">
+                                    Booked
+                                  </Badge>
+                                )}
+                              </div>
+                              <p className="text-sm font-medium mt-1 leading-snug">{item.title}</p>
+                              <p className="text-xs text-muted-foreground mt-0.5">
+                                {item.department && <>{item.department} · </>}
+                                {item.targetCount} pax · {MONTHS[item.targetMonth]} · RM {item.estimatedCost.toLocaleString()}
+                                {item.booking && <> · ✅ {item.booking.programTitle}</>}
+                              </p>
+                              {item.notes && (
+                                <p className="text-[10px] text-muted-foreground mt-1.5 italic line-clamp-2">
+                                  📝 {item.notes}
+                                </p>
                               )}
                             </div>
-                            <p className="text-sm font-medium mt-1">{item.title}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {item.department && <>{item.department} · </>}
-                              {item.targetCount} pax · {MONTHS[item.targetMonth]} · RM {item.estimatedCost.toLocaleString()}
-                              {item.booking && <> · ✅ {item.booking.programTitle}</>}
-                            </p>
-                            {item.notes && (
-                              <p className="text-[10px] text-muted-foreground mt-1 italic line-clamp-2">
-                                📝 {item.notes}
-                              </p>
-                            )}
                           </div>
+
                           {/* Admin actions */}
-                          <div className="flex items-center gap-1 ml-2 flex-shrink-0">
+                          <div className="flex items-center justify-end gap-1.5 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-border w-full sm:w-auto flex-shrink-0">
                             {(() => {
                               const isApproved = item.notes?.includes("[Admin Approved");
                               const isRejected = item.notes?.includes("[Admin Rejected");
@@ -514,14 +519,14 @@ export default function AdminTrainingPlansPage() {
                                   <>
                                     <Button
                                       size="sm" variant="outline"
-                                      className="h-7 text-[10px] text-emerald-600 border-emerald-300 hover:bg-emerald-50 dark:bg-emerald-950/30"
+                                      className="h-7 text-[10px] text-emerald-600 border-emerald-300 hover:bg-emerald-50 dark:bg-emerald-950/30 py-0.5 px-2 rounded-md"
                                       onClick={() => adminAction(item.id, "APPROVE")}
                                     >
                                       <CheckCircle2 className="h-3 w-3 mr-0.5" /> Approve
                                     </Button>
                                     <Button
                                       size="sm" variant="outline"
-                                      className="h-7 text-[10px] text-red-500 border-red-300 hover:bg-red-50 dark:bg-red-950/30"
+                                      className="h-7 text-[10px] text-red-500 border-red-300 hover:bg-red-50 dark:bg-red-950/30 py-0.5 px-2 rounded-md"
                                       onClick={() => { setRejectItemId(item.id); setRejectReason(""); }}
                                     >
                                       <XCircle className="h-3 w-3 mr-0.5" /> Reject
@@ -530,54 +535,58 @@ export default function AdminTrainingPlansPage() {
                                 );
                               }
                               if (isApproved) {
-                                return <Badge className="bg-emerald-100 text-emerald-700 text-[10px]">✅ Approved</Badge>;
+                                return <Badge className="bg-emerald-100 text-emerald-700 text-[10px] py-0.5 px-2 rounded-md">Approved</Badge>;
                               }
                               return null;
                             })()}
                             <Button
                               size="sm" variant="ghost"
-                              className="h-7 text-[10px]"
+                              className="h-7 w-7 p-0 flex items-center justify-center"
                               onClick={() => {
                                 const newId = noteItemId === item.id ? null : item.id;
                                 setNoteItemId(newId);
                                 setAdminNote("");
                               }}
                             >
-                              <MessageSquare className="h-3 w-3" />
+                              <MessageSquare className="h-3.5 w-3.5 text-muted-foreground" />
                             </Button>
                           </div>
 
                           {/* Rejection reason prompt */}
                           {rejectItemId === item.id && (
-                            <div className="col-span-full mt-2 space-y-2">
+                            <div className="col-span-full mt-2 space-y-2 w-full">
                               <p className="text-[10px] font-medium text-red-600">Reject this plan item? HR will need to revise it.</p>
-                              <div className="flex gap-2">
+                              <div className="flex flex-col sm:flex-row gap-2">
                                 <Input
                                   value={rejectReason}
                                   onChange={(e) => setRejectReason(e.target.value)}
                                   placeholder="Reason for rejection..."
-                                  className="h-8 text-xs"
+                                  className="h-8 text-xs w-full"
                                 />
-                                <Button size="sm" className="h-8 text-xs bg-red-600 hover:bg-red-700" onClick={() => adminAction(item.id, "REJECT", { reason: rejectReason })}>
-                                  Confirm Reject
-                                </Button>
-                                <Button size="sm" variant="ghost" className="h-8 text-xs" onClick={() => setRejectItemId(null)}>Cancel</Button>
+                                <div className="flex gap-2 justify-end">
+                                  <Button size="sm" className="h-8 text-xs bg-red-600 hover:bg-red-700 whitespace-nowrap" onClick={() => adminAction(item.id, "REJECT", { reason: rejectReason })}>
+                                    Confirm Reject
+                                  </Button>
+                                  <Button size="sm" variant="ghost" className="h-8 text-xs" onClick={() => setRejectItemId(null)}>Cancel</Button>
+                                </div>
                               </div>
                             </div>
                           )}
 
                           {/* Admin note input */}
                           {noteItemId === item.id && (
-                            <div className="col-span-full mt-2 flex gap-2">
+                            <div className="col-span-full mt-2 flex flex-col sm:flex-row gap-2 w-full">
                               <Input
                                 value={adminNote}
                                 onChange={(e) => setAdminNote(e.target.value)}
                                 placeholder="Add note for HR..."
-                                className="h-8 text-xs"
+                                className="h-8 text-xs w-full"
                               />
-                              <Button size="sm" className="h-8 text-xs" onClick={() => addAdminNote(item.id)}>
-                                Add Note
-                              </Button>
+                              <div className="flex gap-2 justify-end">
+                                <Button size="sm" className="h-8 text-xs whitespace-nowrap" onClick={() => addAdminNote(item.id)}>
+                                  Add Note
+                                </Button>
+                              </div>
                             </div>
                           )}
                         </div>
@@ -620,7 +629,7 @@ function PlansSkeleton() {
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-4 w-72" />
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {[...Array(5)].map((_, i) => (
           <Card key={i}>
             <CardContent className="py-4">

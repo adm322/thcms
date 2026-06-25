@@ -69,9 +69,9 @@ export default function TrainerEvaluations() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {evaluations.map((e) => (
-            <Link key={e.id} href={`/trainer/evaluations/${e.id}`}>
+            <Link key={e.id} href={`/trainer/evaluations/${e.id}`} className="block">
               <Card className="hover:bg-accent/50 cursor-pointer transition-colors">
                 <CardContent className="flex items-center justify-between py-4">
                   <div className="min-w-0 flex-1">

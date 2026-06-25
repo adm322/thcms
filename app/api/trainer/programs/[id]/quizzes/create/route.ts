@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import crypto from "crypto";
 
 export async function POST(
   request: NextRequest,
@@ -29,6 +30,7 @@ export async function POST(
       description: body.description || "",
       passingScore: passingScore || 50,
       timeLimitMins: timeLimitMins || 30,
+      shareToken: crypto.randomBytes(6).toString("hex"),
     },
   });
 

@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./AuthProvider";
+import { CodeConductSidebar } from "./CodeConductSidebar";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, GraduationCap, BookOpen, Users, ClipboardList, FileText,
   Receipt, DollarSign, Star, Calendar, Compass, MapPin, ThumbsUp, MessageSquare,
   TrendingUp, Sparkles, MessageCircle, Clock, FileSpreadsheet, Calculator,
-  BookMarked,
+  BookMarked, HelpCircle, ScrollText,
 } from "lucide-react";
 
 interface NavItem {
@@ -29,6 +30,7 @@ const adminGroups: NavGroup[] = [
     { href: "/admin/bookings", label: "Bookings", icon: ClipboardList },
     { href: "/admin/reimbursements", label: "Reimbursements", icon: Receipt },
     { href: "/admin/invoices", label: "Invoices", icon: DollarSign },
+    { href: "/admin/code-of-conduct", label: "Code of Conduct", icon: ScrollText },
     { href: "/admin/support", label: "Support Tickets", icon: MessageSquare },
   ]},
   { label: "Training", items: [
@@ -49,10 +51,13 @@ const trainerGroups: NavGroup[] = [
   ]},
   { label: "Programs", items: [
     { href: "/trainer/programs", label: "My Programs", icon: BookOpen },
+    { href: "/trainer/bookings", label: "Bookings", icon: ClipboardList },
     { href: "/trainer/programs/new", label: "Create Program", icon: GraduationCap },
+    { href: "/trainer/sop", label: "SOP & Guide", icon: FileText },
   ]},
   { label: "Engagement", items: [
     { href: "/trainer/evaluations", label: "Evaluations", icon: Star },
+    { href: "/trainer/quizzes", label: "Quizzes & Polls", icon: HelpCircle },
     { href: "/trainer/messages", label: "Messages", icon: MessageCircle },
     { href: "/trainer/materials", label: "Materials", icon: FileText },
   ]},
@@ -91,10 +96,17 @@ const hrGroups: NavGroup[] = [
   ]},
 ];
 
+const participantGroups: NavGroup[] = [
+  { label: "My Hub", items: [
+    { href: "/participant", label: "My Classes", icon: BookOpen },
+    { href: "/participant/scan", label: "Scan QR", icon: Sparkles },
+  ]},
+];
+
 export function Sidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
-  const groups = user?.role === "ADMIN" ? adminGroups : user?.role === "TRAINER" ? trainerGroups : hrGroups;
+  const groups = user?.role === "ADMIN" ? adminGroups : user?.role === "TRAINER" ? trainerGroups : user?.role === "PARTICIPANT" ? participantGroups : hrGroups;
 
   return (
     <div className="flex h-full w-full flex-col bg-card border-r">
@@ -116,7 +128,9 @@ export function Sidebar() {
             </p>
             <div className="space-y-0.5">
               {group.items.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                const isExact = pathname === item.href;
+                // ponytail: avoid double-highlight on nested routes (e.g. /trainer/programs vs /trainer/programs/new)
+                const isActive = isExact || (pathname.startsWith(item.href + "/") && !group.items.some(other => other.href !== item.href && pathname.startsWith(other.href)));
                 return (
                   <Link key={item.href} href={item.href}
                     className={cn(
@@ -134,11 +148,14 @@ export function Sidebar() {
         ))}
       </nav>
 
+      {/* Code of Conduct — trainer only */}
+      {user?.role === "TRAINER" && <CodeConductSidebar />}
+
       <div className="border-t px-5 py-3 flex-shrink-0">
         <div className="rounded-md bg-accent/50 px-3 py-2">
           <p className="text-[10px] text-muted-foreground">Signed in as</p>
           <p className="text-xs font-medium truncate">
-            {user?.role === "ADMIN" ? "Platform Admin" : user?.role === "TRAINER" ? "Training Provider" : "HR Department"}
+            {user?.role === "ADMIN" ? "Platform Admin" : user?.role === "TRAINER" ? "Training Provider" : user?.role === "PARTICIPANT" ? "Participant" : "HR Department"}
           </p>
         </div>
       </div>

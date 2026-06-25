@@ -11,7 +11,7 @@ export async function PUT(
   const { questionId } = await params;
 
   const q = await prisma.question.findUnique({ where: { id: questionId }, include: { quiz: { include: { module: { select: { program: { select: { trainerId: true } } } } } } } });
-  if (!q || q.quiz.module.program.trainerId !== session.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!q || (q.quiz.standalone ? false : q.quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   let body: any;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
@@ -40,7 +40,7 @@ export async function DELETE(
   const { questionId } = await params;
 
   const q = await prisma.question.findUnique({ where: { id: questionId }, include: { quiz: { include: { module: { select: { program: { select: { trainerId: true } } } } } } } });
-  if (!q || q.quiz.module.program.trainerId !== session.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!q || (q.quiz.standalone ? false : q.quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   await prisma.question.delete({ where: { id: questionId } });
   return NextResponse.json({ success: true });

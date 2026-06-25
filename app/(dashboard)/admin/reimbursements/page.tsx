@@ -27,26 +27,34 @@ export default function AdminReimbursements() {
       <div className="space-y-3">
         {items.map((item) => (
           <Card key={item.id}>
-            <CardContent className="flex items-center justify-between py-4">
-              <div>
-                <p className="font-medium">{item.description}</p>
-                <p className="text-sm text-muted-foreground">
-                  {item.trainerName} • RM {item.amount.toLocaleString()} • {item.programTitle}
+            <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 px-5">
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-sm text-foreground leading-snug">{item.description}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Requested by <span className="font-medium text-foreground">{item.trainerName}</span>
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                  Program: {item.programTitle}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <Badge variant={item.status === "PENDING" ? "secondary" : item.status === "APPROVED" ? "default" : "destructive"}>
-                  {item.status}
-                </Badge>
+              
+              <div className="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-border w-full sm:w-auto flex-shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-foreground font-mono">RM {item.amount.toLocaleString()}</span>
+                  <Badge variant={item.status === "PENDING" ? "secondary" : item.status === "APPROVED" ? "default" : "destructive"} className="text-[10px] font-mono tracking-wider uppercase py-0.5 px-2 rounded-full">
+                    {item.status}
+                  </Badge>
+                </div>
+                
                 {item.status === "PENDING" && (
-                  <>
-                    <Button size="sm" variant="outline" onClick={() => updateStatus(item.id, "APPROVED")}>
+                  <div className="flex items-center gap-1">
+                    <Button size="sm" className="h-8 text-xs px-3" variant="outline" onClick={() => updateStatus(item.id, "APPROVED")}>
                       Approve
                     </Button>
-                    <Button size="sm" variant="destructive" onClick={() => updateStatus(item.id, "REJECTED")}>
+                    <Button size="sm" className="h-8 text-xs px-3" variant="destructive" onClick={() => updateStatus(item.id, "REJECTED")}>
                       Reject
                     </Button>
-                  </>
+                  </div>
                 )}
               </div>
             </CardContent>

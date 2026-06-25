@@ -67,11 +67,13 @@ Modals should use `fixed inset-0 z-50` overlay with `stopPropagation()` on the i
 
 Open `prisma/seed.ts`. First add `await prisma.{model}.deleteMany()` in the cleanup section (before the parent model's deleteMany to avoid FK errors).
 
+**Data Integrity:** Never ignore partial seed script failures. If a script fails halfway through, you MUST delete the corrupted partial data and fix the script so it runs cleanly from start to finish.
+
 Add realistic data after all existing seed sections, before the `console.log("✅ Seed complete!")` line. Use arrays of objects and iterate with `for...of`.
 
 Update the console.log summary to mention the new data count.
 
-## 5. Build & Verify
+## 5. Build & Verify Full Lifecycle
 
 ```bash
 # Kill server first (SQLite locks)
@@ -83,6 +85,10 @@ npx next build --webpack    # Windows: always use --webpack
 # Start
 npx next start -p 3000
 ```
+
+After starting the server, you **MUST verify the complete app lifecycle**:
+- **Verify UI Connections:** If you added a link, button, or redirect, guarantee the target route exists and successfully resolves (no dead ends).
+- **Verify Seeded Data:** Do not assume the seed script worked just because the UI renders. Verify that the seeded data is actually consumable by the application (e.g., checking that a seeded Quiz actually loads its questions).
 
 If build fails with TypeScript errors:
 - Check `BookingWhereInput` doesn't support `trainerId` — use `{ program: { trainerId } }`
@@ -99,3 +105,5 @@ If build fails with TypeScript errors:
 - Don't use `userId` on session (it's `id`)
 - Don't put `trainerId` directly on Booking queries
 - Don't nest `CollapsibleSection` inside another `CollapsibleSection`
+- **Don't create dead ends:** Never leave a UI link or user flow pointing to a broken, unverified, or unimplemented route. Ensure the complete app lifecycle is finished.
+- **Don't tolerate partial data:** Never leave partially seeded or corrupted database records.

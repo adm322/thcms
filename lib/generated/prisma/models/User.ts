@@ -222,6 +222,7 @@ export type UserWhereInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestListRelationFilter
   trainingPlans?: Prisma.TrainingPlanItemListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  participantProfile?: Prisma.ParticipantListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -249,6 +250,7 @@ export type UserOrderByWithRelationInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestOrderByRelationAggregateInput
   trainingPlans?: Prisma.TrainingPlanItemOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  participantProfile?: Prisma.ParticipantOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -279,6 +281,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   teamBuildingReqs?: Prisma.TeamBuildingRequestListRelationFilter
   trainingPlans?: Prisma.TrainingPlanItemListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  participantProfile?: Prisma.ParticipantListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -333,6 +336,7 @@ export type UserCreateInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -359,6 +363,7 @@ export type UserUncheckedCreateInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -385,6 +390,7 @@ export type UserUpdateInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -411,6 +417,7 @@ export type UserUncheckedUpdateInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -592,6 +599,22 @@ export type UserUpdateOneRequiredWithoutBookingsAsHRNestedInput = {
   upsert?: Prisma.UserUpsertWithoutBookingsAsHRInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBookingsAsHRInput, Prisma.UserUpdateWithoutBookingsAsHRInput>, Prisma.UserUncheckedUpdateWithoutBookingsAsHRInput>
+}
+
+export type UserCreateNestedOneWithoutParticipantProfileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutParticipantProfileInput, Prisma.UserUncheckedCreateWithoutParticipantProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutParticipantProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutParticipantProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutParticipantProfileInput, Prisma.UserUncheckedCreateWithoutParticipantProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutParticipantProfileInput
+  upsert?: Prisma.UserUpsertWithoutParticipantProfileInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutParticipantProfileInput, Prisma.UserUpdateWithoutParticipantProfileInput>, Prisma.UserUncheckedUpdateWithoutParticipantProfileInput>
 }
 
 export type UserCreateNestedOneWithoutReimbursementsInput = {
@@ -789,6 +812,7 @@ export type UserCreateWithoutCompanyInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCompanyInput = {
@@ -814,6 +838,7 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCompanyInput = {
@@ -878,6 +903,7 @@ export type UserCreateWithoutTrainerProfileInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTrainerProfileInput = {
@@ -903,6 +929,7 @@ export type UserUncheckedCreateWithoutTrainerProfileInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTrainerProfileInput = {
@@ -944,6 +971,7 @@ export type UserUpdateWithoutTrainerProfileInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTrainerProfileInput = {
@@ -969,6 +997,7 @@ export type UserUncheckedUpdateWithoutTrainerProfileInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProgramsInput = {
@@ -994,6 +1023,7 @@ export type UserCreateWithoutProgramsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProgramsInput = {
@@ -1019,6 +1049,7 @@ export type UserUncheckedCreateWithoutProgramsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProgramsInput = {
@@ -1060,6 +1091,7 @@ export type UserUpdateWithoutProgramsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgramsInput = {
@@ -1085,6 +1117,7 @@ export type UserUncheckedUpdateWithoutProgramsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBookingsAsHRInput = {
@@ -1110,6 +1143,7 @@ export type UserCreateWithoutBookingsAsHRInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBookingsAsHRInput = {
@@ -1135,6 +1169,7 @@ export type UserUncheckedCreateWithoutBookingsAsHRInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBookingsAsHRInput = {
@@ -1176,6 +1211,7 @@ export type UserUpdateWithoutBookingsAsHRInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsAsHRInput = {
@@ -1189,6 +1225,127 @@ export type UserUncheckedUpdateWithoutBookingsAsHRInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
+  leavesApproved?: Prisma.LeaveUncheckedUpdateManyWithoutApprovedByNestedInput
+  votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutHrNestedInput
+  tickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutHrNestedInput
+  changelogs?: Prisma.ChangelogUncheckedUpdateManyWithoutAuthorNestedInput
+  availabilities?: Prisma.TrainerAvailabilityUncheckedUpdateManyWithoutTrainerNestedInput
+  teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
+  trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutParticipantProfileInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  role?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
+  bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
+  leavesApproved?: Prisma.LeaveCreateNestedManyWithoutApprovedByInput
+  votes?: Prisma.ProgramVoteCreateNestedManyWithoutHrInput
+  tickets?: Prisma.SupportTicketCreateNestedManyWithoutHrInput
+  changelogs?: Prisma.ChangelogCreateNestedManyWithoutAuthorInput
+  availabilities?: Prisma.TrainerAvailabilityCreateNestedManyWithoutTrainerInput
+  teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
+  trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutParticipantProfileInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  role?: string
+  companyId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
+  bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
+  leavesApproved?: Prisma.LeaveUncheckedCreateNestedManyWithoutApprovedByInput
+  votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutHrInput
+  tickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutHrInput
+  changelogs?: Prisma.ChangelogUncheckedCreateNestedManyWithoutAuthorInput
+  availabilities?: Prisma.TrainerAvailabilityUncheckedCreateNestedManyWithoutTrainerInput
+  teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
+  trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutParticipantProfileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutParticipantProfileInput, Prisma.UserUncheckedCreateWithoutParticipantProfileInput>
+}
+
+export type UserUpsertWithoutParticipantProfileInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutParticipantProfileInput, Prisma.UserUncheckedUpdateWithoutParticipantProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutParticipantProfileInput, Prisma.UserUncheckedCreateWithoutParticipantProfileInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutParticipantProfileInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutParticipantProfileInput, Prisma.UserUncheckedUpdateWithoutParticipantProfileInput>
+}
+
+export type UserUpdateWithoutParticipantProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
+  bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
+  leavesApproved?: Prisma.LeaveUpdateManyWithoutApprovedByNestedInput
+  votes?: Prisma.ProgramVoteUpdateManyWithoutHrNestedInput
+  tickets?: Prisma.SupportTicketUpdateManyWithoutHrNestedInput
+  changelogs?: Prisma.ChangelogUpdateManyWithoutAuthorNestedInput
+  availabilities?: Prisma.TrainerAvailabilityUpdateManyWithoutTrainerNestedInput
+  teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
+  trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutParticipantProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
+  bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
@@ -1226,6 +1383,7 @@ export type UserCreateWithoutReimbursementsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReimbursementsInput = {
@@ -1251,6 +1409,7 @@ export type UserUncheckedCreateWithoutReimbursementsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReimbursementsInput = {
@@ -1292,6 +1451,7 @@ export type UserUpdateWithoutReimbursementsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReimbursementsInput = {
@@ -1317,6 +1477,7 @@ export type UserUncheckedUpdateWithoutReimbursementsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLeavesApprovedInput = {
@@ -1342,6 +1503,7 @@ export type UserCreateWithoutLeavesApprovedInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLeavesApprovedInput = {
@@ -1367,6 +1529,7 @@ export type UserUncheckedCreateWithoutLeavesApprovedInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLeavesApprovedInput = {
@@ -1408,6 +1571,7 @@ export type UserUpdateWithoutLeavesApprovedInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeavesApprovedInput = {
@@ -1433,6 +1597,7 @@ export type UserUncheckedUpdateWithoutLeavesApprovedInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -1458,6 +1623,7 @@ export type UserCreateWithoutSentMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -1483,6 +1649,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -1513,6 +1680,7 @@ export type UserCreateWithoutReceivedMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -1538,6 +1706,7 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -1579,6 +1748,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -1604,6 +1774,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutReceivedMessagesInput = {
@@ -1640,6 +1811,7 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -1665,6 +1837,7 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewsInput = {
@@ -1690,6 +1863,7 @@ export type UserCreateWithoutReviewsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewsInput = {
@@ -1715,6 +1889,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewsInput = {
@@ -1756,6 +1931,7 @@ export type UserUpdateWithoutReviewsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -1781,6 +1957,7 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutVotesInput = {
@@ -1806,6 +1983,7 @@ export type UserCreateWithoutVotesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutVotesInput = {
@@ -1831,6 +2009,7 @@ export type UserUncheckedCreateWithoutVotesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutVotesInput = {
@@ -1872,6 +2051,7 @@ export type UserUpdateWithoutVotesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVotesInput = {
@@ -1897,6 +2077,7 @@ export type UserUncheckedUpdateWithoutVotesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTicketsInput = {
@@ -1922,6 +2103,7 @@ export type UserCreateWithoutTicketsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTicketsInput = {
@@ -1947,6 +2129,7 @@ export type UserUncheckedCreateWithoutTicketsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTicketsInput = {
@@ -1988,6 +2171,7 @@ export type UserUpdateWithoutTicketsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTicketsInput = {
@@ -2013,6 +2197,7 @@ export type UserUncheckedUpdateWithoutTicketsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutChangelogsInput = {
@@ -2038,6 +2223,7 @@ export type UserCreateWithoutChangelogsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutChangelogsInput = {
@@ -2063,6 +2249,7 @@ export type UserUncheckedCreateWithoutChangelogsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutChangelogsInput = {
@@ -2104,6 +2291,7 @@ export type UserUpdateWithoutChangelogsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChangelogsInput = {
@@ -2129,6 +2317,7 @@ export type UserUncheckedUpdateWithoutChangelogsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTeamBuildingReqsInput = {
@@ -2154,6 +2343,7 @@ export type UserCreateWithoutTeamBuildingReqsInput = {
   availabilities?: Prisma.TrainerAvailabilityCreateNestedManyWithoutTrainerInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTeamBuildingReqsInput = {
@@ -2179,6 +2369,7 @@ export type UserUncheckedCreateWithoutTeamBuildingReqsInput = {
   availabilities?: Prisma.TrainerAvailabilityUncheckedCreateNestedManyWithoutTrainerInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTeamBuildingReqsInput = {
@@ -2220,6 +2411,7 @@ export type UserUpdateWithoutTeamBuildingReqsInput = {
   availabilities?: Prisma.TrainerAvailabilityUpdateManyWithoutTrainerNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTeamBuildingReqsInput = {
@@ -2245,6 +2437,7 @@ export type UserUncheckedUpdateWithoutTeamBuildingReqsInput = {
   availabilities?: Prisma.TrainerAvailabilityUncheckedUpdateManyWithoutTrainerNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTrainingPlansInput = {
@@ -2270,6 +2463,7 @@ export type UserCreateWithoutTrainingPlansInput = {
   availabilities?: Prisma.TrainerAvailabilityCreateNestedManyWithoutTrainerInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTrainingPlansInput = {
@@ -2295,6 +2489,7 @@ export type UserUncheckedCreateWithoutTrainingPlansInput = {
   availabilities?: Prisma.TrainerAvailabilityUncheckedCreateNestedManyWithoutTrainerInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTrainingPlansInput = {
@@ -2336,6 +2531,7 @@ export type UserUpdateWithoutTrainingPlansInput = {
   availabilities?: Prisma.TrainerAvailabilityUpdateManyWithoutTrainerNestedInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTrainingPlansInput = {
@@ -2361,6 +2557,7 @@ export type UserUncheckedUpdateWithoutTrainingPlansInput = {
   availabilities?: Prisma.TrainerAvailabilityUncheckedUpdateManyWithoutTrainerNestedInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -2386,6 +2583,7 @@ export type UserCreateWithoutNotificationsInput = {
   availabilities?: Prisma.TrainerAvailabilityCreateNestedManyWithoutTrainerInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -2411,6 +2609,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   availabilities?: Prisma.TrainerAvailabilityUncheckedCreateNestedManyWithoutTrainerInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -2452,6 +2651,7 @@ export type UserUpdateWithoutNotificationsInput = {
   availabilities?: Prisma.TrainerAvailabilityUpdateManyWithoutTrainerNestedInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -2477,6 +2677,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   availabilities?: Prisma.TrainerAvailabilityUncheckedUpdateManyWithoutTrainerNestedInput
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAvailabilitiesInput = {
@@ -2502,6 +2703,7 @@ export type UserCreateWithoutAvailabilitiesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAvailabilitiesInput = {
@@ -2527,6 +2729,7 @@ export type UserUncheckedCreateWithoutAvailabilitiesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAvailabilitiesInput = {
@@ -2568,6 +2771,7 @@ export type UserUpdateWithoutAvailabilitiesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAvailabilitiesInput = {
@@ -2593,6 +2797,7 @@ export type UserUncheckedUpdateWithoutAvailabilitiesInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyCompanyInput = {
@@ -2628,6 +2833,7 @@ export type UserUpdateWithoutCompanyInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -2653,6 +2859,7 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutCompanyInput = {
@@ -2685,6 +2892,7 @@ export type UserCountOutputType = {
   teamBuildingReqs: number
   trainingPlans: number
   notifications: number
+  participantProfile: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2702,6 +2910,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   teamBuildingReqs?: boolean | UserCountOutputTypeCountTeamBuildingReqsArgs
   trainingPlans?: boolean | UserCountOutputTypeCountTrainingPlansArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  participantProfile?: boolean | UserCountOutputTypeCountParticipantProfileArgs
 }
 
 /**
@@ -2812,6 +3021,13 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountParticipantProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ParticipantWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2838,6 +3054,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   teamBuildingReqs?: boolean | Prisma.User$teamBuildingReqsArgs<ExtArgs>
   trainingPlans?: boolean | Prisma.User$trainingPlansArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  participantProfile?: boolean | Prisma.User$participantProfileArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2894,6 +3111,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   teamBuildingReqs?: boolean | Prisma.User$teamBuildingReqsArgs<ExtArgs>
   trainingPlans?: boolean | Prisma.User$trainingPlansArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  participantProfile?: boolean | Prisma.User$participantProfileArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2922,6 +3140,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     teamBuildingReqs: Prisma.$TeamBuildingRequestPayload<ExtArgs>[]
     trainingPlans: Prisma.$TrainingPlanItemPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    participantProfile: Prisma.$ParticipantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3342,6 +3561,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   teamBuildingReqs<T extends Prisma.User$teamBuildingReqsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$teamBuildingReqsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamBuildingRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trainingPlans<T extends Prisma.User$trainingPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$trainingPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TrainingPlanItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  participantProfile<T extends Prisma.User$participantProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$participantProfileArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4149,6 +4369,30 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.participantProfile
+ */
+export type User$participantProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Participant
+   */
+  select?: Prisma.ParticipantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Participant
+   */
+  omit?: Prisma.ParticipantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParticipantInclude<ExtArgs> | null
+  where?: Prisma.ParticipantWhereInput
+  orderBy?: Prisma.ParticipantOrderByWithRelationInput | Prisma.ParticipantOrderByWithRelationInput[]
+  cursor?: Prisma.ParticipantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ParticipantScalarFieldEnum | Prisma.ParticipantScalarFieldEnum[]
 }
 
 /**

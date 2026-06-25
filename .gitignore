@@ -4,3 +4,34 @@ dev.db
 dev.db-journal
 .env.local
 *.log
+
+# InsForge & AI agent skills
+.insforge
+.agent
+.agents
+.augment
+.claude
+.cline
+.github/copilot*
+.kilocode
+.qoder
+.qwen
+.roo
+.trae
+.windsurf
+
+# Local environment & temporary files
+.env
+scratch/
+awesome-design-md-main/
+*.sql
+run-fix.*
+fix-quizzes.*
+migrate-quizzes.ts
+deploy-now.js
+trigger-fix.js
+test-db.js
+test-fetch.js
+check.ts
+tsconfig.tsbuildinfo
+nul

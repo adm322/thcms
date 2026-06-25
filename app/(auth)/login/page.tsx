@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { GraduationCap, Loader2, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
 
 function getDashboardPath(role: string): string {
   switch (role) {
@@ -16,8 +17,10 @@ function getDashboardPath(role: string): string {
   }
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { refresh } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +46,9 @@ export default function LoginPage() {
         return;
       }
 
-      router.push(getDashboardPath(data.user.role));
+      await refresh();
+      const redirect = searchParams.get("redirect");
+      router.push(redirect || getDashboardPath(data.user.role));
       router.refresh();
     } catch {
       setError("Network error. Please try again.");
@@ -66,6 +71,7 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Login failed"); return; }
+      await refresh();
       router.push(getDashboardPath(data.user.role));
       router.refresh();
     } catch { setError("Network error"); }
@@ -198,8 +204,26 @@ export default function LoginPage() {
               ))}
             </div>
           </div>
+          {/* Participants */}
+          <div className="w-full">
+            <p className="text-[10px] text-muted-foreground mb-1.5">Participants</p>
+            <div className="flex flex-wrap gap-1.5">
+              <button onClick={() => quickLogin("participant@demo.com")}
+                className="rounded-full border px-3 py-1.5 text-xs font-medium hover:bg-accent transition-colors">
+                Demo Participant
+              </button>
+            </div>
+          </div>
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

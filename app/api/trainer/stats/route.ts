@@ -38,10 +38,16 @@ export async function GET() {
         date: b.programDate.toISOString(),
       }));
 
+    // Booking status breakdown for pipeline
+    const statusCounts = { PENDING: 0, CONFIRMED: 0, COMPLETED: 0, CANCELLED: 0 };
+    bookings.forEach(b => { if (b.status in statusCounts) statusCounts[b.status as keyof typeof statusCounts]++; });
+
     return NextResponse.json({
       totalPrograms,
       publishedPrograms,
+      draftPrograms: totalPrograms - publishedPrograms,
       totalBookings: bookings.length,
+      bookingStatusCounts: statusCounts,
       totalRevenue,
       averageRating: profile?.rating ?? 0,
       upcomingBookings: upcoming,

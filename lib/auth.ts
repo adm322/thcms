@@ -13,7 +13,7 @@ export interface SessionUser {
   id: string;
   email: string;
   name: string;
-  role: "ADMIN" | "TRAINER" | "HR";
+  role: "ADMIN" | "TRAINER" | "HR" | "PARTICIPANT";
   companyId?: string | null;
 }
 

@@ -64,11 +64,11 @@ export async function GET() {
     });
   }
 
-  // 2. Completed trainings — submit trainer HRDF claim
-  const completedWithoutHrdf = bookings.filter(
+  // 2. Completed trainings — trainer uploads supporting docs for employer's e-TRiS submission
+  const completedWithoutDocs = bookings.filter(
     (b) => b.status === "COMPLETED" && !b.trainerHrdfSubmitted
   );
-  for (const b of completedWithoutHrdf.slice(0, 3)) {
+  for (const b of completedWithoutDocs.slice(0, 3)) {
     const daysSince = Math.floor(
       (now.getTime() - new Date(b.programDate).getTime()) / 86400000
     );
@@ -83,11 +83,11 @@ export async function GET() {
       deadlineDays,
       message:
         deadlineDays <= 7
-          ? `⚠️ Only ${deadlineDays}d left to submit your HRDF claim for "${b.program.title}"`
+          ? `⚠️ Only ${deadlineDays}d left to upload supporting docs for "${b.program.title}"`
           : deadlineDays <= 30
-          ? `Submit trainer HRDF claim for "${b.program.title}" — ${deadlineDays}d remaining`
-          : `You can still claim HRDF for "${b.program.title}" — ${daysSince}d since completion`,
-      action: "Submit Claim",
+          ? `Upload supporting documents for "${b.program.title}" — ${deadlineDays}d remaining`
+          : `Supporting documents still needed for "${b.program.title}" — ${daysSince}d since completion`,
+      action: "Upload Docs",
       link: `/trainer/bookings/${b.id}`,
     });
   }
@@ -180,7 +180,7 @@ export async function GET() {
     }),
     summary: {
       upcomingThisWeek: upcomingThisWeek.length,
-      pendingHrdfClaims: completedWithoutHrdf.length,
+      pendingDocs: completedWithoutDocs.length,
       unpublishedPrograms: unpublished.length,
       zeroBookingPrograms: zeroBookingPrograms.length,
       pendingApprovals: pendingCount,

@@ -403,6 +403,11 @@ export type ModuleSumOrderByAggregateInput = {
   durationMins?: Prisma.SortOrder
 }
 
+export type ModuleNullableScalarRelationFilter = {
+  is?: Prisma.ModuleWhereInput | null
+  isNot?: Prisma.ModuleWhereInput | null
+}
+
 export type ModuleScalarRelationFilter = {
   is?: Prisma.ModuleWhereInput
   isNot?: Prisma.ModuleWhereInput
@@ -456,10 +461,12 @@ export type ModuleCreateNestedOneWithoutQuizzesInput = {
   connect?: Prisma.ModuleWhereUniqueInput
 }
 
-export type ModuleUpdateOneRequiredWithoutQuizzesNestedInput = {
+export type ModuleUpdateOneWithoutQuizzesNestedInput = {
   create?: Prisma.XOR<Prisma.ModuleCreateWithoutQuizzesInput, Prisma.ModuleUncheckedCreateWithoutQuizzesInput>
   connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutQuizzesInput
   upsert?: Prisma.ModuleUpsertWithoutQuizzesInput
+  disconnect?: Prisma.ModuleWhereInput | boolean
+  delete?: Prisma.ModuleWhereInput | boolean
   connect?: Prisma.ModuleWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutQuizzesInput, Prisma.ModuleUpdateWithoutQuizzesInput>, Prisma.ModuleUncheckedUpdateWithoutQuizzesInput>
 }

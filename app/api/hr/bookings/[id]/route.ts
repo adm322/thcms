@@ -36,6 +36,7 @@ export async function GET(
     depositPaid: booking.depositPaid,
     depositStatus: booking.depositStatus,
     status: booking.status,
+    meetingLink: booking.meetingLink,
     hrdfScheme: booking.hrdfScheme,
     employerHrdfSubmitted: booking.employerHrdfSubmitted,
     employerHrdfSubmittedAt: booking.employerHrdfSubmittedAt?.toISOString() || null,

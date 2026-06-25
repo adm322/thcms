@@ -153,51 +153,55 @@ export default function AdminProgramsPage() {
         <div className="space-y-2">
           {programs.map((p, idx) => (
             <div key={p.id} className={`stagger-item stagger-${Math.min(idx + 1, 10)}`}>
-            <div className="flex items-center justify-between rounded-xl border px-5 py-4 hover:bg-accent/20 transition-colors">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border px-5 py-4 hover:bg-accent/20 transition-colors gap-4">
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
+                <div className="flex items-center gap-2 flex-wrap mb-1.5">
                   <Badge className={`text-[10px] ${CATEGORY_COLORS[p.category] || ""}`}>{p.category}</Badge>
                   <Badge className={`text-[10px] ${STATUS_COLORS[p.status] || ""}`}>{p.status}</Badge>
                   {p.featured && <Badge className="text-[10px] bg-amber-100 text-amber-700">⭐ Featured</Badge>}
                 </div>
-                <p className="text-sm font-semibold">{p.title}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-sm font-semibold text-foreground leading-snug">{p.title}</p>
+                <p className="text-xs text-muted-foreground mt-1">
                   by {p.trainerName} · {p.durationHours}h · RM {p.pricePerPax}/pax · {p.locationType} · max {p.maxParticipants}
-                  {" · "}{p.bookingCount} bookings · {p.moduleCount} modules
+                </p>
+                <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
+                  {p.bookingCount} bookings · {p.moduleCount} modules
                 </p>
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-1 ml-3 flex-shrink-0">
-                {/* Feature toggle */}
-                <Button variant="ghost" size="sm" className="h-8 text-xs"
-                  onClick={() => quickAction(p.id, "feature")}
-                  title={p.featured ? "Unfeature" : "Feature"}>
-                  <Star className={`h-4 w-4 ${p.featured ? "fill-amber-400 text-amber-400" : "text-muted-foreground"}`} />
-                </Button>
-                {/* Publish/Unpublish */}
-                {p.status !== "PUBLISHED" && (
-                  <Button variant="ghost" size="sm" className="h-8 text-xs text-emerald-600"
-                    onClick={() => quickAction(p.id, "publish")} title="Publish">
-                    <CheckCircle2 className="h-4 w-4" />
+              <div className="flex items-center justify-between sm:justify-end gap-2 pt-3 sm:pt-0 border-t sm:border-t-0 border-border w-full sm:w-auto flex-shrink-0">
+                <div className="flex items-center gap-1">
+                  {/* Feature toggle */}
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0"
+                    onClick={() => quickAction(p.id, "feature")}
+                    title={p.featured ? "Unfeature" : "Feature"}>
+                    <Star className={`h-4 w-4 ${p.featured ? "fill-amber-400 text-amber-400" : "text-muted-foreground"}`} />
                   </Button>
-                )}
-                {p.status === "PUBLISHED" && (
-                  <Button variant="ghost" size="sm" className="h-8 text-xs text-muted-foreground"
-                    onClick={() => quickAction(p.id, "archive")} title="Archive">
-                    <Archive className="h-4 w-4" />
-                  </Button>
-                )}
-                {p.status === "ARCHIVED" && (
-                  <Button variant="ghost" size="sm" className="h-8 text-xs text-blue-600"
-                    onClick={() => quickAction(p.id, "draft")} title="Move to Draft">
-                    <EyeOff className="h-4 w-4" />
-                  </Button>
-                )}
+                  {/* Publish/Unpublish */}
+                  {p.status !== "PUBLISHED" && (
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-emerald-600"
+                      onClick={() => quickAction(p.id, "publish")} title="Publish">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {p.status === "PUBLISHED" && (
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground"
+                      onClick={() => quickAction(p.id, "archive")} title="Archive">
+                      <Archive className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {p.status === "ARCHIVED" && (
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-600"
+                      onClick={() => quickAction(p.id, "draft")} title="Move to Draft">
+                      <EyeOff className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
                 {/* View / Expand */}
-                <Button variant="ghost" size="sm" className="h-8 text-xs"
+                <Button variant="outline" size="sm" className="h-8 text-xs px-3"
                   onClick={() => setExpandedId(expandedId === p.id ? null : p.id)}>
-                  {expandedId === p.id ? "Hide" : "View"}
+                  {expandedId === p.id ? "Hide" : "View Details"}
                 </Button>
               </div>
             </div>
@@ -231,7 +235,7 @@ function ProgramsSkeleton() {
       <div><Skeleton className="h-8 w-40 mb-1" /><Skeleton className="h-4 w-64" /></div>
       <div className="flex gap-2">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-8 w-20 rounded-full" />)}</div>
       <div className="flex gap-3"><Skeleton className="h-10 flex-1 rounded-lg" /><Skeleton className="h-10 w-32 rounded-lg" /></div>
-      <div className="space-y-2">{[...Array(8)].map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}</div>
+      <div className="space-y-2 overflow-x-auto">{[...Array(8)].map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}</div>
     </div>
   );
 }

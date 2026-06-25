@@ -25,10 +25,10 @@ interface NextActionBannerProps {
 }
 
 const urgencyConfig = {
-  critical: { bg: "border-red-300 bg-red-50", icon: AlertTriangle, iconColor: "text-red-500", badge: "destructive" as const },
-  urgent: { bg: "border-amber-300 bg-amber-50", icon: AlertTriangle, iconColor: "text-amber-500", badge: "destructive" as const },
-  soon: { bg: "border-blue-200 bg-blue-50", icon: Clock, iconColor: "text-blue-500", badge: "secondary" as const },
-  info: { bg: "border-blue-200 bg-blue-50", icon: Clock, iconColor: "text-blue-400", badge: "secondary" as const },
+  critical: { bg: "border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-900/50", icon: AlertTriangle, iconColor: "text-red-500", badge: "destructive" as const },
+  urgent: { bg: "border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-900/50", icon: AlertTriangle, iconColor: "text-amber-500", badge: "destructive" as const },
+  soon: { bg: "border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-900/50", icon: Clock, iconColor: "text-blue-500", badge: "secondary" as const },
+  info: { bg: "border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-900/50", icon: Clock, iconColor: "text-blue-400", badge: "secondary" as const },
 };
 
 export function NextActionBanner({ role }: NextActionBannerProps) {
@@ -60,7 +60,10 @@ export function NextActionBanner({ role }: NextActionBannerProps) {
 
   useEffect(() => {
     fetchActions();
-    const interval = setInterval(fetchActions, 60000);
+    // ponytail: only poll when the tab is visible
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") fetchActions();
+    }, 60000);
     return () => clearInterval(interval);
   }, [role]);
 

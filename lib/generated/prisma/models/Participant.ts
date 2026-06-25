@@ -20,31 +20,20 @@ export type ParticipantModel = runtime.Types.Result.DefaultSelection<Prisma.$Par
 
 export type AggregateParticipant = {
   _count: ParticipantCountAggregateOutputType | null
-  _avg: ParticipantAvgAggregateOutputType | null
-  _sum: ParticipantSumAggregateOutputType | null
   _min: ParticipantMinAggregateOutputType | null
   _max: ParticipantMaxAggregateOutputType | null
-}
-
-export type ParticipantAvgAggregateOutputType = {
-  quizScore: number | null
-}
-
-export type ParticipantSumAggregateOutputType = {
-  quizScore: number | null
 }
 
 export type ParticipantMinAggregateOutputType = {
   id: string | null
   bookingId: string | null
   employeeId: string | null
+  userId: string | null
   name: string | null
   email: string | null
   icNumber: string | null
   department: string | null
   attendanceStatus: string | null
-  quizId: string | null
-  quizScore: number | null
   certificateUrl: string | null
   createdAt: Date | null
 }
@@ -53,13 +42,12 @@ export type ParticipantMaxAggregateOutputType = {
   id: string | null
   bookingId: string | null
   employeeId: string | null
+  userId: string | null
   name: string | null
   email: string | null
   icNumber: string | null
   department: string | null
   attendanceStatus: string | null
-  quizId: string | null
-  quizScore: number | null
   certificateUrl: string | null
   createdAt: Date | null
 }
@@ -68,38 +56,28 @@ export type ParticipantCountAggregateOutputType = {
   id: number
   bookingId: number
   employeeId: number
+  userId: number
   name: number
   email: number
   icNumber: number
   department: number
   attendanceStatus: number
-  quizId: number
-  quizScore: number
   certificateUrl: number
   createdAt: number
   _all: number
 }
 
 
-export type ParticipantAvgAggregateInputType = {
-  quizScore?: true
-}
-
-export type ParticipantSumAggregateInputType = {
-  quizScore?: true
-}
-
 export type ParticipantMinAggregateInputType = {
   id?: true
   bookingId?: true
   employeeId?: true
+  userId?: true
   name?: true
   email?: true
   icNumber?: true
   department?: true
   attendanceStatus?: true
-  quizId?: true
-  quizScore?: true
   certificateUrl?: true
   createdAt?: true
 }
@@ -108,13 +86,12 @@ export type ParticipantMaxAggregateInputType = {
   id?: true
   bookingId?: true
   employeeId?: true
+  userId?: true
   name?: true
   email?: true
   icNumber?: true
   department?: true
   attendanceStatus?: true
-  quizId?: true
-  quizScore?: true
   certificateUrl?: true
   createdAt?: true
 }
@@ -123,13 +100,12 @@ export type ParticipantCountAggregateInputType = {
   id?: true
   bookingId?: true
   employeeId?: true
+  userId?: true
   name?: true
   email?: true
   icNumber?: true
   department?: true
   attendanceStatus?: true
-  quizId?: true
-  quizScore?: true
   certificateUrl?: true
   createdAt?: true
   _all?: true
@@ -173,18 +149,6 @@ export type ParticipantAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: ParticipantAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: ParticipantSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: ParticipantMinAggregateInputType
@@ -215,8 +179,6 @@ export type ParticipantGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: ParticipantCountAggregateInputType | true
-  _avg?: ParticipantAvgAggregateInputType
-  _sum?: ParticipantSumAggregateInputType
   _min?: ParticipantMinAggregateInputType
   _max?: ParticipantMaxAggregateInputType
 }
@@ -225,18 +187,15 @@ export type ParticipantGroupByOutputType = {
   id: string
   bookingId: string
   employeeId: string | null
+  userId: string | null
   name: string
   email: string | null
   icNumber: string | null
   department: string | null
   attendanceStatus: string
-  quizId: string | null
-  quizScore: number | null
   certificateUrl: string | null
   createdAt: Date
   _count: ParticipantCountAggregateOutputType | null
-  _avg: ParticipantAvgAggregateOutputType | null
-  _sum: ParticipantSumAggregateOutputType | null
   _min: ParticipantMinAggregateOutputType | null
   _max: ParticipantMaxAggregateOutputType | null
 }
@@ -263,36 +222,36 @@ export type ParticipantWhereInput = {
   id?: Prisma.StringFilter<"Participant"> | string
   bookingId?: Prisma.StringFilter<"Participant"> | string
   employeeId?: Prisma.StringNullableFilter<"Participant"> | string | null
+  userId?: Prisma.StringNullableFilter<"Participant"> | string | null
   name?: Prisma.StringFilter<"Participant"> | string
   email?: Prisma.StringNullableFilter<"Participant"> | string | null
   icNumber?: Prisma.StringNullableFilter<"Participant"> | string | null
   department?: Prisma.StringNullableFilter<"Participant"> | string | null
   attendanceStatus?: Prisma.StringFilter<"Participant"> | string
-  quizId?: Prisma.StringNullableFilter<"Participant"> | string | null
-  quizScore?: Prisma.FloatNullableFilter<"Participant"> | number | null
   certificateUrl?: Prisma.StringNullableFilter<"Participant"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
   booking?: Prisma.XOR<Prisma.BookingScalarRelationFilter, Prisma.BookingWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
-  quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  quizResults?: Prisma.QuizResultListRelationFilter
 }
 
 export type ParticipantOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   icNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   department?: Prisma.SortOrderInput | Prisma.SortOrder
   attendanceStatus?: Prisma.SortOrder
-  quizId?: Prisma.SortOrderInput | Prisma.SortOrder
-  quizScore?: Prisma.SortOrderInput | Prisma.SortOrder
   certificateUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   booking?: Prisma.BookingOrderByWithRelationInput
   employee?: Prisma.EmployeeOrderByWithRelationInput
-  quiz?: Prisma.QuizOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
+  quizResults?: Prisma.QuizResultOrderByRelationAggregateInput
 }
 
 export type ParticipantWhereUniqueInput = Prisma.AtLeast<{
@@ -302,38 +261,35 @@ export type ParticipantWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ParticipantWhereInput | Prisma.ParticipantWhereInput[]
   bookingId?: Prisma.StringFilter<"Participant"> | string
   employeeId?: Prisma.StringNullableFilter<"Participant"> | string | null
+  userId?: Prisma.StringNullableFilter<"Participant"> | string | null
   name?: Prisma.StringFilter<"Participant"> | string
   email?: Prisma.StringNullableFilter<"Participant"> | string | null
   icNumber?: Prisma.StringNullableFilter<"Participant"> | string | null
   department?: Prisma.StringNullableFilter<"Participant"> | string | null
   attendanceStatus?: Prisma.StringFilter<"Participant"> | string
-  quizId?: Prisma.StringNullableFilter<"Participant"> | string | null
-  quizScore?: Prisma.FloatNullableFilter<"Participant"> | number | null
   certificateUrl?: Prisma.StringNullableFilter<"Participant"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
   booking?: Prisma.XOR<Prisma.BookingScalarRelationFilter, Prisma.BookingWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
-  quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  quizResults?: Prisma.QuizResultListRelationFilter
 }, "id">
 
 export type ParticipantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   icNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   department?: Prisma.SortOrderInput | Prisma.SortOrder
   attendanceStatus?: Prisma.SortOrder
-  quizId?: Prisma.SortOrderInput | Prisma.SortOrder
-  quizScore?: Prisma.SortOrderInput | Prisma.SortOrder
   certificateUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ParticipantCountOrderByAggregateInput
-  _avg?: Prisma.ParticipantAvgOrderByAggregateInput
   _max?: Prisma.ParticipantMaxOrderByAggregateInput
   _min?: Prisma.ParticipantMinOrderByAggregateInput
-  _sum?: Prisma.ParticipantSumOrderByAggregateInput
 }
 
 export type ParticipantScalarWhereWithAggregatesInput = {
@@ -343,13 +299,12 @@ export type ParticipantScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Participant"> | string
   bookingId?: Prisma.StringWithAggregatesFilter<"Participant"> | string
   employeeId?: Prisma.StringNullableWithAggregatesFilter<"Participant"> | string | null
+  userId?: Prisma.StringNullableWithAggregatesFilter<"Participant"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Participant"> | string
   email?: Prisma.StringNullableWithAggregatesFilter<"Participant"> | string | null
   icNumber?: Prisma.StringNullableWithAggregatesFilter<"Participant"> | string | null
   department?: Prisma.StringNullableWithAggregatesFilter<"Participant"> | string | null
   attendanceStatus?: Prisma.StringWithAggregatesFilter<"Participant"> | string
-  quizId?: Prisma.StringNullableWithAggregatesFilter<"Participant"> | string | null
-  quizScore?: Prisma.FloatNullableWithAggregatesFilter<"Participant"> | number | null
   certificateUrl?: Prisma.StringNullableWithAggregatesFilter<"Participant"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Participant"> | Date | string
 }
@@ -361,27 +316,27 @@ export type ParticipantCreateInput = {
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
   booking: Prisma.BookingCreateNestedOneWithoutParticipantsInput
   employee?: Prisma.EmployeeCreateNestedOneWithoutParticipantsInput
-  quiz?: Prisma.QuizCreateNestedOneWithoutParticipantsInput
+  user?: Prisma.UserCreateNestedOneWithoutParticipantProfileInput
+  quizResults?: Prisma.QuizResultCreateNestedManyWithoutParticipantInput
 }
 
 export type ParticipantUncheckedCreateInput = {
   id?: string
   bookingId: string
   employeeId?: string | null
+  userId?: string | null
   name: string
   email?: string | null
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizId?: string | null
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
+  quizResults?: Prisma.QuizResultUncheckedCreateNestedManyWithoutParticipantInput
 }
 
 export type ParticipantUpdateInput = {
@@ -391,40 +346,39 @@ export type ParticipantUpdateInput = {
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   booking?: Prisma.BookingUpdateOneRequiredWithoutParticipantsNestedInput
   employee?: Prisma.EmployeeUpdateOneWithoutParticipantsNestedInput
-  quiz?: Prisma.QuizUpdateOneWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneWithoutParticipantProfileNestedInput
+  quizResults?: Prisma.QuizResultUpdateManyWithoutParticipantNestedInput
 }
 
 export type ParticipantUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizResults?: Prisma.QuizResultUncheckedUpdateManyWithoutParticipantNestedInput
 }
 
 export type ParticipantCreateManyInput = {
   id?: string
   bookingId: string
   employeeId?: string | null
+  userId?: string | null
   name: string
   email?: string | null
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizId?: string | null
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
 }
@@ -436,7 +390,6 @@ export type ParticipantUpdateManyMutationInput = {
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -445,13 +398,12 @@ export type ParticipantUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -466,36 +418,35 @@ export type ParticipantOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type ParticipantScalarRelationFilter = {
+  is?: Prisma.ParticipantWhereInput
+  isNot?: Prisma.ParticipantWhereInput
+}
+
 export type ParticipantCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   icNumber?: Prisma.SortOrder
   department?: Prisma.SortOrder
   attendanceStatus?: Prisma.SortOrder
-  quizId?: Prisma.SortOrder
-  quizScore?: Prisma.SortOrder
   certificateUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-}
-
-export type ParticipantAvgOrderByAggregateInput = {
-  quizScore?: Prisma.SortOrder
 }
 
 export type ParticipantMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   icNumber?: Prisma.SortOrder
   department?: Prisma.SortOrder
   attendanceStatus?: Prisma.SortOrder
-  quizId?: Prisma.SortOrder
-  quizScore?: Prisma.SortOrder
   certificateUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -504,61 +455,70 @@ export type ParticipantMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   icNumber?: Prisma.SortOrder
   department?: Prisma.SortOrder
   attendanceStatus?: Prisma.SortOrder
-  quizId?: Prisma.SortOrder
-  quizScore?: Prisma.SortOrder
   certificateUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
-export type ParticipantSumOrderByAggregateInput = {
-  quizScore?: Prisma.SortOrder
-}
-
-export type ParticipantCreateNestedManyWithoutQuizInput = {
-  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizInput, Prisma.ParticipantUncheckedCreateWithoutQuizInput> | Prisma.ParticipantCreateWithoutQuizInput[] | Prisma.ParticipantUncheckedCreateWithoutQuizInput[]
-  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutQuizInput | Prisma.ParticipantCreateOrConnectWithoutQuizInput[]
-  createMany?: Prisma.ParticipantCreateManyQuizInputEnvelope
+export type ParticipantCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutUserInput, Prisma.ParticipantUncheckedCreateWithoutUserInput> | Prisma.ParticipantCreateWithoutUserInput[] | Prisma.ParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutUserInput | Prisma.ParticipantCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ParticipantCreateManyUserInputEnvelope
   connect?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
 }
 
-export type ParticipantUncheckedCreateNestedManyWithoutQuizInput = {
-  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizInput, Prisma.ParticipantUncheckedCreateWithoutQuizInput> | Prisma.ParticipantCreateWithoutQuizInput[] | Prisma.ParticipantUncheckedCreateWithoutQuizInput[]
-  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutQuizInput | Prisma.ParticipantCreateOrConnectWithoutQuizInput[]
-  createMany?: Prisma.ParticipantCreateManyQuizInputEnvelope
+export type ParticipantUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutUserInput, Prisma.ParticipantUncheckedCreateWithoutUserInput> | Prisma.ParticipantCreateWithoutUserInput[] | Prisma.ParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutUserInput | Prisma.ParticipantCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ParticipantCreateManyUserInputEnvelope
   connect?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
 }
 
-export type ParticipantUpdateManyWithoutQuizNestedInput = {
-  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizInput, Prisma.ParticipantUncheckedCreateWithoutQuizInput> | Prisma.ParticipantCreateWithoutQuizInput[] | Prisma.ParticipantUncheckedCreateWithoutQuizInput[]
-  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutQuizInput | Prisma.ParticipantCreateOrConnectWithoutQuizInput[]
-  upsert?: Prisma.ParticipantUpsertWithWhereUniqueWithoutQuizInput | Prisma.ParticipantUpsertWithWhereUniqueWithoutQuizInput[]
-  createMany?: Prisma.ParticipantCreateManyQuizInputEnvelope
+export type ParticipantUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutUserInput, Prisma.ParticipantUncheckedCreateWithoutUserInput> | Prisma.ParticipantCreateWithoutUserInput[] | Prisma.ParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutUserInput | Prisma.ParticipantCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ParticipantUpsertWithWhereUniqueWithoutUserInput | Prisma.ParticipantUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ParticipantCreateManyUserInputEnvelope
   set?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
   disconnect?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
   delete?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
   connect?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
-  update?: Prisma.ParticipantUpdateWithWhereUniqueWithoutQuizInput | Prisma.ParticipantUpdateWithWhereUniqueWithoutQuizInput[]
-  updateMany?: Prisma.ParticipantUpdateManyWithWhereWithoutQuizInput | Prisma.ParticipantUpdateManyWithWhereWithoutQuizInput[]
+  update?: Prisma.ParticipantUpdateWithWhereUniqueWithoutUserInput | Prisma.ParticipantUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ParticipantUpdateManyWithWhereWithoutUserInput | Prisma.ParticipantUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.ParticipantScalarWhereInput | Prisma.ParticipantScalarWhereInput[]
 }
 
-export type ParticipantUncheckedUpdateManyWithoutQuizNestedInput = {
-  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizInput, Prisma.ParticipantUncheckedCreateWithoutQuizInput> | Prisma.ParticipantCreateWithoutQuizInput[] | Prisma.ParticipantUncheckedCreateWithoutQuizInput[]
-  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutQuizInput | Prisma.ParticipantCreateOrConnectWithoutQuizInput[]
-  upsert?: Prisma.ParticipantUpsertWithWhereUniqueWithoutQuizInput | Prisma.ParticipantUpsertWithWhereUniqueWithoutQuizInput[]
-  createMany?: Prisma.ParticipantCreateManyQuizInputEnvelope
+export type ParticipantUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutUserInput, Prisma.ParticipantUncheckedCreateWithoutUserInput> | Prisma.ParticipantCreateWithoutUserInput[] | Prisma.ParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutUserInput | Prisma.ParticipantCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ParticipantUpsertWithWhereUniqueWithoutUserInput | Prisma.ParticipantUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ParticipantCreateManyUserInputEnvelope
   set?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
   disconnect?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
   delete?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
   connect?: Prisma.ParticipantWhereUniqueInput | Prisma.ParticipantWhereUniqueInput[]
-  update?: Prisma.ParticipantUpdateWithWhereUniqueWithoutQuizInput | Prisma.ParticipantUpdateWithWhereUniqueWithoutQuizInput[]
-  updateMany?: Prisma.ParticipantUpdateManyWithWhereWithoutQuizInput | Prisma.ParticipantUpdateManyWithWhereWithoutQuizInput[]
+  update?: Prisma.ParticipantUpdateWithWhereUniqueWithoutUserInput | Prisma.ParticipantUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ParticipantUpdateManyWithWhereWithoutUserInput | Prisma.ParticipantUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.ParticipantScalarWhereInput | Prisma.ParticipantScalarWhereInput[]
+}
+
+export type ParticipantCreateNestedOneWithoutQuizResultsInput = {
+  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizResultsInput, Prisma.ParticipantUncheckedCreateWithoutQuizResultsInput>
+  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutQuizResultsInput
+  connect?: Prisma.ParticipantWhereUniqueInput
+}
+
+export type ParticipantUpdateOneRequiredWithoutQuizResultsNestedInput = {
+  create?: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizResultsInput, Prisma.ParticipantUncheckedCreateWithoutQuizResultsInput>
+  connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutQuizResultsInput
+  upsert?: Prisma.ParticipantUpsertWithoutQuizResultsInput
+  connect?: Prisma.ParticipantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ParticipantUpdateToOneWithWhereWithoutQuizResultsInput, Prisma.ParticipantUpdateWithoutQuizResultsInput>, Prisma.ParticipantUncheckedUpdateWithoutQuizResultsInput>
 }
 
 export type ParticipantCreateNestedManyWithoutBookingInput = {
@@ -603,14 +563,6 @@ export type ParticipantUncheckedUpdateManyWithoutBookingNestedInput = {
   deleteMany?: Prisma.ParticipantScalarWhereInput | Prisma.ParticipantScalarWhereInput[]
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type ParticipantCreateNestedManyWithoutEmployeeInput = {
   create?: Prisma.XOR<Prisma.ParticipantCreateWithoutEmployeeInput, Prisma.ParticipantUncheckedCreateWithoutEmployeeInput> | Prisma.ParticipantCreateWithoutEmployeeInput[] | Prisma.ParticipantUncheckedCreateWithoutEmployeeInput[]
   connectOrCreate?: Prisma.ParticipantCreateOrConnectWithoutEmployeeInput | Prisma.ParticipantCreateOrConnectWithoutEmployeeInput[]
@@ -653,21 +605,21 @@ export type ParticipantUncheckedUpdateManyWithoutEmployeeNestedInput = {
   deleteMany?: Prisma.ParticipantScalarWhereInput | Prisma.ParticipantScalarWhereInput[]
 }
 
-export type ParticipantCreateWithoutQuizInput = {
+export type ParticipantCreateWithoutUserInput = {
   id?: string
   name: string
   email?: string | null
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
   booking: Prisma.BookingCreateNestedOneWithoutParticipantsInput
   employee?: Prisma.EmployeeCreateNestedOneWithoutParticipantsInput
+  quizResults?: Prisma.QuizResultCreateNestedManyWithoutParticipantInput
 }
 
-export type ParticipantUncheckedCreateWithoutQuizInput = {
+export type ParticipantUncheckedCreateWithoutUserInput = {
   id?: string
   bookingId: string
   employeeId?: string | null
@@ -676,34 +628,34 @@ export type ParticipantUncheckedCreateWithoutQuizInput = {
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
+  quizResults?: Prisma.QuizResultUncheckedCreateNestedManyWithoutParticipantInput
 }
 
-export type ParticipantCreateOrConnectWithoutQuizInput = {
+export type ParticipantCreateOrConnectWithoutUserInput = {
   where: Prisma.ParticipantWhereUniqueInput
-  create: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizInput, Prisma.ParticipantUncheckedCreateWithoutQuizInput>
+  create: Prisma.XOR<Prisma.ParticipantCreateWithoutUserInput, Prisma.ParticipantUncheckedCreateWithoutUserInput>
 }
 
-export type ParticipantCreateManyQuizInputEnvelope = {
-  data: Prisma.ParticipantCreateManyQuizInput | Prisma.ParticipantCreateManyQuizInput[]
+export type ParticipantCreateManyUserInputEnvelope = {
+  data: Prisma.ParticipantCreateManyUserInput | Prisma.ParticipantCreateManyUserInput[]
 }
 
-export type ParticipantUpsertWithWhereUniqueWithoutQuizInput = {
+export type ParticipantUpsertWithWhereUniqueWithoutUserInput = {
   where: Prisma.ParticipantWhereUniqueInput
-  update: Prisma.XOR<Prisma.ParticipantUpdateWithoutQuizInput, Prisma.ParticipantUncheckedUpdateWithoutQuizInput>
-  create: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizInput, Prisma.ParticipantUncheckedCreateWithoutQuizInput>
+  update: Prisma.XOR<Prisma.ParticipantUpdateWithoutUserInput, Prisma.ParticipantUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.ParticipantCreateWithoutUserInput, Prisma.ParticipantUncheckedCreateWithoutUserInput>
 }
 
-export type ParticipantUpdateWithWhereUniqueWithoutQuizInput = {
+export type ParticipantUpdateWithWhereUniqueWithoutUserInput = {
   where: Prisma.ParticipantWhereUniqueInput
-  data: Prisma.XOR<Prisma.ParticipantUpdateWithoutQuizInput, Prisma.ParticipantUncheckedUpdateWithoutQuizInput>
+  data: Prisma.XOR<Prisma.ParticipantUpdateWithoutUserInput, Prisma.ParticipantUncheckedUpdateWithoutUserInput>
 }
 
-export type ParticipantUpdateManyWithWhereWithoutQuizInput = {
+export type ParticipantUpdateManyWithWhereWithoutUserInput = {
   where: Prisma.ParticipantScalarWhereInput
-  data: Prisma.XOR<Prisma.ParticipantUpdateManyMutationInput, Prisma.ParticipantUncheckedUpdateManyWithoutQuizInput>
+  data: Prisma.XOR<Prisma.ParticipantUpdateManyMutationInput, Prisma.ParticipantUncheckedUpdateManyWithoutUserInput>
 }
 
 export type ParticipantScalarWhereInput = {
@@ -713,15 +665,86 @@ export type ParticipantScalarWhereInput = {
   id?: Prisma.StringFilter<"Participant"> | string
   bookingId?: Prisma.StringFilter<"Participant"> | string
   employeeId?: Prisma.StringNullableFilter<"Participant"> | string | null
+  userId?: Prisma.StringNullableFilter<"Participant"> | string | null
   name?: Prisma.StringFilter<"Participant"> | string
   email?: Prisma.StringNullableFilter<"Participant"> | string | null
   icNumber?: Prisma.StringNullableFilter<"Participant"> | string | null
   department?: Prisma.StringNullableFilter<"Participant"> | string | null
   attendanceStatus?: Prisma.StringFilter<"Participant"> | string
-  quizId?: Prisma.StringNullableFilter<"Participant"> | string | null
-  quizScore?: Prisma.FloatNullableFilter<"Participant"> | number | null
   certificateUrl?: Prisma.StringNullableFilter<"Participant"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
+}
+
+export type ParticipantCreateWithoutQuizResultsInput = {
+  id?: string
+  name: string
+  email?: string | null
+  icNumber?: string | null
+  department?: string | null
+  attendanceStatus?: string
+  certificateUrl?: string | null
+  createdAt?: Date | string
+  booking: Prisma.BookingCreateNestedOneWithoutParticipantsInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutParticipantsInput
+  user?: Prisma.UserCreateNestedOneWithoutParticipantProfileInput
+}
+
+export type ParticipantUncheckedCreateWithoutQuizResultsInput = {
+  id?: string
+  bookingId: string
+  employeeId?: string | null
+  userId?: string | null
+  name: string
+  email?: string | null
+  icNumber?: string | null
+  department?: string | null
+  attendanceStatus?: string
+  certificateUrl?: string | null
+  createdAt?: Date | string
+}
+
+export type ParticipantCreateOrConnectWithoutQuizResultsInput = {
+  where: Prisma.ParticipantWhereUniqueInput
+  create: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizResultsInput, Prisma.ParticipantUncheckedCreateWithoutQuizResultsInput>
+}
+
+export type ParticipantUpsertWithoutQuizResultsInput = {
+  update: Prisma.XOR<Prisma.ParticipantUpdateWithoutQuizResultsInput, Prisma.ParticipantUncheckedUpdateWithoutQuizResultsInput>
+  create: Prisma.XOR<Prisma.ParticipantCreateWithoutQuizResultsInput, Prisma.ParticipantUncheckedCreateWithoutQuizResultsInput>
+  where?: Prisma.ParticipantWhereInput
+}
+
+export type ParticipantUpdateToOneWithWhereWithoutQuizResultsInput = {
+  where?: Prisma.ParticipantWhereInput
+  data: Prisma.XOR<Prisma.ParticipantUpdateWithoutQuizResultsInput, Prisma.ParticipantUncheckedUpdateWithoutQuizResultsInput>
+}
+
+export type ParticipantUpdateWithoutQuizResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  booking?: Prisma.BookingUpdateOneRequiredWithoutParticipantsNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneWithoutParticipantProfileNestedInput
+}
+
+export type ParticipantUncheckedUpdateWithoutQuizResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParticipantCreateWithoutBookingInput = {
@@ -731,25 +754,25 @@ export type ParticipantCreateWithoutBookingInput = {
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
   employee?: Prisma.EmployeeCreateNestedOneWithoutParticipantsInput
-  quiz?: Prisma.QuizCreateNestedOneWithoutParticipantsInput
+  user?: Prisma.UserCreateNestedOneWithoutParticipantProfileInput
+  quizResults?: Prisma.QuizResultCreateNestedManyWithoutParticipantInput
 }
 
 export type ParticipantUncheckedCreateWithoutBookingInput = {
   id?: string
   employeeId?: string | null
+  userId?: string | null
   name: string
   email?: string | null
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizId?: string | null
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
+  quizResults?: Prisma.QuizResultUncheckedCreateNestedManyWithoutParticipantInput
 }
 
 export type ParticipantCreateOrConnectWithoutBookingInput = {
@@ -784,25 +807,25 @@ export type ParticipantCreateWithoutEmployeeInput = {
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
   booking: Prisma.BookingCreateNestedOneWithoutParticipantsInput
-  quiz?: Prisma.QuizCreateNestedOneWithoutParticipantsInput
+  user?: Prisma.UserCreateNestedOneWithoutParticipantProfileInput
+  quizResults?: Prisma.QuizResultCreateNestedManyWithoutParticipantInput
 }
 
 export type ParticipantUncheckedCreateWithoutEmployeeInput = {
   id?: string
   bookingId: string
+  userId?: string | null
   name: string
   email?: string | null
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizId?: string | null
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
+  quizResults?: Prisma.QuizResultUncheckedCreateNestedManyWithoutParticipantInput
 }
 
 export type ParticipantCreateOrConnectWithoutEmployeeInput = {
@@ -830,7 +853,7 @@ export type ParticipantUpdateManyWithWhereWithoutEmployeeInput = {
   data: Prisma.XOR<Prisma.ParticipantUpdateManyMutationInput, Prisma.ParticipantUncheckedUpdateManyWithoutEmployeeInput>
 }
 
-export type ParticipantCreateManyQuizInput = {
+export type ParticipantCreateManyUserInput = {
   id?: string
   bookingId: string
   employeeId?: string | null
@@ -839,26 +862,25 @@ export type ParticipantCreateManyQuizInput = {
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
 }
 
-export type ParticipantUpdateWithoutQuizInput = {
+export type ParticipantUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   booking?: Prisma.BookingUpdateOneRequiredWithoutParticipantsNestedInput
   employee?: Prisma.EmployeeUpdateOneWithoutParticipantsNestedInput
+  quizResults?: Prisma.QuizResultUpdateManyWithoutParticipantNestedInput
 }
 
-export type ParticipantUncheckedUpdateWithoutQuizInput = {
+export type ParticipantUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -867,12 +889,12 @@ export type ParticipantUncheckedUpdateWithoutQuizInput = {
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizResults?: Prisma.QuizResultUncheckedUpdateManyWithoutParticipantNestedInput
 }
 
-export type ParticipantUncheckedUpdateManyWithoutQuizInput = {
+export type ParticipantUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -881,7 +903,6 @@ export type ParticipantUncheckedUpdateManyWithoutQuizInput = {
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -889,13 +910,12 @@ export type ParticipantUncheckedUpdateManyWithoutQuizInput = {
 export type ParticipantCreateManyBookingInput = {
   id?: string
   employeeId?: string | null
+  userId?: string | null
   name: string
   email?: string | null
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizId?: string | null
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
 }
@@ -907,37 +927,36 @@ export type ParticipantUpdateWithoutBookingInput = {
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employee?: Prisma.EmployeeUpdateOneWithoutParticipantsNestedInput
-  quiz?: Prisma.QuizUpdateOneWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneWithoutParticipantProfileNestedInput
+  quizResults?: Prisma.QuizResultUpdateManyWithoutParticipantNestedInput
 }
 
 export type ParticipantUncheckedUpdateWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizResults?: Prisma.QuizResultUncheckedUpdateManyWithoutParticipantNestedInput
 }
 
 export type ParticipantUncheckedUpdateManyWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -945,13 +964,12 @@ export type ParticipantUncheckedUpdateManyWithoutBookingInput = {
 export type ParticipantCreateManyEmployeeInput = {
   id?: string
   bookingId: string
+  userId?: string | null
   name: string
   email?: string | null
   icNumber?: string | null
   department?: string | null
   attendanceStatus?: string
-  quizId?: string | null
-  quizScore?: number | null
   certificateUrl?: string | null
   createdAt?: Date | string
 }
@@ -963,127 +981,155 @@ export type ParticipantUpdateWithoutEmployeeInput = {
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   booking?: Prisma.BookingUpdateOneRequiredWithoutParticipantsNestedInput
-  quiz?: Prisma.QuizUpdateOneWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneWithoutParticipantProfileNestedInput
+  quizResults?: Prisma.QuizResultUpdateManyWithoutParticipantNestedInput
 }
 
 export type ParticipantUncheckedUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizResults?: Prisma.QuizResultUncheckedUpdateManyWithoutParticipantNestedInput
 }
 
 export type ParticipantUncheckedUpdateManyWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  quizId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quizScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   certificateUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type ParticipantCountOutputType
+ */
+
+export type ParticipantCountOutputType = {
+  quizResults: number
+}
+
+export type ParticipantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  quizResults?: boolean | ParticipantCountOutputTypeCountQuizResultsArgs
+}
+
+/**
+ * ParticipantCountOutputType without action
+ */
+export type ParticipantCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ParticipantCountOutputType
+   */
+  select?: Prisma.ParticipantCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ParticipantCountOutputType without action
+ */
+export type ParticipantCountOutputTypeCountQuizResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QuizResultWhereInput
+}
 
 
 export type ParticipantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   bookingId?: boolean
   employeeId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   icNumber?: boolean
   department?: boolean
   attendanceStatus?: boolean
-  quizId?: boolean
-  quizScore?: boolean
   certificateUrl?: boolean
   createdAt?: boolean
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.Participant$employeeArgs<ExtArgs>
-  quiz?: boolean | Prisma.Participant$quizArgs<ExtArgs>
+  user?: boolean | Prisma.Participant$userArgs<ExtArgs>
+  quizResults?: boolean | Prisma.Participant$quizResultsArgs<ExtArgs>
+  _count?: boolean | Prisma.ParticipantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["participant"]>
 
 export type ParticipantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   bookingId?: boolean
   employeeId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   icNumber?: boolean
   department?: boolean
   attendanceStatus?: boolean
-  quizId?: boolean
-  quizScore?: boolean
   certificateUrl?: boolean
   createdAt?: boolean
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.Participant$employeeArgs<ExtArgs>
-  quiz?: boolean | Prisma.Participant$quizArgs<ExtArgs>
+  user?: boolean | Prisma.Participant$userArgs<ExtArgs>
 }, ExtArgs["result"]["participant"]>
 
 export type ParticipantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   bookingId?: boolean
   employeeId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   icNumber?: boolean
   department?: boolean
   attendanceStatus?: boolean
-  quizId?: boolean
-  quizScore?: boolean
   certificateUrl?: boolean
   createdAt?: boolean
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.Participant$employeeArgs<ExtArgs>
-  quiz?: boolean | Prisma.Participant$quizArgs<ExtArgs>
+  user?: boolean | Prisma.Participant$userArgs<ExtArgs>
 }, ExtArgs["result"]["participant"]>
 
 export type ParticipantSelectScalar = {
   id?: boolean
   bookingId?: boolean
   employeeId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   icNumber?: boolean
   department?: boolean
   attendanceStatus?: boolean
-  quizId?: boolean
-  quizScore?: boolean
   certificateUrl?: boolean
   createdAt?: boolean
 }
 
-export type ParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "bookingId" | "employeeId" | "name" | "email" | "icNumber" | "department" | "attendanceStatus" | "quizId" | "quizScore" | "certificateUrl" | "createdAt", ExtArgs["result"]["participant"]>
+export type ParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "bookingId" | "employeeId" | "userId" | "name" | "email" | "icNumber" | "department" | "attendanceStatus" | "certificateUrl" | "createdAt", ExtArgs["result"]["participant"]>
 export type ParticipantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.Participant$employeeArgs<ExtArgs>
-  quiz?: boolean | Prisma.Participant$quizArgs<ExtArgs>
+  user?: boolean | Prisma.Participant$userArgs<ExtArgs>
+  quizResults?: boolean | Prisma.Participant$quizResultsArgs<ExtArgs>
+  _count?: boolean | Prisma.ParticipantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ParticipantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.Participant$employeeArgs<ExtArgs>
-  quiz?: boolean | Prisma.Participant$quizArgs<ExtArgs>
+  user?: boolean | Prisma.Participant$userArgs<ExtArgs>
 }
 export type ParticipantIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.Participant$employeeArgs<ExtArgs>
-  quiz?: boolean | Prisma.Participant$quizArgs<ExtArgs>
+  user?: boolean | Prisma.Participant$userArgs<ExtArgs>
 }
 
 export type $ParticipantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1091,19 +1137,19 @@ export type $ParticipantPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     booking: Prisma.$BookingPayload<ExtArgs>
     employee: Prisma.$EmployeePayload<ExtArgs> | null
-    quiz: Prisma.$QuizPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs> | null
+    quizResults: Prisma.$QuizResultPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     bookingId: string
     employeeId: string | null
+    userId: string | null
     name: string
     email: string | null
     icNumber: string | null
     department: string | null
     attendanceStatus: string
-    quizId: string | null
-    quizScore: number | null
     certificateUrl: string | null
     createdAt: Date
   }, ExtArgs["result"]["participant"]>
@@ -1502,7 +1548,8 @@ export interface Prisma__ParticipantClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   booking<T extends Prisma.BookingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BookingDefaultArgs<ExtArgs>>): Prisma.Prisma__BookingClient<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.Participant$employeeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Participant$employeeArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  quiz<T extends Prisma.Participant$quizArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Participant$quizArgs<ExtArgs>>): Prisma.Prisma__QuizClient<runtime.Types.Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.Participant$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Participant$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  quizResults<T extends Prisma.Participant$quizResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Participant$quizResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1535,13 +1582,12 @@ export interface ParticipantFieldRefs {
   readonly id: Prisma.FieldRef<"Participant", 'String'>
   readonly bookingId: Prisma.FieldRef<"Participant", 'String'>
   readonly employeeId: Prisma.FieldRef<"Participant", 'String'>
+  readonly userId: Prisma.FieldRef<"Participant", 'String'>
   readonly name: Prisma.FieldRef<"Participant", 'String'>
   readonly email: Prisma.FieldRef<"Participant", 'String'>
   readonly icNumber: Prisma.FieldRef<"Participant", 'String'>
   readonly department: Prisma.FieldRef<"Participant", 'String'>
   readonly attendanceStatus: Prisma.FieldRef<"Participant", 'String'>
-  readonly quizId: Prisma.FieldRef<"Participant", 'String'>
-  readonly quizScore: Prisma.FieldRef<"Participant", 'Float'>
   readonly certificateUrl: Prisma.FieldRef<"Participant", 'String'>
   readonly createdAt: Prisma.FieldRef<"Participant", 'DateTime'>
 }
@@ -1962,22 +2008,46 @@ export type Participant$employeeArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Participant.quiz
+ * Participant.user
  */
-export type Participant$quizArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Participant$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Quiz
+   * Select specific fields to fetch from the User
    */
-  select?: Prisma.QuizSelect<ExtArgs> | null
+  select?: Prisma.UserSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Quiz
+   * Omit specific fields from the User
    */
-  omit?: Prisma.QuizOmit<ExtArgs> | null
+  omit?: Prisma.UserOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.QuizInclude<ExtArgs> | null
-  where?: Prisma.QuizWhereInput
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * Participant.quizResults
+ */
+export type Participant$quizResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the QuizResult
+   */
+  select?: Prisma.QuizResultSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the QuizResult
+   */
+  omit?: Prisma.QuizResultOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuizResultInclude<ExtArgs> | null
+  where?: Prisma.QuizResultWhereInput
+  orderBy?: Prisma.QuizResultOrderByWithRelationInput | Prisma.QuizResultOrderByWithRelationInput[]
+  cursor?: Prisma.QuizResultWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuizResultScalarFieldEnum | Prisma.QuizResultScalarFieldEnum[]
 }
 
 /**

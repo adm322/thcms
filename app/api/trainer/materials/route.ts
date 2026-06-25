@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { uploadFile } from "@/lib/storage";
 
 function getFileType(mime: string): string {
   if (mime.includes("pdf")) return "pdf";
@@ -76,16 +75,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Module not found or access denied" }, { status: 404 });
   }
 
-  // Save file to public/uploads/
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(uploadsDir, { recursive: true });
-
   const ext = file.name.includes(".") ? file.name.split(".").pop() || "bin" : "bin";
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const fileBuffer = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(uploadsDir, fileName), fileBuffer);
-
-  const fileUrl = `/uploads/${fileName}`;
+  
+  const { url: fileUrl } = await uploadFile(fileBuffer, fileName, file.type);
   const fileType = getFileType(file.type);
 
   const material = await prisma.material.create({

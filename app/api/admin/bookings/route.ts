@@ -9,8 +9,9 @@ export async function GET(request: NextRequest) {
   const [bookings, total] = await Promise.all([
     prisma.booking.findMany({
       include: {
-        program: { select: { title: true, trainer: { select: { name: true } } } },
+        program: { select: { title: true, locationType: true, trainer: { select: { name: true } } } },
         company: { select: { name: true } },
+        _count: { select: { participants: true } },
       },
       orderBy: { createdAt: "desc" },
       skip, take: limit,
@@ -29,6 +30,8 @@ export async function GET(request: NextRequest) {
       totalFee: b.totalFee,
       depositStatus: b.depositStatus,
       depositPaid: b.depositPaid,
+      participantCount: b._count.participants,
+      venueAddress: b.venueAddress || b.program.locationType.toUpperCase(),
     })),
     pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
   });

@@ -18,7 +18,7 @@ export async function GET(
       module: { select: { program: { select: { trainerId: true, title: true } } } },
     },
   });
-  if (!quiz || quiz.module.program.trainerId !== session.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!quiz || (quiz.standalone ? false : quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json({
     ...quiz,
@@ -36,7 +36,7 @@ export async function PUT(
   const { quizId } = await params;
 
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId }, include: { module: { select: { program: { select: { trainerId: true } } } } } });
-  if (!quiz || quiz.module.program.trainerId !== session.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!quiz || (quiz.standalone ? false : quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   let body: any;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
@@ -64,7 +64,7 @@ export async function DELETE(
   const { quizId } = await params;
 
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId }, include: { module: { select: { program: { select: { trainerId: true } } } } } });
-  if (!quiz || quiz.module.program.trainerId !== session.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!quiz || (quiz.standalone ? false : quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   await prisma.quiz.delete({ where: { id: quizId } });
   return NextResponse.json({ success: true });

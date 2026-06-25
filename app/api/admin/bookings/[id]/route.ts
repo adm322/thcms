@@ -12,7 +12,11 @@ export async function GET(
     include: {
       program: { select: { title: true, trainer: { select: { name: true } } } },
       company: { select: { name: true } },
-      participants: true,
+      participants: {
+        include: {
+          quizResults: true
+        }
+      },
       invoices: true,
       reimbursements: true,
       evaluations: true,
@@ -30,6 +34,7 @@ export async function GET(
     companyName: booking.company.name,
     date: booking.programDate.toISOString(),
     status: booking.status,
+    meetingLink: booking.meetingLink,
     totalFee: booking.totalFee,
     depositPaid: booking.depositPaid,
     depositStatus: booking.depositStatus,
@@ -40,11 +45,12 @@ export async function GET(
     trainerHrdfSubmittedAt: booking.trainerHrdfSubmittedAt?.toISOString() || null,
     trainerDocumentsUrl: booking.trainerDocumentsUrl,
     participants: booking.participants.map((p) => ({
+      id: p.id,
       name: p.name,
       email: p.email,
       department: p.department,
       attendanceStatus: p.attendanceStatus,
-      quizScore: p.quizScore,
+      quizScore: p.quizResults.length > 0 ? Math.round(p.quizResults.reduce((sum, r) => sum + r.score, 0) / p.quizResults.length) : null,
     })),
     invoices: booking.invoices.map((i) => ({
       id: i.id,
