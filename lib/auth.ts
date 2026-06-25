@@ -58,6 +58,9 @@ export async function clearSessionCookie(): Promise<void> {
 }
 
 export async function getSession(): Promise<SessionUser | null> {
+  if (process.env.NODE_ENV === "test" && process.env.TEST_SESSION) {
+    return JSON.parse(process.env.TEST_SESSION);
+  }
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(COOKIE_NAME)?.value;
