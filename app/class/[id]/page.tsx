@@ -9,6 +9,17 @@ export default function ClassMode({ params }: { params: Promise<{ id: string }> 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [justCheckedIn, setJustCheckedIn] = useState<string | null>(null);
 
+  const [bubbles] = useState(() =>
+    [...Array(20)].map(() => ({
+      width: `${4 + Math.random() * 8}px`,
+      height: `${4 + Math.random() * 8}px`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 3}s`,
+      animationDuration: `${3 + Math.random() * 4}s`
+    }))
+  );
+
   useEffect(() => {
     fetch(`/api/admin/bookings/${id}`).then(r => r.json()).then(setBooking).catch(console.error);
   }, [id]);
@@ -51,12 +62,12 @@ export default function ClassMode({ params }: { params: Promise<{ id: string }> 
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white flex flex-col items-center justify-center p-8 relative overflow-hidden">
       {/* Animated background dots */}
       <div className="absolute inset-0 opacity-10">
-        {[...Array(20)].map((_, i) => (
+        {bubbles.map((style, i) => (
           <div key={i} className="absolute rounded-full bg-white" style={{
-            width: `${4 + Math.random() * 8}px`, height: `${4 + Math.random() * 8}px`,
-            left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
-            animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
-            animationDelay: `${Math.random() * 3}s`,
+            width: style.width, height: style.height,
+            left: style.left, top: style.top,
+            animation: `float ${style.animationDuration} ease-in-out infinite`,
+            animationDelay: style.animationDelay,
           }} />
         ))}
       </div>
