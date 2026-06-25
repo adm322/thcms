@@ -11,7 +11,11 @@ export function formatRent(amount: number): string {
 /** Human-friendly date string, e.g. "18 Jun 2026". */
 export function formatDate(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString("en-MY", {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) {
+      return iso;
+    }
+    return d.toLocaleDateString("en-MY", {
       day: "2-digit",
       month: "short",
       year: "numeric",
