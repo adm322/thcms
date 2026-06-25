@@ -6,17 +6,17 @@ export async function GET() {
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
 
-  // All invoices
-  const invoices = await prisma.invoice.findMany({
-    include: { booking: { select: { program: { select: { category: true } }, company: { select: { name: true } } } } },
-    orderBy: { issuedAt: "asc" },
-  });
-
-  // All bookings (for forecast)
-  const allBookings = await prisma.booking.findMany({
-    where: { status: { in: ["CONFIRMED", "PENDING", "COMPLETED"] } },
-    include: { program: { select: { category: true } } },
-  });
+  // All invoices and bookings (parallelized for performance)
+  const [invoices, allBookings] = await Promise.all([
+    prisma.invoice.findMany({
+      include: { booking: { select: { program: { select: { category: true } }, company: { select: { name: true } } } } },
+      orderBy: { issuedAt: "asc" },
+    }),
+    prisma.booking.findMany({
+      where: { status: { in: ["CONFIRMED", "PENDING", "COMPLETED"] } },
+      include: { program: { select: { category: true } } },
+    }),
+  ]);
 
   // Realized = PAID invoices
   const realized = invoices
