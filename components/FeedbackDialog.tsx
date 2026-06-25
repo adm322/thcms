@@ -183,7 +183,10 @@ export default function FeedbackDialog({
                             key={starValue}
                             type="button"
                             onClick={() => handleRatingChange(idx, starValue)}
-                            className="focus:outline-none transition-transform hover:scale-105 active:scale-95"
+                            aria-label={`Rate ${starValue} star${starValue > 1 ? "s" : ""}`}
+                            title={`${starValue} star${starValue > 1 ? "s" : ""}`}
+                            aria-pressed={isSelected}
+                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-sm focus-visible:ring-offset-1 transition-transform hover:scale-105 active:scale-95"
                           >
                             <Star 
                               className={cn(

@@ -1,0 +1,3 @@
+## 2025-06-25 - Accessibility for icon-only rating inputs
+**Learning:** Icon-only rating inputs (like star ratings) lack semantic meaning for screen readers and keyboard users if implemented purely with icons. Screen readers won't announce the values, and without `aria-pressed`, they won't know the current selection state.
+**Action:** Always add `aria-label`, `title`, and `aria-pressed` to interactive icon-only elements used for ratings. Furthermore, ensure proper visual keyboard focus using `focus-visible` styles to help keyboard users easily identify which star is currently focused.
