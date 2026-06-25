@@ -18,10 +18,6 @@ export async function uploadFile(
   const provider = process.env.STORAGE_PROVIDER || "local";
 
   if (provider === "vercel_blob") {
-    // Stub for Vercel Blob implementation
-    // const { put } = await import("@vercel/blob");
-    // const blob = await put(fileName, fileBuffer, { access: 'public' });
-    // return { url: blob.url };
     throw new Error("Vercel Blob storage not fully implemented yet.");
   } 
   
