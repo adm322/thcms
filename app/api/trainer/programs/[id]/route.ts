@@ -104,22 +104,24 @@ export async function DELETE(
 
   // Cascade delete: bookings → participants, evaluations, invoices, reimbursements, messages, reviews
   const bookings = await prisma.booking.findMany({ where: { programId: id }, select: { id: true } });
-  for (const b of bookings) {
-    await prisma.review.deleteMany({ where: { bookingId: b.id } });
-    await prisma.reimbursement.deleteMany({ where: { bookingId: b.id } });
-    await prisma.invoice.deleteMany({ where: { bookingId: b.id } });
-    await prisma.message.deleteMany({ where: { bookingId: b.id } });
-    await prisma.evaluation.deleteMany({ where: { bookingId: b.id } });
-    await prisma.participant.deleteMany({ where: { bookingId: b.id } });
+  const bookingIds = bookings.map((b) => b.id);
+  if (bookingIds.length > 0) {
+    await prisma.review.deleteMany({ where: { bookingId: { in: bookingIds } } });
+    await prisma.reimbursement.deleteMany({ where: { bookingId: { in: bookingIds } } });
+    await prisma.invoice.deleteMany({ where: { bookingId: { in: bookingIds } } });
+    await prisma.message.deleteMany({ where: { bookingId: { in: bookingIds } } });
+    await prisma.evaluation.deleteMany({ where: { bookingId: { in: bookingIds } } });
+    await prisma.participant.deleteMany({ where: { bookingId: { in: bookingIds } } });
   }
   await prisma.booking.deleteMany({ where: { programId: id } });
   
   // Modules cascade to quizzes, questions, materials
   const modules = await prisma.module.findMany({ where: { programId: id }, select: { id: true } });
-  for (const m of modules) {
-    await prisma.question.deleteMany({ where: { quiz: { moduleId: m.id } } });
-    await prisma.quiz.deleteMany({ where: { moduleId: m.id } });
-    await prisma.material.deleteMany({ where: { moduleId: m.id } });
+  const moduleIds = modules.map((m) => m.id);
+  if (moduleIds.length > 0) {
+    await prisma.question.deleteMany({ where: { quiz: { moduleId: { in: moduleIds } } } });
+    await prisma.quiz.deleteMany({ where: { moduleId: { in: moduleIds } } });
+    await prisma.material.deleteMany({ where: { moduleId: { in: moduleIds } } });
   }
   await prisma.module.deleteMany({ where: { programId: id } });
 
