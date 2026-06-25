@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-// GET: list programs with vote counts
+// GET: list published programs with company employee vote counts
 export async function GET() {
   const session = await getSession();
-  if (!session || session.role !== "HR") {
+  if (!session || session.role !== "PARTICIPANT") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -18,36 +18,30 @@ export async function GET() {
     orderBy: { createdAt: "desc" },
   });
 
-  // Count HR votes per program
-  const hrVotes = await prisma.programVote.groupBy({
-    by: ["programId"],
-    where: {
-      hr: {
-        role: "HR",
-      },
-    },
-    _count: {
-      id: true,
-    },
-  });
-  const hrVoteMap = new Map(hrVotes.map((v) => [v.programId, v._count.id]));
+  const companyId = session.companyId;
+  const employeeVoteMap = new Map<string, number>();
 
-  // Count Employee votes of the same company per program
-  const employeeVotes = await prisma.programVote.groupBy({
-    by: ["programId"],
-    where: {
-      hr: {
-        role: "PARTICIPANT",
-        companyId: session.companyId,
+  if (companyId) {
+    // Count votes from employees within the same company (role: PARTICIPANT)
+    const companyVotes = await prisma.programVote.groupBy({
+      by: ["programId"],
+      where: {
+        hr: {
+          role: "PARTICIPANT",
+          companyId: companyId,
+        },
       },
-    },
-    _count: {
-      id: true,
-    },
-  });
-  const employeeVoteMap = new Map(employeeVotes.map((v) => [v.programId, v._count.id]));
+      _count: {
+        id: true,
+      },
+    });
 
-  // Get user's existing votes (the current HR)
+    companyVotes.forEach((v) => {
+      employeeVoteMap.set(v.programId, v._count.id);
+    });
+  }
+
+  // Get current participant's own votes
   const userVotes = await prisma.programVote.findMany({
     where: { hrId: session.id },
     select: { programId: true },
@@ -60,28 +54,31 @@ export async function GET() {
       title: p.title,
       category: p.category,
       trainerName: p.trainer.name,
-      voteCount: hrVoteMap.get(p.id) || 0,
-      employeeVotesCount: employeeVoteMap.get(p.id) || 0,
+      description: p.description,
+      voteCount: employeeVoteMap.get(p.id) || 0,
       voted: votedIds.has(p.id),
-      status: p.status,
     }))
   );
 }
 
-// POST: cast a vote
+// POST: toggle a participant's vote
 export async function POST(request: NextRequest) {
   const session = await getSession();
-  if (!session || session.role !== "HR") {
+  if (!session || session.role !== "PARTICIPANT") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   let body: any;
-  try { body = await request.json(); } catch {
+  try {
+    body = await request.json();
+  } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const { programId } = body;
-  if (!programId) return NextResponse.json({ error: "programId required" }, { status: 400 });
+  if (!programId) {
+    return NextResponse.json({ error: "programId required" }, { status: 400 });
+  }
 
   // Check existing vote
   const existing = await prisma.programVote.findUnique({
@@ -94,6 +91,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ voted: false });
   }
 
+  // Create new vote
   await prisma.programVote.create({
     data: { hrId: session.id, programId },
   });
