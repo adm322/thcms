@@ -31,16 +31,16 @@ export async function POST(
     },
   });
 
-  // Clone modules
-  for (const mod of program.modules) {
-    await prisma.module.create({
-      data: {
+  // Clone modules using createMany for better performance
+  if (program.modules && program.modules.length > 0) {
+    await prisma.module.createMany({
+      data: program.modules.map((mod) => ({
         programId: clone.id,
         title: mod.title,
         description: mod.description,
         orderIndex: mod.orderIndex,
         durationMins: mod.durationMins,
-      },
+      })),
     });
   }
 
