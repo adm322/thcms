@@ -46,7 +46,7 @@ const MONTHS = [
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-type ViewMode = "month" | "year";
+type ViewMode = "month" | "quarter" | "year";
 
 export function CalendarView({ events, onEventClick }: CalendarViewProps) {
   const today = new Date();
@@ -449,6 +449,19 @@ export function CalendarView({ events, onEventClick }: CalendarViewProps) {
               </Button>
             </>
           )}
+          {viewMode === "quarter" && (
+            <>
+              <Button variant="outline" size="icon" className="h-8 w-8" onClick={goPrevQuarter}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <h3 className="w-32 text-center text-base font-semibold">
+                Q{viewQuarter + 1} {viewYear}
+              </h3>
+              <Button variant="outline" size="icon" className="h-8 w-8" onClick={goNextQuarter}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </>
+          )}
           {viewMode === "year" && (
             <>
               <Button variant="outline" size="icon" className="h-8 w-8" onClick={goPrevYear}>
@@ -475,6 +488,15 @@ export function CalendarView({ events, onEventClick }: CalendarViewProps) {
               Month
             </button>
             <button
+              onClick={() => setViewMode("quarter")}
+              className={cn(
+                "rounded-md px-3 py-1 text-xs font-medium transition-colors",
+                viewMode === "quarter" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Quarter
+            </button>
+            <button
               onClick={() => setViewMode("year")}
               className={cn(
                 "rounded-md px-3 py-1 text-xs font-medium transition-colors",
@@ -494,6 +516,13 @@ export function CalendarView({ events, onEventClick }: CalendarViewProps) {
       {viewMode === "month" && (
         <div className="overflow-x-auto">
           {renderMonthGrid(viewYear, viewMonth)}
+        </div>
+      )}
+
+      {/* Quarter view — 1 row of 3 months */}
+      {viewMode === "quarter" && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[0, 1, 2].map((offset) => renderCompactMonth(viewYear, viewQuarter * 3 + offset))}
         </div>
       )}
 
