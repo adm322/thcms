@@ -58,7 +58,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
             score: score
           }
         });
-        console.log(`Updated score for participant ${participant.id} on quiz ${quiz.id}: ${score}%`);
       }
     }
   } catch (err) {
