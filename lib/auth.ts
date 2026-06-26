@@ -2,9 +2,9 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "trainhub-my-jwt-secret-key-2026-change-in-prod"
-);
+const JWT_SECRET = process.env.JWT_SECRET
+  ? new TextEncoder().encode(process.env.JWT_SECRET)
+  : crypto.getRandomValues(new Uint8Array(32));
 
 const COOKIE_NAME = "trainhub_session";
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
