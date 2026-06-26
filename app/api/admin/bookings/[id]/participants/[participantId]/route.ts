@@ -10,9 +10,15 @@ export async function PATCH(
   if (!session || session.role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { participantId } = await params;
-  const body = await _req.json().catch(() => ({}));
+  let body: { attendanceStatus?: string };
+  try { body = await _req.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
   const { attendanceStatus } = body;
+  if (!attendanceStatus) return NextResponse.json({ error: "attendanceStatus required" }, { status: 400 });
 
-  await prisma.participant.update({ where: { id: participantId }, data: { attendanceStatus } });
+  try {
+    await prisma.participant.update({ where: { id: participantId }, data: { attendanceStatus } });
+  } catch {
+    return NextResponse.json({ error: "Participant not found" }, { status: 404 });
+  }
   return NextResponse.json({ success: true });
 }

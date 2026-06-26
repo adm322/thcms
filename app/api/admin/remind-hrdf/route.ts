@@ -8,7 +8,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { bookingId } = await request.json().catch(() => ({}));
+  let body: { bookingId?: string };
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const { bookingId } = body;
   if (!bookingId) return NextResponse.json({ error: "bookingId required" }, { status: 400 });
 
   const booking = await prisma.booking.findUnique({
@@ -17,16 +19,20 @@ export async function POST(request: NextRequest) {
   });
   if (!booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
 
-  // Send notification to HR
-  await prisma.notification.create({
-    data: {
-      userId: booking.hrId,
-      type: "HRDF_DEADLINE",
-      title: `⏰ HRDF Claim Reminder: ${booking.program.title}`,
-      body: `Admin reminds you to submit the HRDF claim for "${booking.program.title}" — completed ${Math.floor((Date.now() - new Date(booking.programDate).getTime()) / 86400000)} days ago. Submit before it expires.`,
-      link: `/hr/bookings/${booking.id}`,
-    },
-  });
+  try {
+    await prisma.notification.create({
+      data: {
+        userId: booking.hrId,
+        type: "HRDF_DEADLINE",
+        title: `⏰ HRDF Claim Reminder: ${booking.program.title}`,
+        body: `Admin reminds you to submit the HRDF claim for "${booking.program.title}" — completed ${Math.floor((Date.now() - new Date(booking.programDate).getTime()) / 86400000)} days ago. Submit before it expires.`,
+        link: `/hr/bookings/${booking.id}`,
+      },
+    });
+  } catch (err) {
+    console.error("Failed to create HRDF reminder notification:", err);
+    return NextResponse.json({ error: "Failed to send reminder" }, { status: 500 });
+  }
 
   return NextResponse.json({ success: true, reminded: true });
 }

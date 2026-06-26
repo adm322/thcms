@@ -87,7 +87,7 @@ export function TrainerDashboardClient({ initialData }: { initialData: any }) {
         const days = (d.days || []).filter((day: any) => day.date >= today).slice(0, 14);
         setAvailDays(days);
       })
-      .catch(() => {});
+      .catch(console.error);
   }
 
   function formatDate(iso: string) {

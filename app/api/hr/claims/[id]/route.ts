@@ -15,6 +15,11 @@ export async function PATCH(
   if (!status || !["APPROVED", "REJECTED", "PAID"].includes(status)) {
     return NextResponse.json({ error: "Valid status: APPROVED, REJECTED, PAID" }, { status: 400 });
   }
-  const claim = await prisma.claim.update({ where: { id }, data: { status } });
-  return NextResponse.json(claim);
+  try {
+    const claim = await prisma.claim.update({ where: { id }, data: { status } });
+    return NextResponse.json(claim);
+  } catch (err) {
+    console.error("Failed to update claim:", err);
+    return NextResponse.json({ error: "Failed to update claim" }, { status: 500 });
+  }
 }

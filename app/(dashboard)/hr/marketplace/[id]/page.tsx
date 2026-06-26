@@ -350,7 +350,7 @@ function TrainerAvailabilityStrip({ trainerId, date }: { trainerId: string; date
         const day = (data.days || []).find((d: any) => d.date === date);
         if (day) setStatus(day.status);
       })
-      .catch(() => {});
+      .catch(console.error);
   }, [trainerId, date]);
 
   if (!date) return null;
@@ -391,7 +391,7 @@ function HRDFEstimate({ participants, durationHours, venueType }: { participants
     fetch(`/api/hr/hrdf?${params}`)
       .then(r => r.json())
       .then(data => setEstimate({ claimable: data.totalClaimable, breakdown: data.breakdown }))
-      .catch(() => {});
+      .catch(console.error);
   }, [participants, durationHours, venueType]);
 
   if (!estimate) return null;
