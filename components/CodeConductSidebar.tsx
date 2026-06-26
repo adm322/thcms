@@ -9,7 +9,7 @@ export function CodeConductSidebar() {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    fetch("/api/trainer/code-of-conduct").then(r => r.json()).then(setDoc).catch(() => {});
+    fetch("/api/trainer/code-of-conduct").then(r => r.json()).then(setDoc).catch(console.error);
   }, []);
 
   if (!doc) return null;

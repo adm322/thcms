@@ -4,7 +4,10 @@ import { getSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const { answers } = await req.json();
+  let body: { answers?: Record<string, string> };
+  try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const { answers } = body;
+  if (!answers) return NextResponse.json({ error: "answers required" }, { status: 400 });
 
   const quiz = await prisma.quiz.findUnique({ 
     where: { shareToken: token }, 
@@ -61,7 +64,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
       }
     }
   } catch (err) {
-    console.error("Skipped participant score update for standalone quiz / error", err);
+    // ponytail: non-fatal — score is still returned to the user even if we can't record it against a participant
+    console.error("Failed to record participant score:", err);
   }
 
   return NextResponse.json({ score, total, correct });

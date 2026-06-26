@@ -12,8 +12,8 @@ export async function PATCH(
   }
 
   const { id } = await params;
-  const body = await request.json().catch(() => null);
-  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  let body: { action?: string; adminNotes?: string };
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
 
   const { action, adminNotes } = body;
 
@@ -39,16 +39,6 @@ export async function PATCH(
     data.notes = existing.notes
       ? `${existing.notes}\n${approvalNote}`
       : approvalNote;
-    // Notify HR
-    await prisma.notification.create({
-      data: {
-        userId: existing.hrId,
-        type: "PLAN_APPROVED",
-        title: `Plan approved: "${existing.title}"`,
-        body: `Admin approved your training plan for ${existing.targetCount} pax. Proceed to book.`,
-        link: "/hr/training-planner",
-      },
-    });
   } else if (action === "REJECT") {
     data.status = "DRAFT";
     const adminMsg = adminNotes || "Needs revision — see admin feedback";
@@ -56,16 +46,6 @@ export async function PATCH(
     data.notes = existing.notes
       ? `${existing.notes}\n${rejectNote}`
       : rejectNote;
-    // Notify HR
-    await prisma.notification.create({
-      data: {
-        userId: existing.hrId,
-        type: "PLAN_REJECTED",
-        title: `Plan returned: "${existing.title}"`,
-        body: adminMsg || "Admin requested changes to your plan. Review and update.",
-        link: "/hr/training-planner",
-      },
-    });
   } else if (action === "NOTE") {
     if (!adminNotes || !adminNotes.trim()) {
       return NextResponse.json({ error: "adminNotes required for NOTE action" }, { status: 400 });
@@ -78,10 +58,38 @@ export async function PATCH(
     return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
   }
 
-  const updated = await prisma.trainingPlanItem.update({
-    where: { id },
-    data,
-  });
+  try {
+    const updated = await prisma.trainingPlanItem.update({
+      where: { id },
+      data,
+    });
 
-  return NextResponse.json(updated);
+    // Notify HR for approve/reject actions
+    if (action === "APPROVE") {
+      await prisma.notification.create({
+        data: {
+          userId: existing.hrId,
+          type: "PLAN_APPROVED",
+          title: `Plan approved: "${existing.title}"`,
+          body: `Admin approved your training plan for ${existing.targetCount} pax. Proceed to book.`,
+          link: "/hr/training-planner",
+        },
+      });
+    } else if (action === "REJECT") {
+      await prisma.notification.create({
+        data: {
+          userId: existing.hrId,
+          type: "PLAN_REJECTED",
+          title: `Plan returned: "${existing.title}"`,
+          body: (adminNotes || "Needs revision — see admin feedback") || "Admin requested changes to your plan. Review and update.",
+          link: "/hr/training-planner",
+        },
+      });
+    }
+
+    return NextResponse.json(updated);
+  } catch (err) {
+    console.error("Failed to update training plan:", err);
+    return NextResponse.json({ error: "Failed to update training plan" }, { status: 500 });
+  }
 }

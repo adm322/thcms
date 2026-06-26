@@ -55,7 +55,7 @@ export default function TrainerBookingDetailPage() {
     fetch(`/api/trainer/bookings/${id}`)
       .then(r => r.json())
       .then(data => { setBooking(data); setLoading(false); })
-      .catch(() => setLoading(false));
+      .catch((e) => { console.error("Failed to load booking:", e); setLoading(false); });
   }, [id]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {

@@ -8,23 +8,28 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const notifications = await prisma.notification.findMany({
-    where: { userId: session.id },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  });
+  try {
+    const notifications = await prisma.notification.findMany({
+      where: { userId: session.id },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
 
-  const unreadCount = await prisma.notification.count({
-    where: { userId: session.id, read: false },
-  });
+    const unreadCount = await prisma.notification.count({
+      where: { userId: session.id, read: false },
+    });
 
-  return NextResponse.json({
-    notifications: notifications.map((n) => ({
-      ...n,
-      createdAt: n.createdAt.toISOString(),
-    })),
-    unreadCount,
-  });
+    return NextResponse.json({
+      notifications: notifications.map((n) => ({
+        ...n,
+        createdAt: n.createdAt.toISOString(),
+      })),
+      unreadCount,
+    });
+  } catch (err) {
+    console.error("Failed to fetch notifications:", err);
+    return NextResponse.json({ error: "Failed to fetch notifications" }, { status: 500 });
+  }
 }
 
 export async function PATCH(request: NextRequest) {
@@ -33,24 +38,30 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json().catch(() => ({}));
+  let body: { action?: string; id?: string };
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
   const { action, id } = body;
 
-  if (action === "markAllRead") {
-    await prisma.notification.updateMany({
-      where: { userId: session.id, read: false },
-      data: { read: true },
-    });
-    return NextResponse.json({ success: true });
-  }
+  try {
+    if (action === "markAllRead") {
+      await prisma.notification.updateMany({
+        where: { userId: session.id, read: false },
+        data: { read: true },
+      });
+      return NextResponse.json({ success: true });
+    }
 
-  if (action === "markRead" && id) {
-    await prisma.notification.updateMany({
-      where: { id, userId: session.id },
-      data: { read: true },
-    });
-    return NextResponse.json({ success: true });
-  }
+    if (action === "markRead" && id) {
+      await prisma.notification.updateMany({
+        where: { id, userId: session.id },
+        data: { read: true },
+      });
+      return NextResponse.json({ success: true });
+    }
 
-  return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+  } catch (err) {
+    console.error("Failed to update notifications:", err);
+    return NextResponse.json({ error: "Failed to update notifications" }, { status: 500 });
+  }
 }

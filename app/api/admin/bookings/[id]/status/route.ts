@@ -36,7 +36,11 @@ export async function PATCH(
   }
   if (trainerDocumentsUrl !== undefined) data.trainerDocumentsUrl = trainerDocumentsUrl;
 
-  const updated = await prisma.booking.update({ where: { id }, data });
-
-  return NextResponse.json(updated);
+  try {
+    const updated = await prisma.booking.update({ where: { id }, data });
+    return NextResponse.json(updated);
+  } catch (err) {
+    console.error("Failed to update booking status:", err);
+    return NextResponse.json({ error: "Failed to update booking status" }, { status: 500 });
+  }
 }
