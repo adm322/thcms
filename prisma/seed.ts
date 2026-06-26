@@ -6,7 +6,9 @@ const adapter = new PrismaLibSql({ url: "file:./dev.db" });
 const prisma = new PrismaClient({ adapter });
 
 function hashPassword(password: string): string {
-  return crypto.createHash("sha256").update(password).digest("hex");
+  const salt = crypto.randomBytes(16).toString("hex");
+  const derived = crypto.scryptSync(password, salt, 64).toString("hex");
+  return `scrypt:${salt}:${derived}`;
 }
 
 // Helpers to generate evaluation responses

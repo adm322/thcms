@@ -71,20 +71,52 @@ export async function getSession(): Promise<SessionUser | null> {
   }
 }
 
+/** Hash a password with scrypt + random salt. Format: `scrypt:<salt>:<hash>` */
+export async function hashPassword(password: string): Promise<string> {
+  const crypto = await import("crypto");
+  const salt = crypto.randomBytes(16).toString("hex");
+  const derived = crypto.scryptSync(password, salt, 64).toString("hex");
+  return `scrypt:${salt}:${derived}`;
+}
+
+async function verifyScrypt(password: string, stored: string): Promise<boolean> {
+  const crypto = await import("crypto");
+  const [, salt, hash] = stored.split(":");
+  const derived = crypto.scryptSync(password, salt, 64).toString("hex");
+  return crypto.timingSafeEqual(Buffer.from(hash, "hex"), Buffer.from(derived, "hex"));
+}
+
 /** Validate login credentials against the database */
 export async function validateCredentials(
   email: string,
   password: string
 ): Promise<SessionUser | null> {
   const crypto = await import("crypto");
-  const hash = crypto.createHash("sha256").update(password).digest("hex");
 
   const user = await prisma.user.findUnique({
     where: { email },
     include: { company: true },
   });
+  if (!user) return null;
 
-  if (!user || user.passwordHash !== hash) return null;
+  const isScrypt = user.passwordHash.startsWith("scrypt:");
+  let valid = false;
+
+  if (isScrypt) {
+    valid = await verifyScrypt(password, user.passwordHash);
+  } else {
+    // ponytail: legacy SHA-256 check — auto-upgrades to scrypt on success
+    const sha = crypto.createHash("sha256").update(password).digest("hex");
+    valid = user.passwordHash === sha;
+  }
+
+  if (!valid) return null;
+
+  // Auto-upgrade legacy hashes to scrypt
+  if (!isScrypt) {
+    const upgraded = await hashPassword(password);
+    await prisma.user.update({ where: { id: user.id }, data: { passwordHash: upgraded } });
+  }
 
   return {
     id: user.id,

@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 // GET featured + recent programs
 export async function GET() {
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const [featured, recent] = await Promise.all([
     prisma.program.findMany({
       where: { featured: true, status: "PUBLISHED" },
@@ -32,6 +38,11 @@ export async function GET() {
 
 // PATCH toggle feature
 export async function PATCH(request: NextRequest) {
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   let body: any;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
 

@@ -1,10 +1,25 @@
 import { NextResponse } from "next/server";
+import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
 
   const participant = await prisma.participant.findUnique({
@@ -54,10 +69,10 @@ export async function GET(
 <div class="cert">
   <h1>Certificate of Completion</h1>
   <p style="font-size:16px;color:#4d4d4d;">This certifies that</p>
-  <p class="name">${participant.name}</p>
+  <p class="name">${escapeHtml(participant.name)}</p>
   <p style="font-size:14px;color:#888;">has successfully completed</p>
-  <p class="program">${participant.booking.program.title}</p>
-  <p class="trainer">Trainer: ${participant.booking.program.trainer.name}</p>
+  <p class="program">${escapeHtml(participant.booking.program.title)}</p>
+  <p class="trainer">Trainer: ${escapeHtml(participant.booking.program.trainer.name)}</p>
   ${avgScore !== null ? `<p class="score">Average Quiz Score: ${avgScore}%</p>` : ""}
   <p class="date">${date.toLocaleDateString("en-MY", { day:"numeric", month:"long", year:"numeric" })}</p>
   <p class="brand">TrainHub Malaysia — HR & Training Platform</p>
