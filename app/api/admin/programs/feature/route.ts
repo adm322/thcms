@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { parseBody } from "@/lib/api-utils";
 
 // GET featured + recent programs
 export async function GET() {
@@ -32,10 +33,10 @@ export async function GET() {
 
 // PATCH toggle feature
 export async function PATCH(request: NextRequest) {
-  let body: any;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { id, featured } = body;
+  const { id, featured } = body as { id: string; featured?: boolean };
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
   const program = await prisma.program.update({

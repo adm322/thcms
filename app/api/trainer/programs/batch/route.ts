@@ -1,19 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
-  let body: any;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
   const {
     title,
@@ -25,7 +19,11 @@ export async function POST(request: NextRequest) {
     locationType,
     syllabus,
     modules,
-  } = body;
+  } = body as {
+    title: string; description?: string; category: string; durationHours?: number;
+    maxParticipants?: number; pricePerPax?: number; locationType?: string;
+    syllabus?: string; modules?: { title: string; description?: string; durationMins?: number; orderIndex?: number }[];
+  };
 
   if (!title || !category) {
     return NextResponse.json({ error: "title and category are required" }, { status: 400 });
@@ -43,7 +41,7 @@ export async function POST(request: NextRequest) {
         maxParticipants: maxParticipants || 20,
         pricePerPax: pricePerPax || 0,
         locationType: locationType || "ON_SITE",
-        syllabus: syllabus || [],
+        syllabus: syllabus || "[]",
         status: "DRAFT",
       },
     });

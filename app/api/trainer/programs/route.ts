@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 import { CreateProgramSchema } from "@/lib/validations";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const programs = await prisma.program.findMany({
     where: { trainerId: session.id },
@@ -35,17 +33,11 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
-  let body: any;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
   const result = CreateProgramSchema.safeParse(body);
   if (!result.success) {

@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "HR") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
   const { id } = await params;
 
   const evaluation = await prisma.evaluation.findUnique({

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { parseBody } from "@/lib/api-utils";
 
 export async function PATCH(
   request: NextRequest,
@@ -7,14 +8,10 @@ export async function PATCH(
 ) {
   const { id } = await params;
 
-  let body: any;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { status, employerHrdfSubmitted, trainerHrdfSubmitted, trainerDocumentsUrl } = body;
+  const { status, employerHrdfSubmitted, trainerHrdfSubmitted, trainerDocumentsUrl } = body as { status: string; employerHrdfSubmitted?: boolean; trainerHrdfSubmitted?: boolean; trainerDocumentsUrl?: string };
   if (!status || !["CONFIRMED", "COMPLETED", "CANCELLED", "PENDING"].includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }

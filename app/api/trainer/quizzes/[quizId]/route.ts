@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 // GET single quiz with questions
@@ -7,8 +7,8 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ quizId: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
   const { quizId } = await params;
 
   const quiz = await prisma.quiz.findUnique({
@@ -31,15 +31,15 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ quizId: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
   const { quizId } = await params;
 
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId }, include: { module: { select: { program: { select: { trainerId: true } } } } } });
   if (!quiz || (quiz.standalone ? false : quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  let body: any;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
   const updated = await prisma.quiz.update({
     where: { id: quizId },
@@ -59,8 +59,8 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ quizId: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
   const { quizId } = await params;
 
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId }, include: { module: { select: { program: { select: { trainerId: true } } } } } });

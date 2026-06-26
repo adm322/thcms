@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { uploadFile } from "@/lib/storage";
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || (session.role !== "ADMIN" && session.role !== "TRAINER" && session.role !== "HR")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("ADMIN", "TRAINER", "HR");
+  if (session instanceof NextResponse) return session;
 
   let formData: FormData;
   try { formData = await request.formData(); } catch {

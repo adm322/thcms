@@ -1,21 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
-  const body = await request.json().catch(() => null);
-  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { action, adminNotes } = body;
+  const { action, adminNotes } = body as Record<string, string>;
 
   const existing = await prisma.trainingPlanItem.findUnique({ where: { id } });
   if (!existing) {

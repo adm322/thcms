@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
   const { bookingId } = await request.json().catch(() => ({}));
   if (!bookingId) return NextResponse.json({ error: "bookingId required" }, { status: 400 });

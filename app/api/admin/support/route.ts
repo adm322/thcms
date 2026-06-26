@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
   const tickets = await prisma.supportTicket.findMany({
     include: { hr: { select: { name: true, email: true } }, company: { select: { name: true } } },
@@ -16,13 +14,11 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireRole("ADMIN");
+  if (auth instanceof NextResponse) return auth;
 
-  let body: { id?: string; status?: string; adminNotes?: string };
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const body = await parseBody<{ id?: string; status?: string; adminNotes?: string }>(request);
+  if (body instanceof NextResponse) return body;
 
   const { id, status, adminNotes } = body;
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });

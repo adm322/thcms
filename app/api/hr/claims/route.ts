@@ -1,18 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parsePagination, paginate } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   const { searchParams } = new URL(request.url);
-  const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
-  const limit = Math.min(10000, parseInt(searchParams.get("limit") || "50"));
+  const { page, limit, skip } = parsePagination(searchParams, 10000);
   const status = searchParams.get("status");
-  const skip = (page - 1) * limit;
 
   const where: any = { employee: { companyId: session.companyId } };
   if (status && status !== "ALL") where.status = status;
@@ -31,6 +27,6 @@ export async function GET(request: NextRequest) {
       type: c.type, amount: c.amount, description: c.description, receiptUrl: c.receiptUrl,
       status: c.status, createdAt: c.createdAt.toISOString(),
     })),
-    pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    pagination: paginate(page, limit, total),
   });
 }

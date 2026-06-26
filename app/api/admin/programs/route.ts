@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status") || undefined;
@@ -68,15 +66,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireRole("ADMIN");
+  if (auth instanceof NextResponse) return auth;
 
-  const body = await request.json().catch(() => null);
-  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { id, action } = body;
+  const { id, action } = body as Record<string, string>;
 
   const program = await prisma.program.findUnique({ where: { id } });
   if (!program) return NextResponse.json({ error: "Not found" }, { status: 404 });

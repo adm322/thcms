@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
   const { id } = await params;
 
   const emp = await prisma.employee.findUnique({
@@ -17,15 +17,15 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
   const { id } = await params;
 
   const emp = await prisma.employee.findUnique({ where: { id } });
   if (!emp || emp.companyId !== session.companyId) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  let body: any;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
   const updated = await prisma.employee.update({
     where: { id },
@@ -45,8 +45,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
   const { id } = await params;
 
   const emp = await prisma.employee.findUnique({ where: { id } });
