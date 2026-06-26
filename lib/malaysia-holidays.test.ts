@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
-import { isFavorableMonth, isBlackoutPeriod, getHariRayaDates, getBlackoutPeriods, isPublicHoliday, getActivePeriods, getRamadanStart } from './malaysia-holidays';
+import { isFavorableMonth, isBlackoutPeriod, getHariRayaDates, getBlackoutPeriods, isPublicHoliday, getActivePeriods, getRamadanStart, getHolidaysForMonth } from './malaysia-holidays';
 
 describe('isFavorableMonth', () => {
   it('should return unfavorable for January with a warning', () => {
@@ -266,5 +266,45 @@ describe('getRamadanStart', () => {
   it('should return correct date for 2026', () => {
     const result = getRamadanStart();
     assert.equal(result, '2026-02-18');
+  });
+});
+
+describe('getHolidaysForMonth', () => {
+  it('should return holidays for a month with holidays (e.g., January 2026)', () => {
+    // January is index 0
+    const holidays = getHolidaysForMonth(2026, 0);
+
+    assert.notEqual(holidays, undefined);
+    assert.ok(holidays.length > 0);
+
+    // Check if expected holidays are included
+    const newYear = holidays.find(h => h.name === "New Year's Day");
+    assert.notEqual(newYear, undefined);
+    assert.equal(newYear?.date, '2026-01-01');
+
+    const thaipusam = holidays.find(h => h.name === "Thaipusam");
+    assert.notEqual(thaipusam, undefined);
+    assert.equal(thaipusam?.date, '2026-01-25');
+  });
+
+  it('should return an empty array for a month with no holidays (e.g., November 2026)', () => {
+    // November is index 10
+    const holidays = getHolidaysForMonth(2026, 10);
+
+    assert.notEqual(holidays, undefined);
+    assert.equal(holidays.length, 0);
+  });
+
+  it('should return an empty array for a different year (e.g., 2025)', () => {
+    // The data is strictly for 2026
+    const holidays = getHolidaysForMonth(2025, 0);
+
+    assert.notEqual(holidays, undefined);
+    assert.equal(holidays.length, 0);
+  });
+
+  it('should handle edge cases like invalid months', () => {
+    assert.equal(getHolidaysForMonth(2026, -1).length, 0);
+    assert.equal(getHolidaysForMonth(2026, 12).length, 0);
   });
 });
