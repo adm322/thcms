@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
-import { formatRent } from './format';
+import { formatRent, formatDate } from './format';
 
 describe('formatRent', () => {
   test('formats a standard number correctly', () => {
@@ -17,5 +17,17 @@ describe('formatRent', () => {
 
   test('formats decimal values correctly', () => {
     assert.strictEqual(formatRent(1234.56), 'RM 1,234.56/mo');
+  });
+});
+
+describe('formatDate', () => {
+  test('formats valid ISO string', () => {
+    // using a timezone-agnostic string (no 'Z' or offset) so that
+    // the date is evaluated correctly regardless of local timezone.
+    assert.strictEqual(formatDate('2026-06-18T12:00:00'), '18 Jun 2026');
+  });
+
+  test('handles invalid date string by returning the original string', () => {
+    assert.strictEqual(formatDate('invalid-date'), 'invalid-date');
   });
 });
