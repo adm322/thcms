@@ -24,26 +24,32 @@ export async function POST(request: NextRequest) {
   let imported = 0;
   let errors = 0;
 
+  const validEmployees = [];
+
   for (const row of employees) {
     const [name, icNumber, email, department, position] = row;
     if (!name) { errors++; continue; }
 
+    validEmployees.push({
+      companyId: session.companyId,
+      name,
+      icNumber: icNumber || null,
+      email: email || null,
+      department: department || null,
+      position: position || null,
+      employmentType: "PERMANENT",
+      status: "ACTIVE",
+    });
+  }
+
+  if (validEmployees.length > 0) {
     try {
-      await prisma.employee.create({
-        data: {
-          companyId: session.companyId,
-          name,
-          icNumber: icNumber || null,
-          email: email || null,
-          department: department || null,
-          position: position || null,
-          employmentType: "PERMANENT",
-          status: "ACTIVE",
-        },
+      const result = await prisma.employee.createMany({
+        data: validEmployees,
       });
-      imported++;
+      imported += result.count;
     } catch {
-      errors++;
+      errors += validEmployees.length;
     }
   }
 
