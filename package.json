@@ -7,7 +7,7 @@
     "build": "node prisma/prepare-db.js && prisma generate && next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest"
+    "test": "node --experimental-test-module-mocks --import tsx --test"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1075.0",
