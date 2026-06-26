@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const tickets = await prisma.supportTicket.findMany({
     include: { hr: { select: { name: true, email: true } }, company: { select: { name: true } } },
     orderBy: { updatedAt: "desc" },
@@ -10,7 +16,12 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  let body: any;
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  let body: { id?: string; status?: string; adminNotes?: string };
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
 
   const { id, status, adminNotes } = body;
