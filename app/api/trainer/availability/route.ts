@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 // GET: Return monthly availability grid with status for each day
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const { searchParams } = new URL(request.url);
   const month = parseInt(searchParams.get("month") || String(new Date().getMonth()));
@@ -79,17 +77,13 @@ export async function GET(request: NextRequest) {
 
 // PUT: Toggle availability for specific dates
 export async function PUT(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
-  let body: any;
-  try { body = await request.json(); } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { date, status, reason } = body;
+  const { date, status, reason } = body as Record<string, string>;
   if (!date || !status) {
     return NextResponse.json({ error: "date and status required" }, { status: 400 });
   }

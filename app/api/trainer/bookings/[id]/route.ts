@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 
@@ -52,10 +50,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 
@@ -66,7 +62,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const body = await req.json();
+  const body = await parseBody(req);
+  if (body instanceof NextResponse) return body;
   const data: any = {};
   if (body.trainerDocumentsUrl !== undefined) data.trainerDocumentsUrl = body.trainerDocumentsUrl;
   if (body.trainerHrdfSubmitted !== undefined) {

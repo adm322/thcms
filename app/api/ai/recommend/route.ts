@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 import { getSmartRecommendations } from "@/lib/ai";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   // Get past booking categories
   const bookings = await prisma.booking.findMany({

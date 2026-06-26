@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parsePagination, paginate } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
-  const page = parseInt(request.nextUrl.searchParams.get("page") || "1");
-  const limit = Math.min(parseInt(request.nextUrl.searchParams.get("limit") || "20"), 100);
-  const skip = (page - 1) * limit;
+  const { page, limit, skip } = parsePagination(request.nextUrl.searchParams);
 
   const [bookings, total] = await Promise.all([
     prisma.booking.findMany({
@@ -39,6 +35,6 @@ export async function GET(request: NextRequest) {
       participantCount: b._count.participants,
       venueAddress: b.venueAddress || b.program.locationType.toUpperCase(),
     })),
-    pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    pagination: paginate(page, limit, total),
   });
 }

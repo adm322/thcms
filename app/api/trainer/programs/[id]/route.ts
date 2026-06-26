@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 
@@ -47,18 +45,12 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
-  let body: any;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
   // Verify ownership
   const existing = await prisma.program.findUnique({ where: { id } });
@@ -66,20 +58,21 @@ export async function PUT(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  const b = body as Record<string, string | number | string[] | null | undefined>;
   const program = await prisma.program.update({
     where: { id },
     data: {
-      title: body.title,
-      description: body.description,
-      category: body.category,
-      durationHours: body.durationHours,
-      maxParticipants: body.maxParticipants,
-      pricePerPax: body.pricePerPax,
-      locationType: body.locationType,
-      syllabus: JSON.stringify(body.syllabus || []),
-      status: body.status,
-      proposalUrl: body.proposalUrl !== undefined ? body.proposalUrl : undefined,
-      proposalLabel: body.proposalLabel !== undefined ? body.proposalLabel : undefined,
+      title: b.title as string,
+      description: b.description as string,
+      category: b.category as string,
+      durationHours: b.durationHours as number,
+      maxParticipants: b.maxParticipants as number,
+      pricePerPax: b.pricePerPax as number,
+      locationType: b.locationType as string,
+      syllabus: JSON.stringify(b.syllabus || []),
+      status: b.status as string,
+      proposalUrl: b.proposalUrl !== undefined ? (b.proposalUrl as string) : undefined,
+      proposalLabel: b.proposalLabel !== undefined ? (b.proposalLabel as string) : undefined,
     },
   });
 
@@ -90,10 +83,8 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 

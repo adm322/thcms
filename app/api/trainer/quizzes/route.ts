@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const quizzes = await prisma.quiz.findMany({
     where: { moduleId: null, standalone: true }, // only standalone quizzes
@@ -23,8 +23,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "TRAINER") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("TRAINER");
+  if (session instanceof NextResponse) return session;
 
   const { title, description, passingScore, timeLimitMins, questions } = await request.json();
 

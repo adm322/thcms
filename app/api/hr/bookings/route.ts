@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   const bookings = await prisma.booking.findMany({
     where: { companyId: session.companyId },
@@ -36,19 +34,13 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
-  let body: any;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { programId, participantCount, programDate, venuePreference, venueAddress, meetingLink } = body || {};
+  const { programId, participantCount, programDate, venuePreference, venueAddress, meetingLink } = (body || {}) as { programId: string; participantCount: number; programDate: string; venuePreference?: string; venueAddress?: string; meetingLink?: string };
 
   if (!programId || !participantCount || !programDate) {
     return NextResponse.json({ error: "programId, participantCount, and programDate are required" }, { status: 400 });

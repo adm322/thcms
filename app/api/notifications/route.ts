@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole();
+  if (session instanceof NextResponse) return session;
 
   const notifications = await prisma.notification.findMany({
     where: { userId: session.id },
@@ -28,10 +26,8 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole();
+  if (session instanceof NextResponse) return session;
 
   const body = await request.json().catch(() => ({}));
   const { action, id } = body;

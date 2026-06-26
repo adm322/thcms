@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { parseBody } from "@/lib/api-utils";
 import { analyzeEvaluationComments } from "@/lib/ai";
 
 export async function POST(request: NextRequest) {
-  let body: any;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
   
   const { comments } = body;
   if (!comments || !Array.isArray(comments)) return NextResponse.json({ error: "comments array required" }, { status: 400 });

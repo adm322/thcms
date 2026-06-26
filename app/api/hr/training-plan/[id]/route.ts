@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 
@@ -19,13 +17,16 @@ export async function PATCH(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const body = await request.json().catch(() => null);
-  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
   const {
     title, category, department, targetCount, targetMonth, targetYear,
     estimatedCost, priority, status, matchedProgramId, bookingId, notes,
-  } = body;
+  } = body as {
+    title?: string; category?: string; department?: string; targetCount?: number; targetMonth?: number; targetYear?: number;
+    estimatedCost?: number; priority?: string; status?: string; matchedProgramId?: string | null; bookingId?: string; notes?: string | null;
+  };
 
   // If converting to SCHEDULED via one-click book, verify the booking exists and belongs to same company
   if (status === "SCHEDULED" && bookingId) {
@@ -87,10 +88,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 

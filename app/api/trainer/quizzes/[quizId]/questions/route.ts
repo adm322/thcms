@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 // GET questions
@@ -7,8 +7,8 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ quizId: string }> }
 ) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole();
+  if (session instanceof NextResponse) return session;
   const { quizId } = await params;
 
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId }, include: { module: { select: { program: { select: { trainerId: true } } } } } });
@@ -27,27 +27,28 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ quizId: string }> }
 ) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole();
+  if (session instanceof NextResponse) return session;
   const { quizId } = await params;
 
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId }, include: { module: { select: { program: { select: { trainerId: true } } } } } });
   if (!quiz || (quiz.standalone ? false : quiz.module?.program?.trainerId !== session.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  let body: any;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
   const count = await prisma.question.count({ where: { quizId } });
 
+  const b = body as Record<string, string | number | unknown[]>;
   const question = await prisma.question.create({
     data: {
       quizId,
-      text: body.text || "New Question",
-      type: body.type || "MCQ",
-      options: JSON.stringify(body.options || []),
-      correctAnswer: body.correctAnswer || "",
-      points: body.points || 1,
-      orderIndex: body.orderIndex ?? count,
+      text: (b.text as string) || "New Question",
+      type: (b.type as string) || "MCQ",
+      options: JSON.stringify(b.options || []),
+      correctAnswer: (b.correctAnswer as string) || "",
+      points: (b.points as number) || 1,
+      orderIndex: (b.orderIndex as number) ?? count,
     },
   });
 

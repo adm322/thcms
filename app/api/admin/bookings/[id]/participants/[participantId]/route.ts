@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string; participantId: string }> }
 ) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
   const { participantId } = await params;
   const body = await _req.json().catch(() => ({}));

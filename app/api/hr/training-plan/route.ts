@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody, parsePagination, paginate } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   const { searchParams } = new URL(request.url);
   const year = searchParams.get("year") ? parseInt(searchParams.get("year")!) : new Date().getFullYear();
   const status = searchParams.get("status") || undefined;
   const department = searchParams.get("department") || undefined;
   const month = searchParams.get("month") ? parseInt(searchParams.get("month")!) : undefined;
-  const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
-  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "100")));
-  const skip = (page - 1) * limit;
+  const { page, limit, skip } = parsePagination(searchParams);
 
   const where: any = {
     companyId: session.companyId,
@@ -63,25 +59,21 @@ export async function GET(request: NextRequest) {
           }
         : null,
     })),
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
+    pagination: paginate(page, limit, total),
   });
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
-  const body = await request.json().catch(() => null);
-  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { title, category, department, targetCount, targetMonth, targetYear, estimatedCost, priority, matchedProgramId, notes } = body;
+  const { title, category, department, targetCount, targetMonth, targetYear, estimatedCost, priority, matchedProgramId, notes } = body as {
+    title: string; category: string; department?: string | null; targetCount: number; targetMonth: number; targetYear: number;
+    estimatedCost?: number; priority?: string; matchedProgramId?: string | null; notes?: string | null;
+  };
 
   if (!title || !category || targetCount === undefined || targetMonth === undefined || targetYear === undefined) {
     return NextResponse.json({ error: "title, category, targetCount, targetMonth, and targetYear are required" }, { status: 400 });

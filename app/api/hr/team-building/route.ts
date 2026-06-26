@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 // ─── Activity Catalog ────────────────────────────────────
@@ -66,10 +66,8 @@ const VENUES: Venue[] = [
 
 // ─── API Endpoint ───────────────────────────────────────
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   const { searchParams } = new URL(request.url);
   const list = searchParams.get("list") === "true";
@@ -92,21 +90,17 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR" || !session.companyId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
-  let body: any;
-  try { body = await request.json(); } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { action } = body;
+  const { action } = body as Record<string, string>;
 
   // ─── Analyze team suitability ────────────────────────
   if (action === "analyze") {
-    const { activityId, employees } = body;
+    const { activityId, employees } = body as Record<string, string | unknown[]>;
     const activity = ACTIVITIES.find(a => a.id === activityId);
     if (!activity) return NextResponse.json({ error: "Activity not found" }, { status: 400 });
 
@@ -171,7 +165,7 @@ export async function POST(request: NextRequest) {
 
   // ─── Calculate costs ──────────────────────────────────
   if (action === "calculate") {
-    const { activityId, venueId, participants, accommodation, days } = body;
+    const { activityId, venueId, participants, accommodation, days } = body as { activityId: string; venueId: string; participants?: number; accommodation?: boolean; days?: number };
     const activity = ACTIVITIES.find(a => a.id === activityId);
     const venue = VENUES.find(v => v.id === venueId);
     if (!activity || !venue) return NextResponse.json({ error: "Invalid activity or venue" }, { status: 400 });
@@ -202,7 +196,13 @@ export async function POST(request: NextRequest) {
       activityId, activityName, activityCategory,
       venueId, venueName, venueAddress,
       startDate, isConsecutive, batchCount,
-      activityCost, accommodationCost, totalCost, hrdfClaimable } = body;
+      activityCost, accommodationCost, totalCost, hrdfClaimable } = body as {
+      eventName?: string | null; hqLocation?: string; teamSize?: number; avgAge?: number; ageMin?: number; ageMax?: number;
+      activityId: string; activityName?: string; activityCategory?: string;
+      venueId: string; venueName?: string; venueAddress?: string;
+      startDate: string; isConsecutive?: boolean; batchCount?: number;
+      activityCost?: number; accommodationCost?: number; totalCost?: number; hrdfClaimable?: number;
+    };
 
     if (!activityId || !venueId || !startDate) {
       return NextResponse.json({ error: "activityId, venueId, startDate required" }, { status: 400 });
