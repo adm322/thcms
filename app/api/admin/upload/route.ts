@@ -16,7 +16,13 @@ export async function POST(request: NextRequest) {
   const file = formData.get("file") as File | null;
   if (!file) return NextResponse.json({ error: "file required" }, { status: 400 });
 
-  const ext = file.name.includes(".") ? file.name.split(".").pop() || "pdf" : "pdf";
+  const ext = file.name.includes(".") ? (file.name.split(".").pop() || "pdf").toLowerCase() : "pdf";
+
+  const ALLOWED_EXTENSIONS = ["pdf", "doc", "docx", "jpg", "jpeg", "png", "zip"];
+  if (!ALLOWED_EXTENSIONS.includes(ext)) {
+    return NextResponse.json({ error: "Invalid file extension" }, { status: 400 });
+  }
+
   const fileName = `doc-${Date.now()}-${Math.random().toString(36).slice(2,6)}.${ext}`;
   const fileBuffer = Buffer.from(await file.arrayBuffer());
   
