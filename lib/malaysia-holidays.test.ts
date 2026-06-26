@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
-import { isFavorableMonth, isBlackoutPeriod, getHariRayaDates, getBlackoutPeriods, isPublicHoliday, getActivePeriods } from './malaysia-holidays';
+import { isFavorableMonth, isBlackoutPeriod, getHariRayaDates, getBlackoutPeriods, isPublicHoliday, getActivePeriods, getRamadanStart } from './malaysia-holidays';
 
 describe('isFavorableMonth', () => {
   it('should return unfavorable for January with a warning', () => {
@@ -259,5 +259,12 @@ describe("getActivePeriods", () => {
     // where date >= start and date <= end will both evaluate to false.
     const periods = getActivePeriods("invalid-date");
     assert.deepStrictEqual(periods, []);
+  });
+});
+
+describe('getRamadanStart', () => {
+  it('should return correct date for 2026', () => {
+    const result = getRamadanStart();
+    assert.equal(result, '2026-02-18');
   });
 });
