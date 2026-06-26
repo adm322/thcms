@@ -1,29 +1,34 @@
-import test from "node:test";
+import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 
-test("Trainer availability PUT - Invalid JSON", async (t) => {
-  const jose = require("jose");
-  const nextHeaders = require("next/headers");
+mock.module("next/headers", {
+  namedExports: {
+    cookies: async () => ({
+      get: (name: string) => name === "trainhub_session" ? { value: "fake-token" } : undefined
+    })
+  }
+});
 
-  // Create a real signed JWT token to bypass the authentication check
-  const secret = process.env.JWT_SECRET || "trainhub-my-jwt-secret-key-2026-change-in-prod";
-  const token = await new jose.SignJWT({ id: "1", role: "TRAINER" })
-    .setProtectedHeader({ alg: "HS256" })
-    .sign(new TextEncoder().encode(secret));
+mock.module("jose", {
+  namedExports: {
+    jwtVerify: async () => ({
+      payload: { role: "TRAINER", id: "1" }
+    })
+  }
+});
 
-  // Mock next/headers cookies to return the token
-  t.mock.method(nextHeaders, "cookies", async () => ({
-    get: (name: string) => name === "trainhub_session" ? { value: token } : undefined
-  }));
-
+test("Trainer availability PUT - Invalid JSON", async () => {
   const { PUT } = await import("./route");
+  const { NextRequest } = await import("next/server");
 
   // Create a mock NextRequest that throws on .json() to simulate Invalid JSON
-  const req = {
-    json: async () => { throw new Error("Invalid JSON"); }
-  };
+  const req = new NextRequest("http://localhost/api/trainer/availability", {
+    method: "PUT",
+    body: "invalid-json"
+  });
+  req.json = async () => { throw new Error("Invalid JSON"); };
 
-  const res = await PUT(req as any);
+  const res = await PUT(req);
 
   // Verify that the response status is 400 Bad Request
   assert.strictEqual(res.status, 400);
