@@ -22,6 +22,7 @@ dev.db-journal
 
 # Local environment & temporary files
 .env
+coverage/
 scratch/
 awesome-design-md-main/
 *.sql

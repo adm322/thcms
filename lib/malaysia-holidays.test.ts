@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
-import { isFavorableMonth, isBlackoutPeriod } from './malaysia-holidays';
+import { isFavorableMonth, isBlackoutPeriod, getHariRayaDates } from './malaysia-holidays';
 
 describe('isFavorableMonth', () => {
   it('should return unfavorable for January with a warning', () => {
@@ -157,5 +157,11 @@ describe('isBlackoutPeriod', () => {
 
   it('should handle time components correctly (assume midnight UTC if missing, test with time within period)', () => {
     assert.equal(isBlackoutPeriod('2026-04-20T12:00:00Z'), 'Hari Raya Aidilfitri');
+  });
+});
+
+describe('getHariRayaDates', () => {
+  it('should return the correct dates for Hari Raya', () => {
+    assert.deepStrictEqual(getHariRayaDates(), ["2026-04-20", "2026-04-21"]);
   });
 });
