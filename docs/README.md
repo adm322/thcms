@@ -18,7 +18,6 @@ Create a `.env` file in the project root:
 
 ```bash
 # AI Provider (optional - falls back to mock responses)
-DEEPSEEK_API_KEY=your_deepseek_api_key    # Priority: DeepSeek > OpenAI > mock
 OPENAI_API_KEY=your_openai_api_key
 
 # Database (default: SQLite)

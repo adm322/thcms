@@ -1,6 +1,6 @@
 /**
- * AI Utility — pluggable: mock now, OpenAI/DeepSeek via API keys
- * Priority: DEEPSEEK_API_KEY > OPENAI_API_KEY > mock
+ * AI Utility — pluggable: mock now, OpenAI via API key
+ * Priority: OPENAI_API_KEY > mock
  */
 
 interface AIResponse {
@@ -10,10 +10,9 @@ interface AIResponse {
 
 // ─── AI Provider Helper ────────────────────────────────────────
 
-type AIProvider = "deepseek" | "openai" | "mock";
+type AIProvider = "openai" | "mock";
 
 function getAIProvider(): AIProvider {
-  if (process.env.DEEPSEEK_API_KEY) return "deepseek";
   if (process.env.OPENAI_API_KEY) return "openai";
   return "mock";
 }
@@ -22,20 +21,17 @@ async function callAI(prompt: string, systemPrompt?: string): Promise<string | n
   const provider = getAIProvider();
   if (provider === "mock") return null;
 
-  const isDeepSeek = provider === "deepseek";
-  const apiKey = isDeepSeek ? process.env.DEEPSEEK_API_KEY! : process.env.OPENAI_API_KEY!;
-  const baseUrl = isDeepSeek ? "https://api.deepseek.com" : "https://api.openai.com";
-  const model = isDeepSeek ? "deepseek-chat" : "gpt-4o-mini";
+  const apiKey = process.env.OPENAI_API_KEY!;
 
   try {
     const messages = systemPrompt
       ? [{ role: "system" as const, content: systemPrompt }, { role: "user" as const, content: prompt }]
       : [{ role: "user" as const, content: prompt }];
 
-    const res = await fetch(`${baseUrl}/v1/chat/completions`, {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({ model, messages }),
+      body: JSON.stringify({ model: "gpt-4o-mini", messages }),
     });
 
     const data = await res.json();
@@ -52,7 +48,7 @@ export async function generateQuizQuestions(
   topic: string,
   count: number = 5
 ): Promise<{ text: string; type: string; options: string[]; correctAnswer: string; points: number }[]> {
-  // Try real AI (DeepSeek or OpenAI) if key is set
+  // Try real AI (OpenAI) if key is set
   const content = await callAI(
     `Generate ${count} quiz questions about "${topic}" for a corporate training. Include MCQs and True/False. Return JSON array with fields: text, type (MCQ/TRUE_FALSE), options (array of 4 for MCQ, ["True","False"] for T/F), correctAnswer, points (1-3).`
   );
