@@ -230,6 +230,9 @@ model Booking {
   @@index([hrId])
   @@index([companyId])
   @@index([status])
+  @@index([status, programDate]) // H1 — calendar range queries
+  @@index([status, createdAt]) // M7 — pending bookings ORDER BY createdAt DESC
+  @@index([employerHrdfSubmitted]) // H2 — HRDF followup queries
 }
 
 model Participant {
@@ -295,6 +298,7 @@ model Invoice {
 
   @@index([bookingId])
   @@index([companyId])
+  @@index([status]) // H4 — revenue aggregation queries
 }
 
 model Reimbursement {
@@ -313,6 +317,7 @@ model Reimbursement {
 
   @@index([bookingId])
   @@index([trainerId])
+  @@index([status]) // H3 — pending reimbursement count
 }
 
 // ─── Employee Records (HR's internal database) ─────────────
@@ -341,6 +346,7 @@ model Employee {
 
   @@index([companyId])
   @@index([icNumber])
+  @@index([companyId, status]) // M2 — employee list by company + active/inactive filter
 }
 
 // ─── HR Modules: Leave, Attendance, Payroll, Claims ────────
@@ -375,6 +381,7 @@ model Attendance {
 
   @@index([employeeId])
   @@index([date])
+  @@index([employeeId, date]) // M1 — attendance lookup by employee + date range
 }
 
 model Payroll {
@@ -571,6 +578,7 @@ model TeamBuildingRequest {
   @@index([hrId])
   @@index([companyId])
   @@index([status])
+  @@index([status, createdAt]) // M8 — team building requests pending since sort
 }
 
 // ─── Training Plan Items (HR annual planning) ──────────────
@@ -624,6 +632,7 @@ model Notification {
 
   @@index([userId])
   @@index([read])
+  @@index([userId, read]) // M3 — unread notification count/query
 }
 
 // ─── Code of Conduct ──────────────────────────────────────────
