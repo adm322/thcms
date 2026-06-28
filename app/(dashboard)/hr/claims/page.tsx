@@ -11,7 +11,7 @@ import { Receipt, CheckCircle2, XCircle, ChevronLeft, ChevronRight } from "lucid
 
 interface ClaimRecord { id: string; employeeName: string; department: string; type: string; amount: number; description: string | null; receiptUrl: string | null; status: string; createdAt: string; }
 const typeLabels: Record<string, string> = { MILEAGE: "Mileage", TRAVEL: "Travel", MEAL: "Meal", MEDICAL: "Medical", OPTICAL: "Optical", DENTAL: "Dental", OTHER: "Other" };
-const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = { APPROVED: "default", PENDING: "secondary", REJECTED: "destructive", PAID: "outline" };
+const statusColors: Record<string, "status-success" | "status-info" | "status-warning" | "status-danger" | "status-neutral"> = { APPROVED: "status-success", PENDING: "status-warning", REJECTED: "status-danger", PAID: "status-success" };
 
 export default function HRClaims() {
   const [claims, setClaims] = useState<ClaimRecord[]>([]);

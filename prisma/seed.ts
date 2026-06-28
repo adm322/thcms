@@ -1,8 +1,10 @@
-import { PrismaClient } from "../lib/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
+import "dotenv/config";
+import { PrismaClient } from "../lib/generated/prisma/client";
 import * as crypto from "crypto";
 
-const adapter = new PrismaLibSql({ url: "file:./dev.db" });
+const url = process.env.DATABASE_URL || "file:./dev.db";
+const adapter = new PrismaLibSql({ url });
 const prisma = new PrismaClient({ adapter });
 
 function hashPassword(password: string): string {
@@ -164,6 +166,11 @@ async function main() {
   });
   const hr6 = await prisma.user.create({
     data: { email: "hr@sdarby.my", passwordHash: password, name: "Grace Tan", role: "HR", companyId: simeDarby.id },
+  });
+
+  // Demo Participant
+  const participant = await prisma.user.create({
+    data: { email: "participant@demo.com", passwordHash: password, name: "Demo Participant", role: "PARTICIPANT", companyId: petronas.id },
   });
 
   // ─── Trainer Profiles ───────────────────────────────────

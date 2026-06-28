@@ -25,7 +25,7 @@
 │   ├── ui/                         # shadcn/ui primitives (Button, Card, Input, Badge, Dialog, Tabs, Skeleton...)
 │   ├── Sidebar.tsx                 # Role-aware sidebar navigation
 │   ├── CalendarView.tsx            # Month/Year training calendar
-│   ├── NextActionBanner.tsx        # Smart contextual action alerts
+│   ├── NotificationBell.tsx        # Unified inbox (notifications + contextual actions, role-aware tabs)
 │   ├── CollapsibleSection.tsx      # Expandable section wrapper
 │   ├── MessagesInbox.tsx           # Split-pane chat inbox
 │   ├── ExportButton.tsx            # Reusable CSV export

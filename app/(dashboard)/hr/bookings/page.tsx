@@ -6,8 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, Calendar, ClipboardList } from "lucide-react";
 
-const statusBadge: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-  PENDING: "secondary", CONFIRMED: "default", COMPLETED: "outline", CANCELLED: "destructive",
+const statusBadge: Record<string, "status-success" | "status-info" | "status-warning" | "status-danger" | "status-neutral"> = {
+  PENDING: "status-warning", CONFIRMED: "status-info", COMPLETED: "status-success", CANCELLED: "status-neutral",
 };
 
 export default function HRBookings() {

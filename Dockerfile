@@ -1,54 +1,33 @@
-FROM node:22-alpine AS deps
+FROM node:22-alpine
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+# Install dependencies with npm (flat node_modules, no pnpm symlink issues)
+COPY package.json package-lock.json* pnpm-lock.yaml* ./
+RUN npm install --legacy-peer-deps 2>/dev/null || npm install
 
-# Copy package files to install dependencies
-COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --no-frozen-lockfile
-
-FROM node:22-alpine AS builder
-WORKDIR /app
-
-# Install pnpm in builder stage too
-RUN npm install -g pnpm
-
-COPY --from=deps /app/node_modules ./node_modules
+# Copy source code
 COPY . .
 
-# Generate Prisma Client
+# Generate Prisma Client (SQLite mode for Docker/local builds)
+ENV DATABASE_URL=file:./db/dev.db
 RUN npx prisma generate
 
 # Build Next.js application
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm run build
+RUN node prisma/prepare-db.js && npx prisma generate && npx next build --webpack
 
-FROM node:22-alpine AS runner
-WORKDIR /app
+# Prune devDependencies to reduce image size
+RUN npm prune --production
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
+# Entrypoint script
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 3000
 ENV PORT=3000
 
-# server.js is created by next build when output: 'standalone' is configured
-CMD ["node", "server.js"]
+ENTRYPOINT ["./docker-entrypoint.sh"]

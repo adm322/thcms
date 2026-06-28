@@ -34,7 +34,7 @@
 - [x] **Collapsible Sections** — Admin, HR, and Trainer dashboards have collapsible sections to reduce clutter
 - [x] **Smart Action Banners** — Auto-refreshing contextual alerts on all 3 dashboards (HRDF deadlines, upcoming trainings, pending approvals)
 - [x] **Trainer Actions API** — `/api/trainer/actions` with 7 action types (upcoming, HRDF claims, unpublished programs, zero-bookings, availability gaps, revenue, pending)
-- [x] **Expandable Banner** — "+N more items" toggle with chevron on NextActionBanner
+- [x] **Expandable action list** — "+N more items" toggle with chevron in NotificationBell Actions tab
 - [x] **Availability Calendar** — Trainer day-toggle calendar synced across admin/HR
 - [x] **Dual-Party HRDF Tracking** — Employer + trainer independent claim submission on all bookings and team-building requests
 - [x] **Training Checklist** — 15-item interactive checklist on booking detail, localStorage persistence, pre/during/post phases

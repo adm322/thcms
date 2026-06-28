@@ -12,6 +12,22 @@ npx tsx prisma/seed.ts
 npm run dev -- --webpack    # Windows: use --webpack (Turbopack has NUL device bug)
 ```
 
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```bash
+# AI Provider (optional - falls back to mock responses)
+DEEPSEEK_API_KEY=your_deepseek_api_key    # Priority: DeepSeek > OpenAI > mock
+OPENAI_API_KEY=your_openai_api_key
+
+# Database (default: SQLite)
+DATABASE_URL=file:./dev.db
+
+# Auth
+JWT_SECRET=your_jwt_secret
+```
+
 Open **http://localhost:3000** — login page with demo quick-login buttons.
 
 > **Production mode** (stable, fast): `npx next build --webpack && npx next start -p 3000`
@@ -62,7 +78,7 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 │   ├── ui/                         # shadcn/ui primitives (Button, Card, Input, Badge, Dialog, Tabs, Skeleton...)
 │   ├── Sidebar.tsx                 # Role-aware sidebar navigation
 │   ├── CalendarView.tsx            # Month/Year training calendar
-│   ├── NextActionBanner.tsx        # Smart contextual action alerts (auto-refreshing)
+│   ├── NotificationBell.tsx        # Unified inbox (notifications + contextual actions, role-aware tabs)
 │   ├── CollapsibleSection.tsx      # Expandable section wrapper
 │   ├── MessagesInbox.tsx           # Split-pane chat inbox
 │   ├── ExportButton.tsx            # Reusable CSV export

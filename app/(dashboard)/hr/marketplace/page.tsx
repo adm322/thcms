@@ -151,13 +151,13 @@ export default function HRMarketplace() {
                         onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                       />
                     )}
-                    <div className="absolute top-3 left-3">
+                    <div className="absolute top-3 left-3 z-10">
                       <Badge className="bg-black/60 text-white border-0 text-[10px] backdrop-blur-sm">{p.category}</Badge>
                     </div>
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-3 right-3 z-10">
                       <Badge className="bg-black/60 text-white border-0 text-[10px] backdrop-blur-sm capitalize"><MapPin className="mr-1 h-2.5 w-2.5" />{p.locationType}</Badge>
                     </div>
-                    <div className="absolute bottom-3 right-3">
+                    <div className="absolute bottom-3 right-3 z-10">
                       <Badge className="bg-white/90 text-primary border-0 text-sm font-bold shadow-sm">RM {p.pricePerPax}</Badge>
                     </div>
                   </div>

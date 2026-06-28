@@ -1,0 +1,152 @@
+﻿version: 1
+plan:
+  name: TrainHub Dashboard Performance Audit
+  max_concurrency: 10
+  max_consecutive_failures: 2
+  max_cycles: 6
+  auto_reject_retries: 1
+  verifier_config:
+    default_verifiers: [verifier]
+    audit_sample_rate: 0.0
+
+tasks:
+  - id: backend-audit
+    title: "Backend: Query pattern audit (admin.service.ts)"
+    prompt: |
+      You are the Backend Agent for a TrainHub performance audit. Read the following files and produce a detailed findings report:
+      
+      Files to analyze:
+      - E:\Project Repo\thcms\lib\services\admin.service.ts
+      - E:\Project Repo\thcms\app\(dashboard)\admin\page.tsx
+      - E:\Project Repo\thcms\lib\prisma.ts (if exists)
+      
+      Your task: Perform a deep audit of the admin dashboard data fetching. Focus on:
+      1. N+1 query patterns (especially in getAdminTrainingPlans which loads company → trainingPlans → booking for each company)
+      2. Sequential vs parallel execution opportunities (the comment says "execute sequentially to prevent connection spikes" — assess if this is still needed)
+      3. getAdminStats revenue calculation: it does `prisma.invoice.findMany` then `reduce()` in JS — assess if a SQL COUNT/SUM would be better
+      4. getAdminCalendar: 3 separate queries (month filter + upcoming + monthly stats) with overlapping data — can these be combined?
+      5. getAdminTrainingPlans: the nested include loads full booking relations just to extract 3 fields — is this over-fetching?
+      6. Any other Prisma anti-patterns (missing select{}, unnecessary includes, large take limits)
+      
+      For each finding, provide:
+      - Location (file:line)
+      - Problem description
+      - Estimated impact (LOW/MEDIUM/HIGH)
+      - Concrete fix recommendation (show the before and after code)
+      
+      Save your report to: E:\Project Repo\thcms\.mavis\plans\backend-audit-report.md
+    assigned_to: general
+    verify_skip_reason: "Code audit is read-only analysis; the synthesis task will cross-check all findings and flag contradictions."
+    max_retries: 1
+
+  - id: dba-audit
+    title: "DBA: Schema index & aggregate audit"
+    prompt: |
+      You are the DBA Agent for a TrainHub performance audit. Read the following files and produce a detailed findings report:
+      
+      Files to analyze:
+      - E:\Project Repo\thcms\prisma\schema.prisma
+      
+      Your task: Perform a database-layer audit of the admin dashboard queries. Focus on:
+      1. Missing indexes: TrainingPlanItem queries `companyId` but has no `@@index([companyId])`. Does bookings have one? What about other foreign keys that get queried?
+      2. Count query performance: `prisma.booking.count()`, `prisma.user.count()`, `prisma.reimbursement.count()` — are there composite indexes that could speed these up?
+      3. SQLite-specific considerations: SQLite with Prisma/libSQL adapter — does it benefit from the same indexing strategies as Postgres?
+      4. Query complexity: `getAdminTrainingPlans` does a large findMany with nested includes across TrainingPlanItem → Booking → Program → User. Any opportunities for raw SQL or simpler query shapes?
+      5. The revenue aggregation in getAdminStats: loading all SENT/PAID invoices into memory vs a SUM query — does Prisma support aggregations on SQLite?
+      6. Any schema design issues that cause slow queries (e.g., missing relations causing manual joins)
+      
+      For each finding, provide:
+      - Table/field reference from schema
+      - Problem description
+      - Recommended index or schema change (show the Prisma schema diff)
+      - Estimated performance gain (qualitative)
+      
+      Save your report to: E:\Project Repo\thcms\.mavis\plans\dba-audit-report.md
+    assigned_to: general
+    verify_skip_reason: "Schema analysis is deterministic; the synthesis task validates findings against actual query patterns in admin.service.ts."
+    max_retries: 1
+
+  - id: frontend-audit
+    title: "Frontend: Client-side processing & render audit"
+    prompt: |
+      You are the Frontend Agent for a TrainHub performance audit. Read the following files and produce a detailed findings report:
+      
+      Files to analyze:
+      - E:\Project Repo\thcms\components\AdminDashboardClient.tsx
+      - E:\Project Repo\thcms\app\(dashboard)\admin\page.tsx
+      - E:\Project Repo\thcms\app\(dashboard)\layout.tsx
+      
+      Your task: Audit the client-side impact of the dashboard data fetching:
+      1. Initial data size: The admin page passes `initialData` with full booking lists, company training plans, etc. to the client. How large is this payload? Is there unnecessary data sent?
+      2. Client-side data transformation: The component does `flatMap` on `planData.companies` and calculates stats from `items`. Could this be done server-side in the service?
+      3. `events` and `upcoming` are stored in React state, duplicated from `initialData`. Is this necessary?
+      4. The `trend` array is computed by filtering bookings 12 times (once per month) on every render. Memoization opportunity?
+      5. Any components that re-render unnecessarily (e.g., passing full objects as props causing child re-renders)
+      6. Hydration: The layout.tsx uses `useEffect` for auth redirect — does the admin page have any SSR/hydration mismatches?
+      
+      For each finding:
+      - Component/line reference
+      - Problem description
+      - Fix recommendation
+      
+      Save your report to: E:\Project Repo\thcms\.mavis\plans\frontend-audit-report.md
+    assigned_to: general
+    verify_skip_reason: "Component analysis is deterministic; the synthesis task validates findings against the actual rendered data payloads."
+    max_retries: 1
+
+  - id: sre-audit
+    title: "SRE: Runtime performance & connection pooling audit"
+    prompt: |
+      You are the SRE Agent for a TrainHub performance audit. Read the following files and produce a detailed findings report:
+      
+      Files to analyze:
+      - E:\Project Repo\thcms\lib\prisma.ts (or wherever Prisma client is initialized)
+      - E:\Project Repo\thcms\next.config.ts
+      - E:\Project Repo\thcms\package.json
+      - E:\Project Repo\thcms\.env (read only, do not log values)
+      
+      Your task: Audit runtime and infrastructure performance:
+      1. Prisma connection pooling: Is the Prisma client instantiated with connection pool settings? What is the `connection_limit`? Does the comment about "no PgBouncer running" suggest a connection pool misconfiguration?
+      2. Next.js serverless: The admin page is `export const dynamic = "force-dynamic"` — does this mean every request hits the database cold? Any caching opportunities (unstable_cache, revalidate tags)?
+      3. Cold start impact: With 12 sequential DB queries on a serverless function cold start, estimate the TTFB impact
+      4. The `catch(() => ({ ... }))` fallback pattern on every service call — does this mask real errors and prevent proper monitoring?
+      5. Any missing Sentry/error tracking integration that would help diagnose slow requests?
+      6. The libSQL adapter for SQLite — does it have connection management issues on serverless?
+      
+      For each finding:
+      - File reference
+      - Problem description
+      - Recommended fix (configuration change, code change, or infrastructure change)
+      - Risk level if not fixed
+      
+      Save your report to: E:\Project Repo\thcms\.mavis\plans\sre-audit-report.md
+    assigned_to: general
+    verify_skip_reason: "Infrastructure analysis is deterministic; the synthesis task cross-references findings against the actual Prisma and Next.js config."
+    max_retries: 1
+
+  - id: synthesis
+    title: "Synthesize all audits into prioritized optimization report"
+    prompt: |
+      You are synthesizing the findings from 4 parallel performance audits of the TrainHub admin dashboard.
+      
+      Read all 4 reports:
+      - E:\Project Repo\thcms\.mavis\plans\backend-audit-report.md
+      - E:\Project Repo\thcms\.mavis\plans\dba-audit-report.md
+      - E:\Project Repo\thcms\.mavis\plans\frontend-audit-report.md
+      - E:\Project Repo\thcms\.mavis\plans\sre-audit-report.md
+      
+      Produce a final prioritized optimization report at:
+      E:\Project Repo\thcms\.mavis\plans\dashboard-performance-report.md
+      
+      Structure:
+      1. Executive Summary (2-3 sentences: what's slow, why, estimated improvement)
+      2. Findings Matrix (table: finding, severity, estimated impact, fix effort)
+      3. Top 5 Priority Fixes (with concrete before/after code snippets)
+      4. Implementation Roadmap (quick wins vs. architectural changes)
+      5. Estimated Performance Impact (before vs. after TTFB, query count)
+      
+      The goal is a report the user can read and approve before we implement fixes.
+    assigned_to: general
+    depends_on: [backend-audit, dba-audit, frontend-audit, sre-audit]
+    verify_skip_reason: "Final synthesis is a human-facing report for user approval; no automated verification needed — user will review and approve before any code is written."
+    max_retries: 1

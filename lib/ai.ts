@@ -1,10 +1,49 @@
 /**
- * AI Utility — pluggable: mock now, OpenAI/Claude later via OPENAI_API_KEY env var
+ * AI Utility — pluggable: mock now, OpenAI/DeepSeek via API keys
+ * Priority: DEEPSEEK_API_KEY > OPENAI_API_KEY > mock
  */
 
 interface AIResponse {
   text: string;
   data?: any;
+}
+
+// ─── AI Provider Helper ────────────────────────────────────────
+
+type AIProvider = "deepseek" | "openai" | "mock";
+
+function getAIProvider(): AIProvider {
+  if (process.env.DEEPSEEK_API_KEY) return "deepseek";
+  if (process.env.OPENAI_API_KEY) return "openai";
+  return "mock";
+}
+
+async function callAI(prompt: string, systemPrompt?: string): Promise<string | null> {
+  const provider = getAIProvider();
+  if (provider === "mock") return null;
+
+  const isDeepSeek = provider === "deepseek";
+  const apiKey = isDeepSeek ? process.env.DEEPSEEK_API_KEY! : process.env.OPENAI_API_KEY!;
+  const baseUrl = isDeepSeek ? "https://api.deepseek.com" : "https://api.openai.com";
+  const model = isDeepSeek ? "deepseek-chat" : "gpt-4o-mini";
+
+  try {
+    const messages = systemPrompt
+      ? [{ role: "system" as const, content: systemPrompt }, { role: "user" as const, content: prompt }]
+      : [{ role: "user" as const, content: prompt }];
+
+    const res = await fetch(`${baseUrl}/v1/chat/completions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({ model, messages }),
+    });
+
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || null;
+  } catch (error) {
+    console.error(`AI API error (${provider}):`, error);
+    return null;
+  }
 }
 
 // ─── Quiz Generator ──────────────────────────────────────────
@@ -13,24 +52,13 @@ export async function generateQuizQuestions(
   topic: string,
   count: number = 5
 ): Promise<{ text: string; type: string; options: string[]; correctAnswer: string; points: number }[]> {
-  // Try real OpenAI if key is set
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [{ role: "user", content: `Generate ${count} quiz questions about "${topic}" for a corporate training. Include MCQs and True/False. Return JSON array with fields: text, type (MCQ/TRUE_FALSE), options (array of 4 for MCQ, ["True","False"] for T/F), correctAnswer, points (1-3).` }],
-        }),
-      });
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (content) {
-        const match = content.match(/\[[\s\S]*\]/);
-        if (match) return JSON.parse(match[0]);
-      }
-    } catch {}
+  // Try real AI (DeepSeek or OpenAI) if key is set
+  const content = await callAI(
+    `Generate ${count} quiz questions about "${topic}" for a corporate training. Include MCQs and True/False. Return JSON array with fields: text, type (MCQ/TRUE_FALSE), options (array of 4 for MCQ, ["True","False"] for T/F), correctAnswer, points (1-3).`
+  );
+  if (content) {
+    const match = content.match(/\[[\s\S]*\]/);
+    if (match) return JSON.parse(match[0]);
   }
 
   // ─── Smart mock questions ──────────────────────────────────
@@ -81,23 +109,12 @@ export async function generateQuizQuestions(
 export async function analyzeEvaluationComments(
   comments: { participant: string; text: string }[]
 ): Promise<{ sentiment: "positive" | "mixed" | "negative"; themes: string[]; summary: string; strengths: string[]; improvements: string[] }> {
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [{ role: "user", content: `Analyze these training evaluation comments. Return JSON: { sentiment: "positive"|"mixed"|"negative", themes: string[], summary: string, strengths: string[], improvements: string[] }\n\nComments:\n${comments.map(c => `- ${c.text}`).join("\n")}` }],
-        }),
-      });
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (content) {
-        const match = content.match(/\{[\s\S]*\}/);
-        if (match) return JSON.parse(match[0]);
-      }
-    } catch {}
+  const content = await callAI(
+    `Analyze these training evaluation comments. Return JSON: { sentiment: "positive"|"mixed"|"negative", themes: string[], summary: string, strengths: string[], improvements: string[] }\n\nComments:\n${comments.map(c => `- ${c.text}`).join("\n")}`
+  );
+  if (content) {
+    const match = content.match(/\{[\s\S]*\}/);
+    if (match) return JSON.parse(match[0]);
   }
 
   // Smart mock analysis
@@ -141,20 +158,10 @@ export async function enhanceDescription(
   title: string,
   bulletPoints: string[]
 ): Promise<string> {
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [{ role: "user", content: `Write a professional, compelling 3-paragraph training program description for "${title}". Based on these points: ${bulletPoints.join(", ")}. Target audience: Malaysian corporate HR and managers.` }],
-        }),
-      });
-      const data = await res.json();
-      return data.choices?.[0]?.message?.content || "";
-    } catch {}
-  }
+  const content = await callAI(
+    `Write a professional, compelling 3-paragraph training program description for "${title}". Based on these points: ${bulletPoints.join(", ")}. Target audience: Malaysian corporate HR and managers.`
+  );
+  if (content) return content;
 
   return `Equip your team with essential skills through our comprehensive "${title}" program. This training is designed for Malaysian professionals seeking practical, immediately applicable knowledge.\n\nParticipants will learn through a blend of expert-led instruction, hands-on exercises, and real-world case studies tailored to the Malaysian workplace context. Our trainer brings extensive industry experience to every session.\n\nBy the end of this program, your team will have the tools, frameworks, and confidence to apply what they've learned immediately. Ideal for teams of all sizes looking to build lasting capability.`;
 }
@@ -166,23 +173,12 @@ export async function getSmartRecommendations(
   employeeCount: number,
   departmentBreakdown: { department: string; count: number }[]
 ): Promise<string[]> {
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [{ role: "user", content: `Based on this company's training history (categories: ${pastCategories.join(", ")}), ${employeeCount} employees, departments: ${JSON.stringify(departmentBreakdown)}, suggest 3 training categories they should consider next. Return JSON array of category names.` }],
-        }),
-      });
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (content) {
-        const match = content.match(/\[[\s\S]*\]/);
-        if (match) return JSON.parse(match[0]);
-      }
-    } catch {}
+  const content = await callAI(
+    `Based on this company's training history (categories: ${pastCategories.join(", ")}), ${employeeCount} employees, departments: ${JSON.stringify(departmentBreakdown)}, suggest 3 training categories they should consider next. Return JSON array of category names.`
+  );
+  if (content) {
+    const match = content.match(/\[[\s\S]*\]/);
+    if (match) return JSON.parse(match[0]);
   }
 
   // Smart mock: recommend categories not yet taken
@@ -197,23 +193,12 @@ export async function getSmartRecommendations(
 export async function analyzeTrainingNeeds(
   responses: { question: string; answer: string }[]
 ): Promise<{ recommendedCategories: string[]; explanation: string; suggestedPrograms: string[] }> {
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [{ role: "user", content: `Based on this training needs assessment, suggest categories and programs. Return JSON: { recommendedCategories: string[], explanation: string, suggestedPrograms: string[] }. Assessment: ${JSON.stringify(responses)}` }],
-        }),
-      });
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (content) {
-        const match = content.match(/\{[\s\S]*\}/);
-        if (match) return JSON.parse(match[0]);
-      }
-    } catch {}
+  const content = await callAI(
+    `Based on this training needs assessment, suggest categories and programs. Return JSON: { recommendedCategories: string[], explanation: string, suggestedPrograms: string[] }. Assessment: ${JSON.stringify(responses)}`
+  );
+  if (content) {
+    const match = content.match(/\{[\s\S]*\}/);
+    if (match) return JSON.parse(match[0]);
   }
 
   return {
