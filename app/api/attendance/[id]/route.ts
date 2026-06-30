@@ -23,7 +23,7 @@ export async function POST(
     const { email, icNumber, isSessionAuth } = body;
 
     let targetEmail = email;
-    let targetIc = icNumber;
+    const targetIc = icNumber;
     let targetUserId: string | null = null;
 
     if (isSessionAuth) {
