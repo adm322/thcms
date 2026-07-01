@@ -1,0 +1,199 @@
+
+> trainhub@0.1.0 build /app
+> node prisma/prepare-db.js && prisma generate && next build --webpack
+
+Local/SQLite database detected. Ensuring Prisma provider is sqlite...
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+
+✔ Generated Prisma Client (7.8.0) to ./lib/generated/prisma in 447ms
+
+▲ Next.js 16.2.9 (webpack)
+- Experiments (use with caution):
+  · cpus: 2
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 15.7s
+  Running TypeScript ...
+  Finished TypeScript in 22.9s ...
+  Collecting page data using 2 workers ...
+  Generating static pages using 2 workers (0/107) ...
+  Generating static pages using 2 workers (26/107)
+  Generating static pages using 2 workers (53/107)
+  Generating static pages using 2 workers (80/107)
+✓ Generating static pages using 2 workers (107/107) in 1267ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /admin
+├ ○ /admin/bookings
+├ ƒ /admin/bookings/[id]
+├ ○ /admin/code-of-conduct
+├ ○ /admin/finance
+├ ○ /admin/invoices
+├ ƒ /admin/invoices/[id]
+├ ○ /admin/programs
+├ ○ /admin/reimbursements
+├ ○ /admin/sales
+├ ○ /admin/support
+├ ○ /admin/team-building
+├ ○ /admin/trainers
+├ ƒ /admin/trainers/[id]
+├ ○ /admin/training-plans
+├ ƒ /api/admin/actions
+├ ƒ /api/admin/bookings
+├ ƒ /api/admin/bookings/[id]
+├ ƒ /api/admin/bookings/[id]/participants/[participantId]
+├ ƒ /api/admin/bookings/[id]/status
+├ ƒ /api/admin/bookings/batch
+├ ƒ /api/admin/calendar
+├ ƒ /api/admin/changelog
+├ ƒ /api/admin/code-of-conduct
+├ ƒ /api/admin/finance
+├ ƒ /api/admin/invoices
+├ ƒ /api/admin/invoices/[id]
+├ ƒ /api/admin/programs
+├ ƒ /api/admin/programs/[id]/proposal
+├ ƒ /api/admin/programs/feature
+├ ƒ /api/admin/reimbursements
+├ ƒ /api/admin/reimbursements/[id]
+├ ƒ /api/admin/remind-hrdf
+├ ƒ /api/admin/sales
+├ ƒ /api/admin/stats
+├ ƒ /api/admin/support
+├ ƒ /api/admin/team-building
+├ ƒ /api/admin/team-building/[id]
+├ ƒ /api/admin/trainers
+├ ƒ /api/admin/trainers/[id]
+├ ƒ /api/admin/trainers/availability
+├ ƒ /api/admin/training-plans
+├ ƒ /api/admin/training-plans/[id]
+├ ƒ /api/admin/upload
+├ ƒ /api/ai/enhance
+├ ƒ /api/ai/insights
+├ ƒ /api/ai/needs
+├ ƒ /api/ai/quiz
+├ ƒ /api/ai/recommend
+├ ƒ /api/attendance/[id]
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/me
+├ ƒ /api/bookings/[id]/ics
+├ ƒ /api/hr/actions
+├ ƒ /api/hr/attendance
+├ ƒ /api/hr/bookings
+├ ƒ /api/hr/bookings/[id]
+├ ƒ /api/hr/calendar
+├ ƒ /api/hr/claims
+├ ƒ /api/hr/claims/[id]
+├ ƒ /api/hr/employees
+├ ƒ /api/hr/employees/[id]
+├ ƒ /api/hr/employees/upload
+├ ƒ /api/hr/evaluations
+├ ƒ /api/hr/evaluations/[id]
+├ ƒ /api/hr/evaluations/[id]/blast
+├ ƒ /api/hr/featured
+├ ƒ /api/hr/hrdf
+├ ƒ /api/hr/leaves
+├ ƒ /api/hr/leaves/[id]
+├ ƒ /api/hr/programs
+├ ƒ /api/hr/programs/[id]
+├ ƒ /api/hr/reviews
+├ ƒ /api/hr/stats
+├ ƒ /api/hr/support
+├ ƒ /api/hr/team-building
+├ ƒ /api/hr/trainers/availability
+├ ƒ /api/hr/training-plan
+├ ƒ /api/hr/training-plan/[id]
+├ ƒ /api/hr/training-plan/summary
+├ ƒ /api/hr/vote
+├ ƒ /api/messages
+├ ƒ /api/notifications
+├ ƒ /api/participant/vote
+├ ƒ /api/participants/[id]/certificate
+├ ƒ /api/participants/evaluations/[id]/submit
+├ ƒ /api/quiz/[token]
+├ ƒ /api/quiz/[token]/submit
+├ ƒ /api/trainer/actions
+├ ƒ /api/trainer/activity
+├ ƒ /api/trainer/availability
+├ ƒ /api/trainer/bookings
+├ ƒ /api/trainer/bookings/[id]
+├ ƒ /api/trainer/calendar
+├ ƒ /api/trainer/code-of-conduct
+├ ƒ /api/trainer/earnings
+├ ƒ /api/trainer/evaluations
+├ ƒ /api/trainer/evaluations/[id]
+├ ƒ /api/trainer/materials
+├ ƒ /api/trainer/modules/[moduleId]
+├ ƒ /api/trainer/programs
+├ ƒ /api/trainer/programs/[id]
+├ ƒ /api/trainer/programs/[id]/clone
+├ ƒ /api/trainer/programs/[id]/itinerary
+├ ƒ /api/trainer/programs/[id]/modules
+├ ƒ /api/trainer/programs/[id]/quizzes
+├ ƒ /api/trainer/programs/[id]/quizzes/create
+├ ƒ /api/trainer/programs/batch
+├ ƒ /api/trainer/questions/[questionId]
+├ ƒ /api/trainer/quizzes
+├ ƒ /api/trainer/quizzes/[quizId]
+├ ƒ /api/trainer/quizzes/[quizId]/questions
+├ ƒ /api/trainer/quizzes/[quizId]/results
+├ ƒ /api/trainer/stats
+├ ƒ /class/[id]
+├ ƒ /class/[id]/check-in
+├ ƒ /hr
+├ ○ /hr/attendance
+├ ○ /hr/bookings
+├ ƒ /hr/bookings/[id]
+├ ○ /hr/claims
+├ ○ /hr/employees
+├ ○ /hr/employees/upload
+├ ○ /hr/evaluations
+├ ƒ /hr/evaluations/[id]/blast
+├ ƒ /hr/evaluations/[id]/summary
+├ ○ /hr/hrdf-calculator
+├ ○ /hr/integration
+├ ○ /hr/leaves
+├ ○ /hr/marketplace
+├ ƒ /hr/marketplace/[id]
+├ ○ /hr/messages
+├ ○ /hr/sop
+├ ○ /hr/support
+├ ○ /hr/team-building
+├ ○ /hr/training-needs
+├ ○ /hr/training-planner
+├ ○ /hr/vote
+├ ○ /login
+├ ƒ /participant
+├ ƒ /participant/class/[id]
+├ ○ /participant/scan
+├ ƒ /quiz/[token]
+├ ƒ /trainer
+├ ○ /trainer/bookings
+├ ƒ /trainer/bookings/[id]
+├ ○ /trainer/earnings
+├ ○ /trainer/evaluations
+├ ƒ /trainer/evaluations/[id]
+├ ○ /trainer/materials
+├ ○ /trainer/messages
+├ ○ /trainer/programs
+├ ƒ /trainer/programs/[id]
+├ ƒ /trainer/programs/[id]/edit
+├ ƒ /trainer/programs/[id]/modules
+├ ƒ /trainer/programs/[id]/quiz
+├ ƒ /trainer/programs/[id]/quiz/questions
+├ ƒ /trainer/programs/[id]/quiz/results
+├ ○ /trainer/programs/new
+├ ○ /trainer/quizzes
+└ ○ /trainer/sop
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
