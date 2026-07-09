@@ -23,6 +23,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
+import { MobileViewLink } from "@/components/mobile-dashboard/MobileViewLink";
 
 interface DashboardStats {
   totalBookings: number;
@@ -30,7 +31,6 @@ interface DashboardStats {
   totalPrograms: number;
   totalRevenue: number;
   pendingBookings: number;
-  pendingReimbursements: number;
 }
 
 interface MonthlyStats {
@@ -263,7 +263,6 @@ export function AdminDashboardClient({ initialData }: { initialData: any }) {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { label: "All Bookings", href: "/admin/bookings", icon: ClipboardList },
-            { label: "Reimbursements", href: "/admin/reimbursements", icon: DollarSign },
             { label: "Invoices", href: "/admin/invoices", icon: TrendingUp },
             { label: "Manage Trainers", href: "/admin/trainers", icon: Users },
           ].map((action: any) => (
@@ -309,6 +308,7 @@ export function AdminDashboardClient({ initialData }: { initialData: any }) {
         onClose={() => setDialogOpen(false)}
         onStatusChange={handleStatusChange}
       />
+      <MobileViewLink />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Edit, BookOpen, FileText, HelpCircle, Layers } from "lucide-react";
+import { StudioStatusBanner } from "@/components/studio/StudioStatusBanner";
 
 export default function ProgramDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -38,6 +39,9 @@ export default function ProgramDetail({ params }: { params: Promise<{ id: string
           </Button>
         </Link>
       </div>
+
+      {/* Studio status — shows "generating…", "ready", or "not yet created" */}
+      <StudioStatusBanner programId={id} />
 
       <Tabs defaultValue="modules">
         <TabsList>

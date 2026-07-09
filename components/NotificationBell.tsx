@@ -443,11 +443,6 @@ export function NotificationBell({ role }: NotificationBellProps = {}) {
                   <Landmark className="h-3 w-3" />{summary.completedNoHrdf} HRDF
                 </span>
               )}
-              {(summary.pendingReimbursements ?? 0) > 0 && (
-                <span className={cn("inline-flex items-center gap-1 rounded-md px-2 py-0.5", urgencyChip.urgent.bg, urgencyChip.urgent.color)}>
-                  <Clock className="h-3 w-3" />{summary.pendingReimbursements} reimburse
-                </span>
-              )}
               {(summary.unpublishedPrograms ?? 0) > 0 && (
                 <span className={cn("inline-flex items-center gap-1 rounded-md px-2 py-0.5", urgencyChip.soon.bg, urgencyChip.soon.color)}>
                   <Calendar className="h-3 w-3" />{summary.unpublishedPrograms} drafts

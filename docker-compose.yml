@@ -5,10 +5,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
       - DATABASE_URL=file:/app/db/dev.db
-      - JWT_SECRET=change-me-in-production-secret-key-12345
+      # JWT_SECRET is loaded from .env (required in production).
+      # Both lib/auth.ts and proxy.ts throw on startup if it is missing.
     volumes:
       - db-data:/app/db
     restart: always

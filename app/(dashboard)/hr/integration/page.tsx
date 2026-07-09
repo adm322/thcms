@@ -36,13 +36,6 @@ export default function IntegrationGuide() {
             <ExportButton apiUrl={`/api/hr/attendance?month=${new Date().getMonth()}&year=${new Date().getFullYear()}`} filename="attendance.csv" size="sm" dataKey="summary" />
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="py-4 text-center space-y-2">
-            <FileSpreadsheet className="h-6 w-6 mx-auto text-primary" />
-            <p className="text-sm font-medium">Claims</p>
-            <ExportButton apiUrl="/api/hr/claims" filename="claims.csv" size="sm" />
-          </CardContent>
-        </Card>
       </div>
 
       {/* Workflow Guide */}
@@ -55,7 +48,7 @@ export default function IntegrationGuide() {
           </Step>
           <Step title="2. Import into TrainHub" icon={Upload}>
             Go to <strong>Employees → Bulk Upload</strong> to import employee CSV files. TrainHub maps your columns automatically (Name, Email, Department, Position, IC Number).
-            For leave and claims data, use the <strong>Export buttons above</strong> to download the current TrainHub format, paste your data into the template, and contact support for bulk import.
+            For leave data, use the <strong>Export buttons above</strong> to download the current TrainHub format, paste your data into the template, and contact support for bulk import.
           </Step>
           <Step title="3. Keep Both in Sync" icon={Link2}>
             <strong>Weekly routine:</strong> Export TrainHub data every Friday (one click per module above). Import into your HRIS or payroll software.
@@ -99,7 +92,6 @@ export default function IntegrationGuide() {
               ["GET /api/hr/leaves", "List leave requests"],
               ["PATCH /api/hr/leaves/:id", "Approve/reject leave"],
               ["GET /api/hr/attendance", "Monthly attendance report"],
-              ["GET /api/hr/claims", "List expense claims"],
               ["GET /api/hr/bookings", "List training bookings"],
               ["GET /api/hr/stats", "Dashboard statistics"],
             ].map(([endpoint, desc]) => (

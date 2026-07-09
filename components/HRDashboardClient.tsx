@@ -11,6 +11,7 @@ import { CollapsibleSection } from "@/components/CollapsibleSection";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Sparkles, AlertTriangle, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { MobileViewLink } from "@/components/mobile-dashboard/MobileViewLink";
 import {
   Users,
   ClipboardList,
@@ -265,6 +266,7 @@ export function HRDashboardClient({ initialData }: { initialData: any }) {
           </Card>
         </TabsContent>
       </Tabs>
+      <MobileViewLink />
     </div>
   );
 }

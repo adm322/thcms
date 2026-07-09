@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server';
 // Mock auth module so that getSession allows the request through
 mock.module('@/lib/auth', {
   namedExports: {
-    getSession: async () => ({ id: 'hr-1', role: 'HR' })
+    getSession: async () => ({ id: 'hr-1', role: 'HR', companyId: 'co1', email: 'h@h.com', name: 'HR' })
   }
 });
 
@@ -18,7 +18,7 @@ test('POST returns 400 on invalid JSON', async () => {
     body: 'invalid-json'
   });
 
-  const res = await POST(req);
+  const res = await POST(req, { params: Promise.resolve({}) });
   assert.equal(res.status, 400);
 
   const data = await res.json();

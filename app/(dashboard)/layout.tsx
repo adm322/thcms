@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { NotificationBell } from "@/components/NotificationBell";
 import { Loader2, Menu, X, Sun, Moon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export default function DashboardLayout({
@@ -124,7 +125,7 @@ export default function DashboardLayout({
           >
             {lang === "en" ? "BM" : "EN"}
           </button>
-          <span className="text-sm text-muted-foreground hidden sm:inline">{user?.name}</span>
+          <Link href="/profile" className="text-sm text-muted-foreground hidden sm:inline hover:text-foreground hover:underline">{user?.name}</Link>
           <button
             onClick={logout}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors ml-2"

@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mobile HR Dashboard — 3 Concepts · TrainHub</title>
+<style>
+  :root {
+    --bg: #f1f5f9;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --primary: #6366f1;
+    --primary-fg: #ffffff;
+    --primary-soft: rgba(99, 102, 241, 0.1);
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --blue: #3b82f6;
+    --emerald: #10b981;
+    --purple: #a855f7;
+    --pink: #ec4899;
+    --shadow-sm: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+    --shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.16);
+    --shadow-lg: 0 30px 60px -10px rgba(15, 23, 42, 0.32);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1220;
+      --surface: #111827;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  .wrap { max-width: 1480px; margin: 0 auto; padding: 32px 24px 80px; }
+  header { margin-bottom: 28px; }
+  h1 { margin: 0 0 4px; font-size: 28px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 4px; font-size: 14px; }
+  .reco { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(168, 85, 247, 0.12)); border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--text); margin-top: 12px; }
+  .reco b { color: var(--primary); font-weight: 700; }
+
+  /* Stage grid */
+  .stage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; align-items: start; }
+  @media (max-width: 1100px) { .stage { grid-template-columns: 1fr; } }
+  .concept { display: flex; flex-direction: column; gap: 14px; }
+  .concept-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .concept-head h2 { margin: 0; font-size: 18px; letter-spacing: -0.01em; }
+  .concept-head .label { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: var(--primary); color: white; font-weight: 700; letter-spacing: 0.04em; }
+  .concept-head .label.b { background: linear-gradient(135deg, var(--blue), var(--emerald)); }
+  .concept-head .label.c { background: linear-gradient(135deg, var(--purple), var(--pink)); }
+  .concept-head .desc { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+  .proscons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; }
+  .proscons .pc { padding: 8px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+  .proscons .pc b { display: block; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .proscons .pc.pro b { color: var(--emerald); }
+  .proscons .pc.con b { color: var(--red); }
+
+  /* Phone frame */
+  .phone { width: 360px; margin: 0 auto; border-radius: 36px; background: #0a0a0a; padding: 12px; box-shadow: var(--shadow-lg); }
+  .phone-inner { background: var(--bg); border-radius: 28px; overflow: hidden; height: 720px; position: relative; display: flex; flex-direction: column; }
+  .notch { height: 24px; display: flex; justify-content: center; align-items: flex-start; padding-top: 6px; }
+  .notch::before { content: ""; width: 100px; height: 18px; background: #0a0a0a; border-radius: 0 0 14px 14px; }
+  .screen { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 14px 80px; scrollbar-width: thin; }
+  .screen::-webkit-scrollbar { width: 4px; }
+  .screen::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Status bar */
+  .statusbar { display: flex; justify-content: space-between; align-items: center; padding: 6px 18px 4px; font-size: 11px; font-weight: 600; }
+  .statusbar .right { display: flex; gap: 4px; align-items: center; }
+
+  /* Mobile header */
+  .mob-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 4px 12px; }
+  .mob-head .hello { font-size: 11px; color: var(--muted); }
+  .mob-head .name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .mob-head .bell { width: 36px; height: 36px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); display: grid; place-items: center; position: relative; }
+  .mob-head .bell .dot { position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 999px; background: var(--red); border: 2px solid var(--surface); }
+
+  /* Shared card */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .card .body { padding: 12px 14px; }
+  .card h3 { margin: 0 0 2px; font-size: 12px; font-weight: 700; }
+  .card .hint { font-size: 10px; color: var(--muted); }
+
+  /* ============= A: Today First ============= */
+  .hero-a { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: white; padding: 16px 16px 18px; border-radius: 16px; margin-bottom: 10px; box-shadow: 0 10px 24px -8px rgba(99, 102, 241, 0.5); }
+  .hero-a .small { font-size: 10px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+  .hero-a h2 { margin: 4px 0 12px; font-size: 17px; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+  .hero-a .row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 12px; }
+  .hero-a .row .dot { width: 6px; height: 6px; border-radius: 999px; background: white; flex-shrink: 0; }
+  .hero-a .cta { margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; background: white; color: var(--primary); padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .hero-a .cta svg { width: 12px; height: 12px; }
+
+  .stats-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+  .stat-mini { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+  .stat-mini .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; }
+  .stat-mini .val { font-size: 20px; font-weight: 700; margin-top: 2px; letter-spacing: -0.02em; }
+  .stat-mini .val small { font-size: 10px; color: var(--emerald); font-weight: 600; margin-left: 4px; }
+
+  .collapse { margin-top: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .collapse .head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; cursor: pointer; }
+  .collapse .head .l { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; }
+  .collapse .head .l .badge { background: var(--red); color: white; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+  .collapse .head .l .badge.blue { background: var(--blue); }
+  .collapse .head .l .badge.purple { background: var(--purple); }
+  .collapse .head svg.chev { width: 14px; height: 14px; color: var(--muted); transition: transform .2s; }
+  .collapse.open .head svg.chev { transform: rotate(180deg); }
+  .collapse .body-c { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  .collapse.open .body-c { max-height: 500px; }
+  .collapse .body-c .inner { padding: 0 12px 12px; }
+
+  .brow { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .brow:last-child { border-bottom: none; }
+  .brow .l { display: flex; align-items: center; gap: 8px; }
+  .brow .l .ico { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; }
+  .brow .l .ico.bk { background: rgba(99, 102, 241, 0.12); color: var(--primary); }
+  .brow .l .ico.am { background: rgba(245, 158, 11, 0.12); color: var(--amber); }
+  .brow .l .ico.em { background: rgba(16, 185, 129, 0.12); color: var(--emerald); }
+  .brow .meta { color: var(--muted); font-size: 10px; }
+  .brow .fee { font-weight: 700; font-size: 11px; }
+
+  /* ============= B: Action-Centric ============= */
+  .urgent-b { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; box-shadow: var(--shadow-sm); }
+  .urgent-b .head-b { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .urgent-b .head-b h3 { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .urgent-b .head-b h3 svg { width: 14px; height: 14px; color: var(--red); }
+  .urgent-b .head-b a { font-size: 10px; color: var(--primary); font-weight: 600; }
+  .urgent-b .item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .urgent-b .item:last-child { border-bottom: none; }
+  .urgent-b .item .ic { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; }
+  .urgent-b .item .ic.r { background: rgba(239, 68, 68, 0.12); color: var(--red); }
+  .urgent-b .item .ic.a { background: rgba(245, 158, 11, 0.12); color: var(--amber); }
+  .urgent-b .item .ic.b { background: rgba(59, 130, 246, 0.12); color: var(--blue); }
+  .urgent-b .item .txt { flex: 1; min-width: 0; }
+  .urgent-b .item .txt .t { font-size: 11px; font-weight: 600; line-height: 1.3; }
+  .urgent-b .item .txt .s { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .urgent-b .item .arr { color: var(--muted); }
+
+  .pills { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 6px; margin: 10px 0 4px; scrollbar-width: none; }
+  .pills::-webkit-scrollbar { display: none; }
+  .pill { flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; min-width: 92px; }
+  .pill .l { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; }
+  .pill .v { font-size: 18px; font-weight: 700; margin-top: 2px; letter-spacing: -0.02em; }
+  .pill .v small { font-size: 9px; color: var(--emerald); font-weight: 600; margin-left: 3px; }
+
+  .section-h { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 8px; padding: 0 2px; }
+  .section-h h4 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; }
+  .section-h a { font-size: 10px; color: var(--primary); font-weight: 600; }
+
+  .ai-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .ai-scroll::-webkit-scrollbar { display: none; }
+  .ai-card { flex-shrink: 0; width: 200px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+  .ai-card .star { color: var(--amber); font-size: 11px; letter-spacing: 1px; }
+  .ai-card .t { font-size: 11px; font-weight: 700; margin-top: 4px; line-height: 1.3; }
+  .ai-card .meta { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  .booking-mini { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; }
+  .booking-mini .d { width: 40px; text-align: center; flex-shrink: 0; }
+  .booking-mini .d .m { font-size: 8px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .booking-mini .d .day { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+  .booking-mini .info { flex: 1; min-width: 0; }
+  .booking-mini .info .t { font-size: 11px; font-weight: 600; line-height: 1.3; }
+  .booking-mini .info .s { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .booking-mini .pill-st { font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 700; background: rgba(99, 102, 241, 0.12); color: var(--primary); }
+  .booking-mini .pill-st.conf { background: rgba(16, 185, 129, 0.12); color: var(--emerald); }
+  .booking-mini .pill-st.comp { background: rgba(100, 116, 139, 0.12); color: var(--muted); }
+
+  /* ============= C: Swipeable ============= */
+  .carousel { position: relative; margin: 4px -14px 12px; }
+  .carousel-track { display: flex; transition: transform .35s cubic-bezier(.4,0,.2,1); }
+  .carousel-card { flex-shrink: 0; width: 100%; padding: 0 14px; }
+  .ctx-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; min-height: 140px; position: relative; overflow: hidden; }
+  .ctx-card.b1 { background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white; border: none; }
+  .ctx-card.b2 { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; border: none; }
+  .ctx-card.b3 { background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); color: white; border: none; }
+  .ctx-card.b4 { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white; border: none; }
+  .ctx-card .small { font-size: 10px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+  .ctx-card h3 { margin: 4px 0 6px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .ctx-card p { margin: 0; font-size: 11px; opacity: 0.9; }
+  .ctx-card .num { font-size: 38px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-top: 4px; }
+  .ctx-card .see { position: absolute; right: 14px; bottom: 14px; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 3px; opacity: 0.95; }
+
+  .dots { display: flex; gap: 5px; justify-content: center; margin-top: 6px; }
+  .dot-c { width: 6px; height: 6px; border-radius: 999px; background: var(--border); cursor: pointer; transition: width .2s, background .2s; }
+  .dot-c.active { width: 18px; background: var(--primary); }
+
+  .feed-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-item .ic { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; }
+  .feed-item .ic.bk { background: rgba(99, 102, 241, 0.12); color: var(--primary); }
+  .feed-item .ic.sp { background: rgba(168, 85, 247, 0.12); color: var(--purple); }
+  .feed-item .ic.al { background: rgba(239, 68, 68, 0.12); color: var(--red); }
+  .feed-item .ic.em { background: rgba(16, 185, 129, 0.12); color: var(--emerald); }
+  .feed-item .body-f { flex: 1; min-width: 0; }
+  .feed-item .body-f .t { font-size: 12px; font-weight: 600; line-height: 1.35; }
+  .feed-item .body-f .s { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .feed-item .time { font-size: 9px; color: var(--muted); white-space: nowrap; }
+
+  /* FAB */
+  .fab { position: absolute; right: 16px; bottom: 70px; width: 52px; height: 52px; border-radius: 999px; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; display: grid; place-items: center; box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.6); cursor: pointer; z-index: 5; }
+  .fab svg { width: 22px; height: 22px; }
+
+  /* Bottom dock (C only) */
+  .dock { position: absolute; left: 12px; right: 12px; bottom: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; display: flex; justify-content: space-around; padding: 8px 4px; box-shadow: var(--shadow); }
+  .dock .d-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 8px; border-radius: 10px; cursor: pointer; }
+  .dock .d-item.active { color: var(--primary); }
+  .dock .d-item .lbl { font-size: 9px; font-weight: 600; }
+  .dock .d-item svg { width: 18px; height: 18px; }
+
+  /* Hint */
+  .hint-bar { text-align: center; font-size: 11px; color: var(--muted); margin-top: 8px; font-style: italic; }
+
+  /* Legend */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 18px; font-size: 11px; color: var(--muted); justify-content: center; }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>HR Dashboard — Mobile Concepts</h1>
+    <p class="sub">Three directions for the HR mobile view. Tap, expand, swipe to explore each one.</p>
+    <div class="reco">My recommendation: <b>Concept A</b> — minimal complexity, answers "what now?" in one glance.</div>
+  </header>
+
+  <div class="stage">
+
+    <!-- ============== CONCEPT A ============== -->
+    <div class="concept">
+      <div class="concept-head">
+        <div>
+          <h2><span class="label">A</span> &nbsp;Today First</h2>
+          <p class="desc">Hero card with today's priorities, compact stats, rest collapsed.</p>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="phone-inner">
+          <div class="notch"></div>
+          <div class="statusbar"><span>9:41</span><span class="right">●●● 5G</span></div>
+          <div class="screen">
+            <div class="mob-head">
+              <div>
+                <div class="hello">Good morning,</div>
+                <div class="name">Aisha Rahman</div>
+              </div>
+              <div class="bell">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="dot"></span>
+              </div>
+            </div>
+
+            <div class="hero-a">
+              <div class="small">Today, 28 Jun</div>
+              <h2>3 things need your attention</h2>
+              <div class="row"><span class="dot"></span> 2 pending approvals</div>
+              <div class="row"><span class="dot"></span> 1 HRDF claim due in 7 days</div>
+              <div class="row"><span class="dot"></span> 1 training session this week</div>
+              <button class="cta">Review now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+            </div>
+
+            <div class="stats-2x2">
+              <div class="stat-mini">
+                <div class="lbl">Employees</div>
+                <div class="val">142</div>
+              </div>
+              <div class="stat-mini">
+                <div class="lbl">Bookings</div>
+                <div class="val">87 <small>+12</small></div>
+              </div>
+              <div class="stat-mini">
+                <div class="lbl">Spend (Q2)</div>
+                <div class="val">RM 48k</div>
+              </div>
+              <div class="stat-mini">
+                <div class="lbl">Categories</div>
+                <div class="val">6</div>
+              </div>
+            </div>
+
+            <div class="collapse open" data-toggle>
+              <div class="head">
+                <div class="l">⚡ Needs Attention <span class="badge">3</span></div>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="body-c"><div class="inner">
+                <div class="brow">
+                  <div class="l"><span class="ico bk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><div>Approve · S. Lim</div><div class="meta">Leadership · 1d ago</div></div></div>
+                  <div class="fee">RM 1,200</div>
+                </div>
+                <div class="brow">
+                  <div class="l"><span class="ico am"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><div><div>HRDF Claim due</div><div class="meta">Q2 batch · 7d left</div></div></div>
+                  <div class="fee">RM 8,400</div>
+                </div>
+                <div class="brow">
+                  <div class="l"><span class="ico em"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div><div>Feedback due</div><div class="meta">3 sessions pending</div></div></div>
+                </div>
+              </div></div>
+            </div>
+
+            <div class="collapse" data-toggle>
+              <div class="head">
+                <div class="l">📋 Recent Bookings <span class="badge blue">5</span></div>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="body-c"><div class="inner">
+                <div class="brow"><div class="l"><span class="ico bk">P</span><div><div>Power BI Bootcamp</div><div class="meta">3 trainees · Confirmed</div></div></div><div class="fee">RM 2,400</div></div>
+                <div class="brow"><div class="l"><span class="ico bk">L</span><div><div>Leadership Essentials</div><div class="meta">5 trainees · Pending</div></div></div><div class="fee">RM 5,000</div></div>
+              </div></div>
+            </div>
+
+            <div class="collapse" data-toggle>
+              <div class="head">
+                <div class="l">✨ AI Recommendations <span class="badge purple">3</span></div>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="body-c"><div class="inner">
+                <div class="brow"><div class="l"><span class="ico em">★</span><div><div>Cybersecurity 101</div><div class="meta">Match: 94% · IT team</div></div></div></div>
+                <div class="brow"><div class="l"><span class="ico em">★</span><div><div>Negotiation Skills</div><div class="meta">Match: 88% · Sales</div></div></div></div>
+              </div></div>
+            </div>
+          </div>
+          <div class="fab" title="Quick add">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="proscons">
+        <div class="pc pro"><b>Pros</b>Clear "what now" answer in 1 glance. Lowest UI complexity.</div>
+        <div class="pc con"><b>Cons</b>Hero card can feel generic if data is sparse.</div>
+      </div>
+      <div class="hint-bar">Tap any collapsed section to expand</div>
+    </div>
+
+    <!-- ============== CONCEPT B ============== -->
+    <div class="concept">
+      <div class="concept-head">
+        <div>
+          <h2><span class="label b">B</span> &nbsp;Action-Centric</h2>
+          <p class="desc">Needs Attention pinned at top, horizontal pill stats, AI recs scroll.</p>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="phone-inner">
+          <div class="notch"></div>
+          <div class="statusbar"><span>9:41</span><span class="right">●●● 5G</span></div>
+          <div class="screen">
+            <div class="mob-head">
+              <div>
+                <div class="hello">Good morning,</div>
+                <div class="name">Aisha Rahman</div>
+              </div>
+              <div class="bell">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="dot"></span>
+              </div>
+            </div>
+
+            <div class="urgent-b">
+              <div class="head-b">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Needs Attention · 3</h3>
+                <a>View all →</a>
+              </div>
+              <div class="item">
+                <div class="ic r"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14"/></svg></div>
+                <div class="txt"><div class="t">Approve 2 pending bookings</div><div class="s">S. Lim · M. Yusof · 1d ago</div></div>
+                <div class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+              </div>
+              <div class="item">
+                <div class="ic a"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                <div class="txt"><div class="t">HRDF claim due in 7 days</div><div class="s">Q2 batch · RM 8,400 pending</div></div>
+                <div class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+              </div>
+              <div class="item">
+                <div class="ic b"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                <div class="txt"><div class="t">3 session feedback pending</div><div class="s">Trainees haven't rated yet</div></div>
+                <div class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+              </div>
+            </div>
+
+            <div class="section-h"><h4>📊 At a Glance</h4></div>
+            <div class="pills">
+              <div class="pill"><div class="l">Employees</div><div class="v">142</div></div>
+              <div class="pill"><div class="l">Bookings</div><div class="v">87 <small>+12</small></div></div>
+              <div class="pill"><div class="l">Spend</div><div class="v">RM 48k</div></div>
+              <div class="pill"><div class="l">Cats</div><div class="v">6</div></div>
+            </div>
+
+            <div class="section-h"><h4>📅 Recent Bookings</h4><a>See all →</a></div>
+            <div class="booking-mini">
+              <div class="d"><div class="m">JUN</div><div class="day">30</div></div>
+              <div class="info"><div class="t">Power BI Bootcamp</div><div class="s">3 trainees · RM 2,400</div></div>
+              <div class="pill-st conf">CONF</div>
+            </div>
+            <div class="booking-mini">
+              <div class="d"><div class="m">JUL</div><div class="day">03</div></div>
+              <div class="info"><div class="t">Leadership Essentials</div><div class="s">5 trainees · RM 5,000</div></div>
+              <div class="pill-st">PEND</div>
+            </div>
+            <div class="booking-mini">
+              <div class="d"><div class="m">JUL</div><div class="day">08</div></div>
+              <div class="info"><div class="t">Cybersecurity 101</div><div class="s">4 trainees · RM 3,200</div></div>
+              <div class="pill-st comp">DONE</div>
+            </div>
+
+            <div class="section-h"><h4>✨ AI Suggestions</h4><a>Refresh</a></div>
+            <div class="ai-scroll">
+              <div class="ai-card">
+                <div class="star">★ ★ ★ ★ ★</div>
+                <div class="t">Cybersecurity 101</div>
+                <div class="meta">94% match · IT team gap</div>
+              </div>
+              <div class="ai-card">
+                <div class="star">★ ★ ★ ★ ★</div>
+                <div class="t">Negotiation Skills</div>
+                <div class="meta">88% match · Sales team</div>
+              </div>
+              <div class="ai-card">
+                <div class="star">★ ★ ★ ★ ☆</div>
+                <div class="t">Public Speaking</div>
+                <div class="meta">82% match · Leadership</div>
+              </div>
+            </div>
+          </div>
+          <div class="fab" title="Quick add">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="proscons">
+        <div class="pc pro"><b>Pros</b>Zero scrolling for urgent stuff. AI recs scannable.</div>
+        <div class="pc con"><b>Cons</b>Assumes HR checks when something's pending.</div>
+      </div>
+      <div class="hint-bar">Scroll the AI Suggestions row horizontally</div>
+    </div>
+
+    <!-- ============== CONCEPT C ============== -->
+    <div class="concept">
+      <div class="concept-head">
+        <div>
+          <h2><span class="label c">C</span> &nbsp;Swipeable Context</h2>
+          <p class="desc">Top carousel, chronological feed below, bottom dock nav.</p>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="phone-inner">
+          <div class="notch"></div>
+          <div class="statusbar"><span>9:41</span><span class="right">●●● 5G</span></div>
+          <div class="screen">
+            <div class="mob-head">
+              <div>
+                <div class="hello">Good morning,</div>
+                <div class="name">Aisha Rahman</div>
+              </div>
+              <div class="bell">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="dot"></span>
+              </div>
+            </div>
+
+            <div class="carousel">
+              <div class="carousel-track" id="track">
+                <div class="carousel-card">
+                  <div class="ctx-card b1">
+                    <div class="small">Today</div>
+                    <div class="num">3</div>
+                    <h3>Things to review</h3>
+                    <p>2 approvals · 1 HRDF claim</p>
+                    <div class="see">Open <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="carousel-card">
+                  <div class="ctx-card b2">
+                    <div class="small">Pending</div>
+                    <div class="num">2</div>
+                    <h3>Approvals waiting</h3>
+                    <p>S. Lim · M. Yusof</p>
+                    <div class="see">Review <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="carousel-card">
+                  <div class="ctx-card b3">
+                    <div class="small">Upcoming</div>
+                    <div class="num">5</div>
+                    <h3>Sessions this week</h3>
+                    <p>Mon–Fri · 28 trainees</p>
+                    <div class="see">Schedule <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="carousel-card">
+                  <div class="ctx-card b4">
+                    <div class="small">Q2 Spend</div>
+                    <div class="num">RM48k</div>
+                    <h3>On track</h3>
+                    <p>62% of HRDF budget used</p>
+                    <div class="see">Details <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg></div>
+                  </div>
+                </div>
+              </div>
+              <div class="dots" id="dots">
+                <div class="dot-c active" data-i="0"></div>
+                <div class="dot-c" data-i="1"></div>
+                <div class="dot-c" data-i="2"></div>
+                <div class="dot-c" data-i="3"></div>
+              </div>
+            </div>
+
+            <div class="section-h"><h4>🕒 Activity</h4><a>Filter</a></div>
+            <div class="feed-item">
+              <div class="ic al"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+              <div class="body-f"><div class="t">S. Lim submitted Leadership Essentials</div><div class="s">Awaiting your approval · RM 5,000</div></div>
+              <div class="time">2h</div>
+            </div>
+            <div class="feed-item">
+              <div class="ic bk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div class="body-f"><div class="t">Power BI Bootcamp confirmed</div><div class="s">3 trainees · 30 Jun · RM 2,400</div></div>
+              <div class="time">5h</div>
+            </div>
+            <div class="feed-item">
+              <div class="ic sp"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg></div>
+              <div class="body-f"><div class="t">AI: 3 new training matches</div><div class="s">Cybersecurity, Negotiation, Public Speaking</div></div>
+              <div class="time">1d</div>
+            </div>
+            <div class="feed-item">
+              <div class="ic em"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg></div>
+              <div class="body-f"><div class="t">Cybersecurity 101 completed</div><div class="s">4 trainees · Avg rating 4.7/5</div></div>
+              <div class="time">2d</div>
+            </div>
+            <div class="feed-item">
+              <div class="ic al"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div class="body-f"><div class="t">HRDF Q2 claim window closes 5 Jul</div><div class="s">RM 8,400 unclaimed</div></div>
+              <div class="time">3d</div>
+            </div>
+          </div>
+          <div class="dock">
+            <div class="d-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="lbl">Home</span></div>
+            <div class="d-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="lbl">Bookings</span></div>
+            <div class="d-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="lbl">Inbox</span></div>
+            <div class="d-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="lbl">Profile</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="proscons">
+        <div class="pc pro"><b>Pros</b>Feels native, fun to swipe. Bottom dock familiar.</div>
+        <div class="pc con"><b>Cons</b>Carousel overkill for 4 contexts. More build cost.</div>
+      </div>
+      <div class="hint-bar">Tap dots or swipe the carousel to switch contexts</div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <span>🟪 <b>A</b> = simplest, prioritizes the "now"</span>
+    <span>🟦 <b>B</b> = always shows pending + scrollable</span>
+    <span>🟧 <b>C</b> = native-feel, swipeable + dock</span>
+  </div>
+</div>
+
+<script>
+  // Concept A: collapsible sections
+  document.querySelectorAll('[data-toggle]').forEach(function(el) {
+    el.querySelector('.head').addEventListener('click', function() { el.classList.toggle('open'); });
+  });
+
+  // Concept C: carousel
+  var track = document.getElementById('track');
+  var dots = document.querySelectorAll('#dots .dot-c');
+  var cur = 0;
+  function go(i) {
+    cur = (i + 4) % 4;
+    track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+    dots.forEach(function(d, idx) { d.classList.toggle('active', idx === cur); });
+  }
+  dots.forEach(function(d) { d.addEventListener('click', function() { go(parseInt(d.getAttribute('data-i'), 10)); }); });
+
+  // Simple touch swipe for carousel
+  var startX = 0, dx = 0;
+  if (track) {
+    track.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; dx = 0; }, { passive: true });
+    track.addEventListener('touchmove', function(e) { dx = e.touches[0].clientX - startX; }, { passive: true });
+    track.addEventListener('touchend', function() { if (Math.abs(dx) > 40) { go(cur + (dx < 0 ? 1 : -1)); } });
+    // Mouse drag for desktop testing
+    var md = false, mx = 0;
+    track.addEventListener('mousedown', function(e) { md = true; mx = e.clientX; });
+    track.addEventListener('mousemove', function(e) { if (md) dx = e.clientX - mx; });
+    track.addEventListener('mouseup', function() { if (md && Math.abs(dx) > 40) { go(cur + (dx < 0 ? 1 : -1)); } md = false; });
+  }
+</script>
+</body>
+</html>

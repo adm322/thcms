@@ -1,0 +1,10 @@
+{
+  "type": "JavaScript Error",
+  "message": "Uncaught ChunkLoadError: Loading chunk app/layout failed.\n(timeout: http://localhost:3000/_next/static/chunks/app/layout.js)",
+  "source": "http://localhost:3000/_next/static/chunks/webpack.js?v=1783013212387",
+  "line": 865,
+  "column": 29,
+  "stack": "ChunkLoadError\n    at __webpack_require__.f.j (http://localhost:3000/_next/static/chunks/webpack.js?v=1783013212387:865:29)\n    at http://localhost:3000/_next/static/chunks/webpack.js?v=1783013212387:145:40\n    at Array.reduce (<anonymous>)\n    at __webpack_require__.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1783013212387:144:67)\n    at fn.e (http://localhost:3000/_next/static/chunks/webpack.js?v=1783013212387:381:50)\n    at loadChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:125:34)\n    at preloadModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:94:31)\n    at resolveModule (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:2951:20)\n    at processFullStringRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:4384:11)\n    at processFullBinaryRow (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:4379:7)\n    at processBinaryChunk (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:4602:19)\n    at progress (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.browser.development.js:4933:9)",
+  "url": "http://localhost:3000/trainer",
+  "time": "2026-07-02T17:28:54.078Z"
+}

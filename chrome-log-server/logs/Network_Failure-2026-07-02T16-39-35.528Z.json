@@ -1,0 +1,8 @@
+{
+  "type": "Network Failure",
+  "message": "Failed to fetch",
+  "url": "http://localhost:9999/missing",
+  "method": "POST",
+  "page": "http://localhost:3000/test",
+  "time": "2026-07-03T10:00:01.000Z"
+}

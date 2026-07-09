@@ -1,0 +1,305 @@
+version: 1
+plan:
+  name: 'learning-studio-build'
+  max_concurrency: 1
+  max_consecutive_failures: 2
+  max_cycles: 20
+  auto_reject_retries: 1
+  verifier_config:
+    default_verifiers: []
+    audit_sample_rate: 0.0
+    strict_mode: false
+
+tasks:
+  - id: foundation
+    title: 'Foundation: Prisma models + deps + lib utilities'
+    verify_skip_reason: 'Downstream APIs task verifies by running tsc --noEmit; foundation APIs (minimax, parser, vector-store) are exercised directly by the APIs task.'
+    prompt: |
+      Build the foundation layer for the Learning Studio feature in E:\Project Repo\thcms.
+      Full spec: E:\Project Repo\thcms\docs\learning-studio-plan.md — read it before starting.
+
+      ## Step 1 — Prisma Models
+      Add these two models to prisma/schema.prisma, BEFORE the `// ─── Trainer Availability` marker:
+
+      ```prisma
+      model LearningStudio {
+        id        String   @id @default(cuid())
+        programId String   @unique
+        program   Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+        sourceFileUrl  String?
+        sourceText     String?
+        slidesJson     String?
+        quizId         String?
+        generatedAt    DateTime?
+
+        chunksEmbedded Boolean   @default(false)
+        embeddedAt     DateTime?
+
+        createdAt DateTime @default(now())
+        updatedAt DateTime @updatedAt
+      }
+
+      model RAGChunk {
+        id               String   @id @default(cuid())
+        learningStudioId String
+        chunkIndex      Int
+        content         String
+        embedding       String   // base64-encoded float32 array
+        createdAt       DateTime @default(now())
+
+        @@index([learningStudioId])
+      }
+      ```
+
+      Also add to Program model:
+      ```
+      studio           LearningStudio?
+      ```
+      Add reverse relation on LearningStudio: already declared via the `program` field.
+
+      Run: `npx prisma generate` then `npx prisma db push --accept-data-loss`
+
+      ## Step 2 — Install deps
+      Run: `npm install mammoth jszip`
+
+      ## Step 3 — lib/minimax.ts
+      Create this file with MiniMax API client. Use the following endpoints (verify if needed):
+      - Base URL: env `MINIMAX_BASE_URL` (default: https://api.minimax.chat)
+      - Chat: POST `{baseUrl}/v1/text/chatcompletion_v2`
+      - Model: env `MINIMAX_CHAT_MODEL` (default: MiniMax-Text-01)
+      - Embedding: POST `{baseUrl}/v1/embedding/embedding_api`
+      - Embed model: env `MINIMAX_EMBED_MODEL` (default: embaab-01)
+
+      Export:
+      ```typescript
+      export async function minimaxChat(prompt: string, system?: string): Promise<string | null>
+      export async function minimaxEmbed(text: string): Promise<number[] | null> // float32 array
+      export async function minimaxSVG(prompt: string): Promise<string | null> // returns SVG XML string
+      ```
+
+      Use the existing API key from env `MINIMAX_API_KEY`. Fall back gracefully if env vars are missing (return null / throw descriptive error).
+
+      ## Step 4 — lib/file-parser.ts
+      ```typescript
+      export async function extractTextFromDOCX(buffer: ArrayBuffer): Promise<string>
+      export async function extractTextFromPPTX(buffer: ArrayBuffer): Promise<string>
+      export async function extractText(file: File): Promise<string> // dispatches by MIME type
+      ```
+      Use mammoth for DOCX, jszip + regex to strip XML tags from PPTX slide text nodes.
+      Handle errors: return empty string on failure, never throw.
+
+      ## Step 5 — lib/chunker.ts
+      ```typescript
+      export interface Chunk { index: number; text: string; }
+
+      export function chunkText(text: string, chunkSize = 500, overlap = 50): Chunk[]
+      ```
+      Split by sentence boundary (regex `.?!` + newline), accumulate up to chunkSize chars, overlap last 50 chars into next chunk.
+
+      ## Step 6 — lib/vector-store.ts
+      ```typescript
+      import { prisma } from '@/lib/prisma';
+
+      export async function insertChunks(chunks: Chunk[], studioId: string): Promise<void>
+      // Embed each chunk with minimaxEmbed → base64-encode float32 → save to RAGChunk
+
+      export async function queryChunks(query: string, studioId: string, topK = 5): Promise<{ content: string; chunkIndex: number }[]>
+      // Embed query → cosine similarity against all stored base64 embeddings → return top-K
+      ```
+
+      Cosine sim in pure JS:
+      ```typescript
+      function cosineSim(a: number[], b: number[]): number {
+        let dot = 0, normA = 0, normB = 0;
+        for (let i = 0; i < a.length; i++) { dot += a[i]*b[i]; normA += a[i]*a[i]; normB += b[i]*b[i]; }
+        return dot / (Math.sqrt(normA)*Math.sqrt(normB));
+      }
+      function base64ToFloat32(b64: string): number[] {
+        const binary = atob(b64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return Array.from(new Float32Array(bytes.buffer));
+      }
+      function float32ToBase64(arr: number[]): string {
+        const bytes = new Uint8Array(new Float32Array(arr).buffer);
+        return btoa(String.fromCharCode(...bytes));
+      }
+      ```
+
+      ## Step 7 — lib/prompts.ts
+      Export these prompt builder functions:
+      - `buildSlidePrompt(text: string, slideCount?: number): { system: string; user: string }`
+      - `buildQuizPrompt(text: string, count?: number): { system: string; user: string }`
+      - `buildSVGPrompt(topic: string, title: string): { system: string; user: string }`
+      - `buildChatPrompt(chunks: { content: string }[], question: string): { system: string; user: string }`
+
+      System prompts should instruct MiniMax to respond ONLY with valid JSON (no markdown code fences). User prompts should include the content to analyze.
+
+      ## Step 8 — .env.local update
+      Append to E:\Project Repo\thcms\.env.local:
+      ```
+      MINIMAX_API_KEY=your_key_here
+      MINIMAX_BASE_URL=https://api.minimax.chat
+      MINIMAX_CHAT_MODEL=MiniMax-Text-01
+      MINIMAX_EMBED_MODEL=embaab-01
+      ```
+
+      ## Step 9 — TypeScript check
+      Run: `npx tsc --noEmit` and fix any errors. Report changed/new files and final tsc status.
+    assigned_to: coder
+    depends_on: []
+    max_retries: 2
+
+  - id: apis
+    title: 'API routes: studio + RAG chat'
+    verify_skip_reason: 'Downstream UI task verifies by running tsc --noEmit and building the app; APIs are exercised via the UI layer.'
+    prompt: |
+      Build the API routes for Learning Studio in E:\Project Repo\thcms.
+      Full spec: E:\Project Repo\thcms\docs\learning-studio-plan.md — read it before starting.
+      All lib utilities from foundation step are available: minimax, file-parser, chunker, vector-store, prompts.
+
+      ## Step 1 — POST /api/program/[id]/studio/route.ts
+      Handle file upload + generate full studio content.
+
+      Auth: require TRAINER role, verify program.trainerId === session.id.
+      Body: multipart/form-data with a `file` field (DOCX or PPTX).
+
+      Flow:
+      1. Find program, verify ownership
+      2. Parse file → extractText
+      3. Save sourceText to LearningStudio (upsert by programId)
+      4. Chunk text → insertChunks (vector store)
+      5. Generate slides: call minimaxChat with buildSlidePrompt → parse JSON → save slidesJson
+      6. Generate quiz: call minimaxChat with buildQuizPrompt → parse JSON → create Quiz (standalone=true) + Question records → save quizId
+      7. Update LearningStudio: generatedAt, chunksEmbedded, embeddedAt
+      8. Return { id, slidesJson, quizId }
+
+      Handle partial failures gracefully — don't fail the whole pipeline. If slide generation fails, save with null slidesJson and log error. Same for quiz.
+
+      ## Step 2 — GET /api/program/[id]/studio/route.ts
+      Auth: TRAINER (owner) or PARTICIPANT (any logged-in user who booked this program).
+      Return: { id, slidesJson, quizId, generatedAt, sourceFileUrl } + optionally quiz questions if owner.
+
+      ```typescript
+      GET response shape:
+      {
+        id: string;
+        slidesJson: string | null;
+        quizId: string | null;
+        generatedAt: string | null;
+        sourceFileUrl: string | null;
+        quiz?: { id, title, questions: Question[] }; // only if TRAINER owner
+      }
+      ```
+
+      ## Step 3 — POST /api/program/[id]/studio/chat/route.ts
+      RAG chat endpoint.
+      Auth: any logged-in user (TRAINER, HR, PARTICIPANT).
+      Body: { question: string }
+
+      Flow:
+      1. Find LearningStudio by programId
+      2. queryChunks(question, studioId, topK=5)
+      3. buildChatPrompt(retrievedChunks, question)
+      4. minimaxChat(system, user)
+      5. Return { answer: string, sources: string[] } // sources = chunk texts
+
+      ## Step 4 — TypeScript check
+      Run: `npx tsc --noEmit` and fix any errors. Report changed/new files and final tsc status.
+    assigned_to: coder
+    depends_on: [foundation]
+    max_retries: 2
+
+  - id: ui
+    title: 'Learning Studio UI: page + components + program edit integration'
+    verify_skip_reason: 'Final verify task runs tsc --noEmit and next build to confirm end-to-end integrity; UI components are exercised through that closure.'
+    prompt: |
+      Build the Learning Studio UI layer in E:\Project Repo\thcms.
+      Full spec: E:\Project Repo\thcms\docs\learning-studio-plan.md — read it before starting.
+      API routes from previous task: /api/program/[id]/studio (GET/POST) and /api/program/[id]/studio/chat.
+
+      ## Step 1 — components/studio/SlideDeck.tsx
+      A client component:
+      - Props: { slidesJson: string } (parse JSON inside)
+      - State: currentSlideIndex
+      - Layout: left sidebar (slide thumbnails/numbers), main area (SlideViewer), bottom nav (← → buttons + progress "3 / 12")
+      - Keyboard: listen to ArrowLeft/ArrowRight on window
+      - Empty state: "No slides generated yet. Upload content to generate slides."
+      - Use Tailwind classes, match existing shadcn component styling patterns in the codebase.
+
+      ## Step 2 — components/studio/SlideViewer.tsx
+      A client component:
+      - Props: { slide: Slide } where Slide = { title, bulletPoints, infographic }
+      - Renders: slide number (small gray), title (large bold), bullet points (ul > li), and if infographic: calls SVGInfographic
+      - Background: white card with border, shadow-sm, rounded-xl, p-8
+      - Typography: title text-2xl font-bold, bullets text-base
+
+      ## Step 3 — components/studio/SVGInfographic.tsx
+      A client component:
+      - Props: { infographic: Infographic } where Infographic = { type, title?, data, svgMarkup? }
+      - Types: "stat", "list", "comparison", "process", "quote"
+      - If svgMarkup is provided: render inline via `dangerouslySetInnerHTML={{ __html: svgMarkup }}` wrapped in a `<div className="svg-container" />` with responsive sizing
+      - If no svgMarkup: render a fallback styled div matching the infographic type (e.g., stat = large number + label, quote = italic large text + attribution)
+      - Add basic CSS in a <style> tag or Tailwind classes for the SVG container: `.svg-container svg { width: 100%; height: auto; max-height: 300px; }`
+
+      ## Step 4 — components/studio/QuizRunner.tsx
+      A client component:
+      - Props: { quizId: string }
+      - On mount: fetch `GET /api/quiz/[quizId]` (questions)
+      - State: currentQuestion, answers{}, submitted, score
+      - Render questions one by one: show question text, radio buttons (MCQ) or True/False buttons
+      - "Next" button advances; last question shows "Submit"
+      - After submit: POST /api/quiz/[quizId]/submit with answers → show score / percentage
+      - Use existing shadcn Button, Card, RadioGroup patterns from codebase
+
+      ## Step 5 — components/studio/RAGChat.tsx
+      A client component:
+      - Props: { programId: string }
+      - State: messages[], loading, input
+      - Message list: scrollable, user messages right-aligned (bg-primary text-white), AI left-aligned (bg-muted)
+      - Input: textarea + send button at bottom
+      - On send: POST /api/program/[programId]/studio/chat with { question: input }
+      - Show sources below AI answer as small gray text citations
+      - Loading state: show typing indicator (animated dots)
+      - Empty state: "Ask anything about this program content"
+
+      ## Step 6 — app/program/[id]/studio/page.tsx
+      "use client" page:
+      - Fetch studio data on mount
+      - Layout: page header with program title + "Back to Program" link
+      - Three tabs: Slides | Quiz | Chat (use existing Tabs pattern)
+      - Tab "Slides": SlideDeck component
+      - Tab "Quiz": if quizId exists → QuizRunner; else → "Quiz will be generated with your slides"
+      - Tab "Chat": if studio exists → RAGChat; else → disabled with tooltip
+      - Loading skeleton while fetching studio data
+      - Auth: redirect to login if not authenticated
+
+      ## Step 7 — app/program/[id]/edit/page.tsx (find and extend)
+      Find the program edit page. Add a "Learning Studio" section/card:
+      - If studio.generatedAt: show "✓ Learning Studio Ready" with link to /program/[id]/studio
+      - If not: show file dropzone (accept=".docx,.pptx") + "Generate Learning Content" button
+      - On upload: POST to /api/program/[id]/studio with FormData
+      - Show loading spinner during generation
+      - After success: refresh page state + show success toast
+
+      ## Step 8 — TypeScript check
+      Run: `npx tsc --noEmit` and fix any errors. Report changed/new files and final tsc status.
+    assigned_to: coder
+    depends_on: [apis]
+    max_retries: 2
+
+  - id: verify
+    title: 'Final verification: TypeScript + build'
+    verify_skip_reason: 'TypeScript compilation and Next.js build are the authoritative closure gates for this feature.'
+    prompt: |
+      Final verification for the Learning Studio feature in E:\Project Repo\thcms.
+
+      Run: `npx tsc --noEmit` — must report zero TypeScript errors.
+
+      Run: `npx next build --webpack 2>&1 | Select-Object -Last 30` — must complete with no fatal errors.
+
+      Report: PASS or FAIL with the specific error lines if any.
+    assigned_to: coder
+    depends_on: [ui]
+    max_retries: 1

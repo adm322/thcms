@@ -1,0 +1,9 @@
+{
+  "type": "Network Failure",
+  "message": "Failed to fetch",
+  "url": "/_next/static/webpack/f3fe2362370cd751.webpack.hot-update.json",
+  "method": "GET",
+  "stack": "TypeError: Failed to fetch\n    at window.fetch (http://localhost:3000/chrome-log-interceptor.js:68:14)\n    at __webpack_require__.hmrM (http://localhost:3000/_next/static/chunks/webpack.js?v=1783011605685:1374:20)",
+  "page": "http://localhost:3000/trainer/programs/cmr3ofgqk0041y0qutaa0n913/edit",
+  "time": "2026-07-02T17:00:11.749Z"
+}

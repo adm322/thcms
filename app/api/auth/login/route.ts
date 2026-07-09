@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { setSessionCookie, validateCredentials } from "@/lib/auth";
 import { LoginSchema } from "@/lib/validations";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  // Per-IP rate limit: 5 attempts / 60s (generous enough for typo retries)
+  const ip = getClientIp(request);
+  if (!rateLimit(`login:${ip}`, 5, 60_000)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a minute and try again." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await request.json();
     const result = LoginSchema.safeParse(body);
@@ -33,6 +43,7 @@ export async function POST(request: NextRequest) {
         name: user.name,
         role: user.role,
         companyId: user.companyId,
+        mustChangePassword: user.mustChangePassword,
       },
     });
   } catch (error) {

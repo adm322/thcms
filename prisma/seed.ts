@@ -1,14 +1,14 @@
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 import "dotenv/config";
 import { PrismaClient } from "../lib/generated/prisma/client";
-import * as crypto from "crypto";
+import * as bcrypt from "bcryptjs";
 
 const url = process.env.DATABASE_URL || "file:./dev.db";
 const adapter = new PrismaLibSql({ url });
 const prisma = new PrismaClient({ adapter });
 
-function hashPassword(password: string): string {
-  return crypto.createHash("sha256").update(password).digest("hex");
+async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 10);
 }
 
 // Helpers to generate evaluation responses
@@ -86,7 +86,6 @@ async function main() {
   await prisma.programVote.deleteMany();
   await prisma.message.deleteMany();
   await prisma.review.deleteMany();
-  await prisma.reimbursement.deleteMany();
   await prisma.invoice.deleteMany();
   await prisma.evaluation.deleteMany();
   await prisma.trainerAvailability.deleteMany();
@@ -104,8 +103,6 @@ async function main() {
   await prisma.supportTicket.deleteMany();
   await prisma.leave.deleteMany();
   await prisma.attendance.deleteMany();
-  await prisma.payroll.deleteMany();
-  await prisma.claim.deleteMany();
   await prisma.employee.deleteMany();
   await prisma.notification.deleteMany();
   await prisma.trainerProfile.deleteMany();
@@ -133,44 +130,44 @@ async function main() {
   });
 
   // ─── Users ──────────────────────────────────────────────
-  const password = hashPassword("password123");
+  const password = await hashPassword("password123");
 
   const admin = await prisma.user.create({
-    data: { email: "admin@trainhub.my", passwordHash: password, name: "Admin Platform", role: "ADMIN" },
+    data: { email: "admin@trainhub.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Admin Platform", role: "ADMIN" },
   });
 
   const trainer1 = await prisma.user.create({
-    data: { email: "aisha@trainhub.my", passwordHash: password, name: "Aisha Rahman", role: "TRAINER" },
+    data: { email: "aisha@trainhub.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Aisha Rahman", role: "TRAINER" },
   });
   const trainer2 = await prisma.user.create({
-    data: { email: "jason@trainhub.my", passwordHash: password, name: "Jason Tan", role: "TRAINER" },
+    data: { email: "jason@trainhub.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Jason Tan", role: "TRAINER" },
   });
   const trainer3 = await prisma.user.create({
-    data: { email: "sarah@trainhub.my", passwordHash: password, name: "Sarah Lim", role: "TRAINER" },
+    data: { email: "sarah@trainhub.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Sarah Lim", role: "TRAINER" },
   });
 
   const hr1 = await prisma.user.create({
-    data: { email: "hr@petronas.my", passwordHash: password, name: "Farid Ismail", role: "HR", companyId: petronas.id },
+    data: { email: "hr@petronas.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Farid Ismail", role: "HR", companyId: petronas.id },
   });
   const hr2 = await prisma.user.create({
-    data: { email: "hr@maybank.my", passwordHash: password, name: "Linda Ooi", role: "HR", companyId: maybank.id },
+    data: { email: "hr@maybank.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Linda Ooi", role: "HR", companyId: maybank.id },
   });
   const hr3 = await prisma.user.create({
-    data: { email: "hr@topglove.my", passwordHash: password, name: "Rajesh Kumar", role: "HR", companyId: topGlove.id },
+    data: { email: "hr@topglove.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Rajesh Kumar", role: "HR", companyId: topGlove.id },
   });
   const hr4 = await prisma.user.create({
-    data: { email: "hr@airasia.my", passwordHash: password, name: "Nadia Hassan", role: "HR", companyId: airAsia.id },
+    data: { email: "hr@airasia.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Nadia Hassan", role: "HR", companyId: airAsia.id },
   });
   const hr5 = await prisma.user.create({
-    data: { email: "hr@tm.my", passwordHash: password, name: "Rizal Mustafa", role: "HR", companyId: telekom.id },
+    data: { email: "hr@tm.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Rizal Mustafa", role: "HR", companyId: telekom.id },
   });
   const hr6 = await prisma.user.create({
-    data: { email: "hr@sdarby.my", passwordHash: password, name: "Grace Tan", role: "HR", companyId: simeDarby.id },
+    data: { email: "hr@sdarby.my", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Grace Tan", role: "HR", companyId: simeDarby.id },
   });
 
   // Demo Participant
   const participant = await prisma.user.create({
-    data: { email: "participant@demo.com", passwordHash: password, name: "Demo Participant", role: "PARTICIPANT", companyId: petronas.id },
+    data: { email: "participant@demo.com", passwordHash: password, passwordAlgo: "bcrypt-10", name: "Demo Participant", role: "PARTICIPANT", companyId: petronas.id },
   });
 
   // ─── Trainer Profiles ───────────────────────────────────
@@ -871,22 +868,6 @@ async function main() {
   await prisma.invoice.create({ data: { bookingId: b19.id, companyId: simeDarby.id, invoiceNumber: "INV-2026-017", amount: 14250, status: "SENT", issuedAt: now, dueDate: new Date(Y, M + 1, 1) } });
   await prisma.invoice.create({ data: { bookingId: b20.id, companyId: maybank.id, invoiceNumber: "INV-2026-018", amount: 10500, status: "SENT", issuedAt: now, dueDate: new Date(Y, M + 1, 1) } });
 
-  // ─── REIMBURSEMENTS ─────────────────────────────────────
-  for (const cb of completedBookings) {
-    if (Math.random() > 0.4) {
-      const statuses = ["PENDING", "APPROVED", "PAID"] as const;
-      await prisma.reimbursement.create({
-        data: {
-          bookingId: cb.booking.id, trainerId: cb.trainerId,
-          amount: Math.round((200 + Math.random() * 800) / 50) * 50,
-          description: `Materials printing, travel & meal allowance for ${cb.program} program`,
-          receiptUrl: Math.random() > 0.5 ? `/receipts/rec-${cb.booking.id.slice(-4)}.pdf` : null,
-          status: statuses[Math.floor(Math.random() * statuses.length)],
-        },
-      });
-    }
-  }
-
   // ─── REVIEWS ────────────────────────────────────────────
   const reviewTexts: Record<string, string[]> = {
     Leadership: [
@@ -970,7 +951,7 @@ async function main() {
     { subject: "Invoice not showing in dashboard", description: "I can't find invoice INV-2026-007 in my list. It was marked as sent but doesn't appear.", priority: "HIGH", status: "OPEN", hrId: hr2.id, companyId: maybank.id },
     { subject: "Unable to upload employee CSV", description: "Getting a 500 error when trying to bulk upload employees. The file is under 5MB.", priority: "HIGH", status: "IN_PROGRESS", hrId: hr5.id, companyId: telekom.id },
     { subject: "Request for new training category", description: "Can we add 'Sustainability & ESG' as a training category? Several of our departments are asking for this.", priority: "MEDIUM", status: "OPEN", hrId: hr6.id, companyId: simeDarby.id },
-    { subject: "Trainer payment delay", description: "My reimbursement for booking #INV-2026-012 hasn't been processed. It's been 2 weeks.", priority: "MEDIUM", status: "OPEN", hrId: hr3.id, companyId: topGlove.id },
+    { subject: "Trainer payment delay", description: "My invoice for booking #INV-2026-012 has an incorrect amount. It's been 2 weeks.", priority: "MEDIUM", status: "OPEN", hrId: hr3.id, companyId: topGlove.id },
     { subject: "Duplicate program listing", description: "The 'Emotional Intelligence' program appears twice in the marketplace with different IDs.", priority: "LOW", status: "RESOLVED", hrId: hr4.id, companyId: airAsia.id },
     { subject: "Request: bulk evaluation blast", description: "Can we send evaluations to all completed bookings at once? Currently have to do one by one.", priority: "MEDIUM", status: "IN_PROGRESS", hrId: hr1.id, companyId: petronas.id },
   ];
@@ -1114,22 +1095,6 @@ async function main() {
           days: duration,
           status: Math.random() > 0.2 ? "APPROVED" : "PENDING",
           reason: "Personal / medical reasons",
-        },
-      });
-    }
-  }
-
-  // ─── CLAIMS ───────────────────────────────────────────────
-  const claimTypes = ["MILEAGE", "TRAVEL", "MEAL", "MEDICAL", "OPTICAL", "DENTAL", "OTHER"];
-  for (const empId of allEmpIds.slice(0, 15)) {
-    if (Math.random() > 0.4) {
-      await prisma.claim.create({
-        data: {
-          employeeId: empId,
-          amount: Math.round((50 + Math.random() * 400) * 100) / 100,
-          type: claimTypes[Math.floor(Math.random() * claimTypes.length)],
-          description: "Monthly expense claim",
-          status: Math.random() > 0.3 ? "APPROVED" : "PENDING",
         },
       });
     }
@@ -1434,10 +1399,10 @@ async function main() {
   console.log(`   19 Training Plan Items, 4 Team Building Requests`);
   console.log(`   ~30 Program Votes across 9 programs`);
   console.log(`   12 Evaluations with full response data`);
-  console.log(`   18 Invoices, ~8 Reimbursements, 12 Reviews`);
+  console.log(`   18 Invoices, 12 Reviews`);
   console.log(`   72+ Employees across 6 companies`);
   console.log(`   40+ Messages, 6 Support Tickets, 7 Changelog Entries`);
-  console.log(`   Attendance records, Leaves, Claims, 8 Program Itineraries`);
+  console.log(`   Attendance records, Leaves, 8 Program Itineraries`);
   console.log(`   Trainer availability data for all 3 trainers\n`);
   console.log(`🔑 All passwords: password123`);
   console.log(`   Admin:   admin@trainhub.my`);

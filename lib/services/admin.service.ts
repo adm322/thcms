@@ -1,15 +1,15 @@
 import { prisma } from "@/lib/prisma";
 
 export async function getAdminStats() {
-  // H5: Run all 6 queries in parallel instead of sequentially
+  // H5: Run all 5 queries in parallel instead of sequentially
   const [totalBookings, totalTrainers, totalPrograms, pendingBookings,
-         pendingReimbursements, invoices] = await Promise.all([
+         invoices, totalCompanies] = await Promise.all([
     prisma.booking.count(),
     prisma.user.count({ where: { role: "TRAINER" } }),
     prisma.program.count({ where: { status: "PUBLISHED" } }),
     prisma.booking.count({ where: { status: "PENDING" } }),
-    prisma.reimbursement.count({ where: { status: "PENDING" } }),
     prisma.invoice.findMany({ where: { status: { in: ["PAID", "SENT"] } }, select: { amount: true } }),
+    prisma.company.count(),
   ]);
 
   const totalRevenue = invoices.reduce((sum, inv) => sum + inv.amount, 0);
@@ -20,7 +20,7 @@ export async function getAdminStats() {
     totalPrograms,
     totalRevenue,
     pendingBookings,
-    pendingReimbursements,
+    totalCompanies,
   };
 }
 
@@ -35,7 +35,7 @@ export async function getAdminCalendar(year?: string | null, month?: string | nu
   const [bookings, upcomingBookings] = await Promise.all([
     // Main calendar view: bookings in the filtered date range
     (async () => {
-      const dateFilter: any = {};
+      const dateFilter: Record<string, unknown> = {};
       if (month) {
         const [y, m] = month.split("-").map(Number);
         dateFilter.programDate = { gte: new Date(y, m - 1, 1), lt: new Date(y, m, 1) };
@@ -271,9 +271,17 @@ export async function getAdminActions() {
     take: 10,
   });
 
-  const pendingReimbursements = await prisma.reimbursement.count({ where: { status: "PENDING" } });
-
-  const actions: any[] = [];
+  const actions: {
+    type?: string | null;
+    urgency: string;
+    message?: string | null;
+    action?: string | null;
+    link?: string | null;
+    bookingId?: string;
+    programTitle?: string;
+    pendingDays?: number;
+    daysSinceCompletion?: number;
+  }[] = [];
 
   for (const b of pendingBookings) {
     const pendingDays = Math.floor((now.getTime() - b.createdAt.getTime()) / 86400000);
@@ -306,16 +314,6 @@ export async function getAdminActions() {
         : `"${b.program.title}" completed ${daysSince}d ago — check HRDF readiness`,
       action: "Remind HR",
       link: `/api/admin/remind-hrdf`,
-    });
-  }
-
-  if (pendingReimbursements > 0) {
-    actions.push({
-      type: "reimbursement",
-      urgency: pendingReimbursements > 3 ? "urgent" : "soon",
-      message: `${pendingReimbursements} reimbursement${pendingReimbursements>1?"s":""} waiting for approval`,
-      action: "Review",
-      link: "/admin/reimbursements",
     });
   }
 

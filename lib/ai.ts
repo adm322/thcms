@@ -17,7 +17,7 @@ function getAIProvider(): AIProvider {
   return "mock";
 }
 
-async function callAI(prompt: string, systemPrompt?: string): Promise<string | null> {
+export async function callAI(prompt: string, systemPrompt?: string): Promise<string | null> {
   const provider = getAIProvider();
   if (provider === "mock") return null;
 

@@ -5,16 +5,28 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { GraduationCap, Loader2, Eye, EyeOff } from "lucide-react";
+import { GraduationCap, Loader2, Eye, EyeOff, Smartphone, Monitor } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
+import { cn } from "@/lib/utils";
+
+/** localStorage key for the user's preferred dashboard layout */
+const VIEW_PREF_KEY = "trainhub-view-pref";
+type ViewMode = "mobile" | "desktop";
 
 function getDashboardPath(role: string): string {
   switch (role) {
     case "ADMIN": return "/admin";
     case "TRAINER": return "/trainer";
     case "HR": return "/hr";
+    case "PARTICIPANT": return "/participant";
     default: return "/";
   }
+}
+
+function resolveRedirect(role: string, viewMode: ViewMode, override?: string | null): string {
+  // An explicit ?redirect query always wins (e.g. for deep links).
+  if (override) return override;
+  return viewMode === "mobile" ? "/m" : getDashboardPath(role);
 }
 
 function LoginForm() {
@@ -26,6 +38,29 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Default to desktop, but switch to mobile when:
+  //   (a) the persisted localStorage pref says so, OR
+  //   (b) the user is loading this page on a small viewport they've never
+  //       picked for before.
+  // Lazy initializer runs once during the first render; for "use client"
+  // components after hydration this is safe and avoids the
+  // react-hooks/set-state-in-effect lint pattern.
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    if (typeof window === "undefined") return "desktop";
+    try {
+      const stored = window.localStorage.getItem(VIEW_PREF_KEY);
+      if (stored === "mobile" || stored === "desktop") return stored;
+    } catch {
+      /* storage blocked — fall back to viewport */
+    }
+    return window.matchMedia("(max-width: 640px)").matches ? "mobile" : "desktop";
+  });
+
+  function setView(mode: ViewMode) {
+    setViewMode(mode);
+    try { window.localStorage.setItem(VIEW_PREF_KEY, mode); } catch { /* no-op */ }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -47,9 +82,8 @@ function LoginForm() {
       }
 
       await refresh();
-      const redirect = searchParams.get("redirect");
-      router.push(redirect || getDashboardPath(data.user.role));
-      router.refresh();
+      const target = resolveRedirect(data.user.role, viewMode, searchParams.get("redirect"));
+      router.push(target);
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -61,7 +95,6 @@ function LoginForm() {
   async function quickLogin(quickEmail: string) {
     setEmail(quickEmail);
     setPassword("password123");
-    // Auto-submit
     setLoading(true);
     try {
       const res = await fetch("/api/auth/login", {
@@ -72,8 +105,8 @@ function LoginForm() {
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Login failed"); return; }
       await refresh();
-      router.push(getDashboardPath(data.user.role));
-      router.refresh();
+      const target = resolveRedirect(data.user.role, viewMode, searchParams.get("redirect"));
+      router.push(target);
     } catch { setError("Network error"); }
     finally { setLoading(false); }
   }
@@ -99,6 +132,50 @@ function LoginForm() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* View selector — defaults based on viewport width, persisted via localStorage */}
+            <div
+              role="radiogroup"
+              aria-label="Choose dashboard view"
+              className="rounded-lg bg-muted p-1 grid grid-cols-2 gap-1"
+            >
+              <button
+                type="button"
+                role="radio"
+                aria-checked={viewMode === "mobile"}
+                onClick={() => setView("mobile")}
+                className={cn(
+                  "flex items-center justify-center gap-1.5 rounded-md py-2 text-xs font-semibold transition-all",
+                  viewMode === "mobile"
+                    ? "bg-background shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                <Smartphone className="size-3.5" />
+                Mobile
+                {viewMode === "mobile" && (
+                  <span className="ml-1 inline-block size-1.5 rounded-full" style={{ backgroundColor: "var(--brand, currentColor)" }} aria-hidden />
+                )}
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={viewMode === "desktop"}
+                onClick={() => setView("desktop")}
+                className={cn(
+                  "flex items-center justify-center gap-1.5 rounded-md py-2 text-xs font-semibold transition-all",
+                  viewMode === "desktop"
+                    ? "bg-background shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                <Monitor className="size-3.5" />
+                Desktop
+                {viewMode === "desktop" && (
+                  <span className="ml-1 inline-block size-1.5 rounded-full" style={{ backgroundColor: "var(--brand, currentColor)" }} aria-hidden />
+                )}
+              </button>
+            </div>
+
             {error && (
               <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
                 {error}

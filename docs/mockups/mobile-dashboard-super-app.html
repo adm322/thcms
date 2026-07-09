@@ -1,0 +1,1061 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mobile HR Dashboard — TNG / CelcomDigi Patterns</title>
+<style>
+  :root {
+    /* TNG-leaning palette */
+    --bg: #f3f5f9;
+    --bg-soft: #eef1f6;
+    --card: #ffffff;
+    --border: #e6eaf2;
+    --text: #0e1a2b;
+    --muted: #6b7a90;
+
+    /* Brand */
+    --tng: #00b2ff;            /* TNG cyan-blue */
+    --tng-deep: #0079d4;
+    --red-orange: #ff5a1f;     /* CelcomDigi accent */
+    --red-orange-deep: #d83b00;
+
+    /* Tile palette */
+    --c-green: #10c46c;
+    --c-orange: #ff8a3d;
+    --c-purple: #8b5cf6;
+    --c-pink: #ff4d8d;
+    --c-blue: #3b82f6;
+    --c-teal: #14b8a6;
+    --c-yellow: #f5b400;
+    --c-rose: #ef4444;
+
+    /* Effects */
+    --shadow-sm: 0 2px 6px rgba(14, 26, 43, 0.06);
+    --shadow: 0 8px 20px -4px rgba(14, 26, 43, 0.10);
+    --shadow-lg: 0 24px 48px -12px rgba(14, 26, 43, 0.25);
+    --radius-sm: 12px;
+    --radius: 16px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+    --radius-pill: 999px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 36px 20px 80px; }
+  h1 { margin: 0 0 4px; font-size: 26px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 6px; font-size: 14px; max-width: 760px; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 18px 0 32px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: white; border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 12px; color: var(--muted); box-shadow: var(--shadow-sm); }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+  @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+
+  .phone-col { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .phone-col h2 { margin: 0; font-size: 16px; letter-spacing: -0.01em; }
+  .phone-col h2 small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; margin-top: 2px; }
+
+  /* Phone shell */
+  .phone {
+    width: 380px;
+    height: 780px;
+    border-radius: 44px;
+    background: #0d1322;
+    padding: 12px;
+    box-shadow: 0 30px 60px -20px rgba(14, 26, 43, 0.45), inset 0 0 0 2px rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .screen {
+    width: 100%; height: 100%;
+    border-radius: 34px;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar (iOS style) */
+  .status-bar {
+    height: 44px;
+    padding: 0 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 14px; font-weight: 600;
+    color: var(--text);
+    flex-shrink: 0;
+    padding-top: 12px;
+  }
+  .status-bar.light { color: white; }
+  .dynamic-island {
+    position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 28px; background: #000; border-radius: 20px;
+  }
+  .signal-icons { display: inline-flex; align-items: center; gap: 4px; }
+  .signal-icons svg { width: 16px; height: 16px; }
+
+  /* Content scroll area */
+  .scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px 16px 100px;
+    scrollbar-width: none;
+  }
+  .scroll::-webkit-scrollbar { display: none; }
+
+  /* Bottom dock */
+  .dock {
+    position: absolute;
+    left: 12px; right: 12px; bottom: 12px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid rgba(230,234,242,0.9);
+    border-radius: 26px;
+    padding: 8px 6px 10px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 10px 30px -10px rgba(14,26,43,0.18);
+  }
+  .dock .tab {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 6px 4px 4px;
+    color: var(--muted);
+    font-size: 10px; font-weight: 600;
+    border-radius: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.18s;
+  }
+  .dock .tab svg { width: 22px; height: 22px; }
+  .dock .tab.active { color: var(--tng); }
+  .dock .tab.active::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; margin-top: 2px; }
+  .dock.b .dock .tab.active, .phone-b .dock .tab.active { color: var(--red-orange); }
+  .phone-c .dock .tab.active { color: #6d28d9; }
+
+  /* ==== Shared components ==== */
+
+  /* Header strip (above hero) */
+  .top-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0 14px;
+  }
+  .greet { line-height: 1.15; }
+  .greet .hi { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .greet .name { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #ffd28b, #ff7a45);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px;
+    box-shadow: 0 2px 6px rgba(14,26,43,0.18);
+  }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+    position: relative;
+  }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn .badge {
+    position: absolute; top: 6px; right: 6px;
+    min-width: 16px; height: 16px; padding: 0 4px;
+    border-radius: 9px;
+    background: var(--c-rose); color: white; font-size: 10px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 2px white;
+  }
+
+  /* Hero (balance card) */
+  .hero {
+    border-radius: 24px;
+    padding: 18px 18px 16px;
+    color: white;
+    background: linear-gradient(135deg, var(--tng) 0%, var(--tng-deep) 100%);
+    box-shadow: 0 14px 30px -10px rgba(0, 121, 212, 0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero.red { background: linear-gradient(135deg, var(--red-orange) 0%, var(--red-orange-deep) 100%); box-shadow: 0 14px 30px -10px rgba(216, 59, 0, 0.35); }
+  .hero.purple { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 14px 30px -10px rgba(139, 92, 246, 0.4); }
+  .hero::before {
+    content: ""; position: absolute; top: -50%; right: -30%; width: 220px; height: 220px;
+    border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 65%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ""; position: absolute; bottom: -60%; left: -20%; width: 220px; height: 220px;
+    border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 65%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+    opacity: 0.88;
+  }
+  .hero-title { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; margin-top: 6px; line-height: 1.2; }
+  .hero-title .count {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    background: rgba(255,255,255,0.18);
+    padding: 4px 10px; border-radius: var(--radius-pill);
+    font-size: 13px; font-weight: 700; margin-left: 4px;
+  }
+  .hero-stats {
+    display: flex; gap: 10px; margin-top: 14px;
+  }
+  .hero-stat { background: rgba(255,255,255,0.16); border-radius: 14px; padding: 8px 10px; flex: 1; }
+  .hero-stat .v { font-size: 15px; font-weight: 800; line-height: 1.1; }
+  .hero-stat .l { font-size: 10px; opacity: 0.85; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 14px;
+    padding: 8px 14px;
+    background: white;
+    color: var(--tng-deep);
+    border-radius: var(--radius-pill);
+    font-size: 12px; font-weight: 700;
+  }
+  .hero.red .hero-cta { color: var(--red-orange-deep); }
+  .hero.purple .hero-cta { color: #6d28d9; }
+
+  /* Quick action tile grid (TNG) */
+  .qa-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin-top: 18px;
+  }
+  .qa-tile {
+    background: white;
+    border-radius: 18px;
+    padding: 14px 6px 10px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .qa-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .qa-tile .ic {
+    width: 38px; height: 38px; margin: 0 auto 6px;
+    border-radius: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: white;
+  }
+  .qa-tile .ic svg { width: 20px; height: 20px; }
+  .qa-tile .lbl { font-size: 11px; font-weight: 600; color: var(--text); }
+
+  /* CelcomDigi-style outlined square tiles */
+  .qa-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin-top: 18px;
+  }
+  .qa-square {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    aspect-ratio: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px;
+    color: var(--text);
+    font-size: 10px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .qa-square .ic {
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--red-orange);
+  }
+  .qa-square .ic svg { width: 22px; height: 22px; }
+  .qa-square:active { background: #fff5f0; border-color: var(--red-orange); }
+
+  /* Quick action pill chips (CelcomDigi) */
+  .pill-row {
+    display: flex; gap: 8px; overflow-x: auto; margin-top: 16px;
+    padding: 4px 0 8px;
+    scrollbar-width: none;
+  }
+  .pill-row::-webkit-scrollbar { display: none; }
+  .pill-chip {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 14px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 12px; font-weight: 600;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+  }
+  .pill-chip.primary {
+    background: linear-gradient(135deg, var(--red-orange), var(--red-orange-deep));
+    color: white;
+    border: none;
+  }
+  .pill-chip.primary svg { color: white; }
+  .pill-chip svg { width: 14px; height: 14px; color: var(--muted); }
+
+  /* Section header */
+  .sec-h {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 22px 0 10px;
+  }
+  .sec-h .t { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .sec-h .see {
+    font-size: 11px; font-weight: 700;
+    color: var(--tng);
+  }
+  .phone-b .sec-h .see { color: var(--red-orange); }
+  .phone-c .sec-h .see { color: #6d28d9; }
+
+  /* Carousel */
+  .carousel {
+    display: flex; gap: 12px; overflow-x: auto;
+    padding: 4px 2px 10px;
+    margin: 0 -16px; padding-left: 16px; padding-right: 16px;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+  .carousel-item {
+    flex-shrink: 0;
+    width: 240px;
+    border-radius: 20px;
+    padding: 16px;
+    background: white;
+    box-shadow: var(--shadow-sm);
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .carousel-item:hover { transform: translateY(-2px); }
+  .carousel-item.gradient-a { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: #064e3b; }
+  .carousel-item.gradient-b { background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #1e3a8a; }
+  .carousel-item.gradient-c { background: linear-gradient(135deg, #fdf4ff, #fae8ff); color: #6b21a8; }
+  .carousel-item .badge {
+    display: inline-block; font-size: 10px; font-weight: 700; padding: 4px 8px;
+    border-radius: var(--radius-pill);
+    background: rgba(0,0,0,0.08); margin-bottom: 10px;
+  }
+  .carousel-item h4 { margin: 0; font-size: 14px; font-weight: 700; line-height: 1.3; }
+  .carousel-item p { margin: 6px 0 0; font-size: 11px; line-height: 1.4; opacity: 0.78; }
+  .carousel-item .arrow {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 12px; font-size: 11px; font-weight: 700;
+  }
+
+  /* Card list item */
+  .list { display: flex; flex-direction: column; gap: 10px; }
+  .list-item {
+    background: white;
+    border-radius: 18px;
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .list-item .av {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .list-item .meta { flex: 1; min-width: 0; }
+  .list-item .nm { font-size: 13px; font-weight: 700; line-height: 1.2; }
+  .list-item .sub { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+  .list-item .right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .status-pill {
+    font-size: 10px; font-weight: 700;
+    padding: 4px 8px;
+    border-radius: var(--radius-pill);
+    background: var(--bg-soft);
+    color: var(--muted);
+  }
+  .status-pill.warn { background: #fef3c7; color: #92400e; }
+  .status-pill.ok { background: #d1fae5; color: #065f46; }
+  .status-pill.info { background: #dbeafe; color: #1e40af; }
+  .status-pill.danger { background: #fee2e2; color: #991b1b; }
+
+  /* Big primary CTA pill */
+  .cta-pill {
+    width: 100%;
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--tng), var(--tng-deep));
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    box-shadow: 0 12px 24px -6px rgba(0, 121, 212, 0.4);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .phone-b .cta-pill { background: linear-gradient(135deg, var(--red-orange), var(--red-orange-deep)); box-shadow: 0 12px 24px -6px rgba(216, 59, 0, 0.4); }
+  .phone-c .cta-pill { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 12px 24px -6px rgba(139, 92, 246, 0.4); }
+
+  /* 2x2 stat grid (bank-app style) */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .stat-card {
+    background: white;
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-card .icon-tag {
+    width: 34px; height: 34px; border-radius: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: white; margin-bottom: 8px;
+  }
+  .stat-card .icon-tag svg { width: 18px; height: 18px; }
+  .stat-card .v { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .stat-card .l { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+  .stat-card .delta { font-size: 10px; font-weight: 700; margin-top: 6px; display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: var(--radius-pill); }
+  .stat-card .delta.up { background: #d1fae5; color: #065f46; }
+  .stat-card .delta.down { background: #fee2e2; color: #991b1b; }
+
+  /* Mini timeline (CelcomDigi usage style) */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .timeline-item {
+    display: flex; gap: 12px;
+    padding: 10px 0;
+  }
+  .timeline-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--bg-soft);
+    color: var(--text);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .timeline-dot svg { width: 16px; height: 16px; }
+  .timeline-dot::after {
+    content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+    width: 2px; height: calc(100% + 20px);
+    background: var(--border);
+  }
+  .timeline-item:last-child .timeline-dot::after { display: none; }
+  .timeline-content { flex: 1; padding-top: 6px; }
+  .timeline-content .tt { font-size: 13px; font-weight: 700; line-height: 1.3; }
+  .timeline-content .ts { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* AI insight card */
+  .ai-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: white;
+    border-radius: 22px;
+    padding: 16px;
+    margin-top: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-card::before {
+    content: ""; position: absolute; top: -40%; right: -20%; width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.4), transparent 60%);
+  }
+  .ai-card .label {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700; padding: 4px 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius-pill);
+    margin-bottom: 10px;
+  }
+  .ai-card .label svg { width: 12px; height: 12px; }
+  .ai-card h4 { margin: 0; font-size: 14px; font-weight: 700; line-height: 1.3; }
+  .ai-card p { margin: 6px 0 12px; font-size: 11px; line-height: 1.45; opacity: 0.85; }
+  .ai-card .ai-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; background: white;
+    color: #0f172a;
+    border-radius: var(--radius-pill);
+    font-size: 11px; font-weight: 700;
+  }
+
+  /* Search pill (top) */
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    background: white;
+    border-radius: var(--radius-pill);
+    padding: 10px 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+  }
+  .search svg { width: 16px; height: 16px; color: var(--muted); }
+  .search input { flex: 1; border: none; outline: none; font: inherit; color: var(--text); background: transparent; }
+  .search input::placeholder { color: var(--muted); }
+  .search .kbd {
+    font-size: 10px; padding: 2px 6px; background: var(--bg);
+    border-radius: 6px; color: var(--muted);
+  }
+
+  /* Hamburger / icon button stack */
+  .ic-stack { display: flex; gap: 8px; }
+  .swatch { display: flex; gap: 6px; align-items: center; font-size: 11px; color: var(--muted); }
+  .swatch i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Mobile HR Dashboard — Super-App Patterns</h1>
+  <p class="sub">Three layout directions using TNG eWallet + CelcomDigi visual DNA: bottom tab nav, hero card, 4-tile quick actions, pill buttons, rounded card everywhere. Tap the tiles, pills, and carousel items to see interaction states. Tap the dock tabs to feel the navigation.</p>
+
+  <div class="legend">
+    <span class="pill"><span class="dot" style="background: var(--tng)"></span> TNG pattern</span>
+    <span class="pill"><span class="dot" style="background: var(--red-orange)"></span> CelcomDigi pattern</span>
+    <span class="pill"><span class="dot" style="background: #8b5cf6"></span> Bank-app / hybrid</span>
+    <span class="pill"><span class="dot" style="background: var(--c-green)"></span> Quick action tiles</span>
+    <span class="pill"><span class="dot" style="background: var(--c-orange)"></span> Pills & chips</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- =================================================== -->
+    <!-- PHONE A — TNG eWallet DNA                              -->
+    <!-- =================================================== -->
+    <div class="phone-col">
+      <h2>A · TNG eWallet DNA <small>Cyan-blue hero, 4-tile grid, sharp pills</small></h2>
+
+      <div class="phone">
+        <div class="screen">
+
+          <div class="status-bar light" style="position: absolute; top: 0; left: 0; right: 0; z-index: 5;">
+            <span>9:41</span>
+            <div class="signal-icons">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm16-2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l3.5-3.5a8.5 8.5 0 0 0-7 0L12 21Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M22 10v4h-3v-4h3Z"/></svg>
+            </div>
+          </div>
+          <div class="dynamic-island"></div>
+
+          <div class="scroll" style="padding-top: 50px;">
+
+            <!-- Hero cyan-blue -->
+            <div class="hero">
+              <div class="hero-eyebrow">Good morning, Sarah</div>
+              <div class="hero-title">3 things need your attention <span class="count">2 NEW</span></div>
+              <div class="hero-stats">
+                <div class="hero-stat"><div class="v">5</div><div class="l">Today</div></div>
+                <div class="hero-stat"><div class="v">3</div><div class="l">Pending</div></div>
+                <div class="hero-stat"><div class="v">12</div><div class="l">This Week</div></div>
+              </div>
+              <button class="hero-cta">View all bookings →</button>
+            </div>
+
+            <!-- Quick action 4-tile grid -->
+            <div class="qa-grid">
+              <div class="qa-tile">
+                <div class="ic" style="background: var(--c-green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="lbl">Approve</div>
+              </div>
+              <div class="qa-tile">
+                <div class="ic" style="background: var(--c-orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+                <div class="lbl">Schedule</div>
+              </div>
+              <div class="qa-tile">
+                <div class="ic" style="background: var(--c-purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+                <div class="lbl">Add Trainer</div>
+              </div>
+              <div class="qa-tile">
+                <div class="ic" style="background: var(--c-pink)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+                <div class="lbl">AI Help</div>
+              </div>
+            </div>
+
+            <!-- AI carousel -->
+            <div class="sec-h">
+              <div class="t">For You ✨</div>
+              <div class="see">See all</div>
+            </div>
+            <div class="carousel">
+              <div class="carousel-item gradient-a">
+                <span class="badge">SMART MATCH</span>
+                <h4>Pair Aiman with Onboarding 101</h4>
+                <p>His last 3 sessions averaged 4.8★ on this topic.</p>
+                <span class="arrow">Try it →</span>
+              </div>
+              <div class="carousel-item gradient-b">
+                <span class="badge">CONFLICT</span>
+                <h4>2 sessions overlap Tuesday 3 PM</h4>
+                <p>Reschedule one to keep both trainers fresh.</p>
+                <span class="arrow">Resolve →</span>
+              </div>
+              <div class="carousel-item gradient-c">
+                <span class="badge">TIP</span>
+                <h4>Auto-approve returning clients</h4>
+                <p>Cut 4 hours of admin per week.</p>
+                <span class="arrow">Enable →</span>
+              </div>
+            </div>
+
+            <!-- Pending list -->
+            <div class="sec-h">
+              <div class="t">Pending Approvals</div>
+              <div class="see">See all (8)</div>
+            </div>
+            <div class="list">
+              <div class="list-item">
+                <div class="av" style="background: linear-gradient(135deg, #fb923c, #c2410c)">AR</div>
+                <div class="meta">
+                  <div class="nm">Aiman Razak</div>
+                  <div class="sub">Onboarding 101 · Wed 10:00 AM</div>
+                </div>
+                <div class="right">
+                  <span class="status-pill warn">Pending</span>
+                  <span style="font-size: 10px; color: var(--muted);">2h ago</span>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="av" style="background: linear-gradient(135deg, #c084fc, #7e22ce)">LP</div>
+                <div class="meta">
+                  <div class="nm">Lina Putri</div>
+                  <div class="sub">Compliance Refresher · Thu 2:30 PM</div>
+                </div>
+                <div class="right">
+                  <span class="status-pill danger">Conflict</span>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="av" style="background: linear-gradient(135deg, #38bdf8, #0369a1)">DV</div>
+                <div class="meta">
+                  <div class="nm">Daniel Voon</div>
+                  <div class="sub">Leadership Lab · Fri 9:00 AM</div>
+                </div>
+                <div class="right">
+                  <span class="status-pill info">Review</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="cta-pill">View All Bookings →</button>
+          </div>
+
+          <!-- Bottom dock: 5 tabs -->
+          <nav class="dock">
+            <div class="tab active">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3L12 3Z"/></svg>
+              Home
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+              Sessions
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg>
+              Scan
+            </div>
+            <div class="tab" style="position: relative;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"/></svg>
+              Inbox
+              <span style="position: absolute; top: 2px; right: 16px; min-width: 14px; height: 14px; padding: 0 4px; background: var(--c-rose); color: white; font-size: 9px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center;">3</span>
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+              Profile
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================== -->
+    <!-- PHONE B — CelcomDigi DNA                                -->
+    <!-- =================================================== -->
+    <div class="phone-col">
+      <h2>B · CelcomDigi DNA <small>Red-orange hero, outlined tiles, timeline</small></h2>
+
+      <div class="phone phone-b">
+        <div class="screen">
+
+          <div class="status-bar light" style="position: absolute; top: 0; left: 0; right: 0; z-index: 5;">
+            <span>9:41</span>
+            <div class="signal-icons">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm16-2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l3.5-3.5a8.5 8.5 0 0 0-7 0L12 21Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M22 10v4h-3v-4h3Z"/></svg>
+            </div>
+          </div>
+          <div class="dynamic-island"></div>
+
+          <div class="scroll" style="padding-top: 50px;">
+
+            <!-- Search -->
+            <div class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input placeholder="Search trainers, sessions…" />
+              <span class="kbd">⌘ K</span>
+            </div>
+
+            <!-- Top bar -->
+            <div class="top-bar">
+              <div class="greet">
+                <div class="hi">Welcome back</div>
+                <div class="name">Hi, Sarah 👋</div>
+              </div>
+              <div class="ic-stack">
+                <div class="icon-btn" style="position: relative;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+                  <span class="badge">5</span>
+                </div>
+                <div class="avatar">SR</div>
+              </div>
+            </div>
+
+            <!-- Hero red-orange -->
+            <div class="hero red">
+              <div class="hero-eyebrow">Sessions Today</div>
+              <div class="hero-title">5 sessions scheduled <span class="count">2 NOW</span></div>
+              <div class="hero-stats">
+                <div class="hero-stat"><div class="v">RM 8.2k</div><div class="l">This Week</div></div>
+                <div class="hero-stat"><div class="v">12</div><div class="l">Trainers</div></div>
+                <div class="hero-stat"><div class="v">87%</div><div class="l">Attendance</div></div>
+              </div>
+              <button class="hero-cta">Open schedule →</button>
+            </div>
+
+            <!-- Outlined quick-action squares -->
+            <div class="qa-row">
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+                Approve
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></div>
+                Schedule
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+                Trainers
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
+                Reports
+              </div>
+            </div>
+
+            <!-- Pill chip row -->
+            <div class="pill-row">
+              <button class="pill-chip primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                New Booking
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg>
+                AI Assist
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/></svg>
+                Templates
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 1-1 3.6l2 1.7-2 3.4-2.4-1a7 7 0 0 1-3.6 1l-.6 2.5h-4l-.6-2.5a7 7 0 0 1-3.6-1l-2.4 1-2-3.4 2-1.7a7 7 0 0 1-1-3.6l-2.5-.6v-4l2.5-.6a7 7 0 0 1 1-3.6l-2-1.7 2-3.4 2.4 1a7 7 0 0 1 3.6-1L9.4 1h4l.6 2.5a7 7 0 0 1 3.6 1l2.4-1 2 3.4-2 1.7a7 7 0 0 1 1 3.6l2.5.6v4l-2.5.6Z"/></svg>
+                Settings
+              </button>
+            </div>
+
+            <!-- Plan-style carousel -->
+            <div class="sec-h">
+              <div class="t">Upcoming Plans</div>
+              <div class="see">View calendar</div>
+            </div>
+            <div class="carousel">
+              <div class="carousel-item gradient-b">
+                <span class="badge">WED · 10:00 AM</span>
+                <h4>Onboarding 101</h4>
+                <p>Trainer: Aiman · Room 4 · 18 pax</p>
+                <span class="arrow">Details →</span>
+              </div>
+              <div class="carousel-item gradient-a">
+                <span class="badge">THU · 2:30 PM</span>
+                <h4>Compliance Refresher</h4>
+                <p>Trainer: Lina · Room 2 · 24 pax</p>
+                <span class="arrow">Details →</span>
+              </div>
+              <div class="carousel-item gradient-c">
+                <span class="badge">FRI · 9:00 AM</span>
+                <h4>Leadership Lab</h4>
+                <p>Trainer: Daniel · Auditorium · 40 pax</p>
+                <span class="arrow">Details →</span>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="sec-h">
+              <div class="t">Recent Activity</div>
+              <div class="see">Filter</div>
+            </div>
+            <div class="timeline" style="background: white; border-radius: 18px; padding: 4px 14px; box-shadow: var(--shadow-sm);">
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--c-green);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">Approved: Safety Training batch</div>
+                  <div class="ts">Today · 8:42 AM</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--c-orange);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">Invoice INV-2418 paid by Acme Sdn Bhd</div>
+                  <div class="ts">Yesterday · 4:15 PM</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--c-purple);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">New trainer onboarded: Hafiz Rahman</div>
+                  <div class="ts">2 days ago</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="cta-pill">View All Activity →</button>
+          </div>
+
+          <!-- Bottom dock: 4 tabs -->
+          <nav class="dock">
+            <div class="tab active">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3L12 3Z"/></svg>
+              Home
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+              Plans
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+              Discover
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+              Profile
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================== -->
+    <!-- PHONE C — Bank-app / Hybrid                             -->
+    <!-- =================================================== -->
+    <div class="phone-col">
+      <h2>C · Bank App DNA <small>2×2 stat grid, account-style cards, dark AI</small></h2>
+
+      <div class="phone phone-c">
+        <div class="screen">
+
+          <div class="status-bar" style="position: absolute; top: 0; left: 0; right: 0; z-index: 5; background: var(--bg);">
+            <span>9:41</span>
+            <div class="signal-icons">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm16-2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l3.5-3.5a8.5 8.5 0 0 0-7 0L12 21Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M22 10v4h-3v-4h3Z"/></svg>
+            </div>
+          </div>
+          <div class="dynamic-island"></div>
+
+          <div class="scroll" style="padding-top: 50px;">
+
+            <!-- Top bar -->
+            <div class="top-bar">
+              <div class="greet">
+                <div class="hi">Dashboard</div>
+                <div class="name">Sarah <span style="color: var(--muted); font-weight: 600;">·</span> <span style="font-size: 12px; background: #f3e8ff; color: #6d28d9; padding: 2px 8px; border-radius: 999px; font-weight: 600;">HR</span></div>
+              </div>
+              <div class="ic-stack">
+                <div class="icon-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                </div>
+                <div class="icon-btn" style="position: relative;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+                  <span class="badge">3</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero purple (org-health card style) -->
+            <div class="hero purple">
+              <div class="hero-eyebrow">Org Health Score</div>
+              <div class="hero-title">92 / 100 <span class="count">↑ 4</span></div>
+              <div class="hero-stats">
+                <div class="hero-stat"><div class="v">96%</div><div class="l">On Time</div></div>
+                <div class="hero-stat"><div class="v">4.7★</div><div class="l">Avg Rating</div></div>
+                <div class="hero-stat"><div class="v">RM 12k</div><div class="l">Saved</div></div>
+              </div>
+              <button class="hero-cta">Open report →</button>
+            </div>
+
+            <!-- 2x2 stat grid (bank-app style) -->
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="icon-tag" style="background: var(--c-blue);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18"/></svg></div>
+                <div class="v">23</div>
+                <div class="l">Sessions this week</div>
+                <div class="delta up">↑ 12% vs last week</div>
+              </div>
+              <div class="stat-card">
+                <div class="icon-tag" style="background: var(--c-green);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/></svg></div>
+                <div class="v">87%</div>
+                <div class="l">Attendance rate</div>
+                <div class="delta up">↑ 3%</div>
+              </div>
+              <div class="stat-card">
+                <div class="icon-tag" style="background: var(--c-purple);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+                <div class="v">12</div>
+                <div class="l">Active trainers</div>
+                <div class="delta up">+2 new</div>
+              </div>
+              <div class="stat-card">
+                <div class="icon-tag" style="background: var(--c-orange);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <div class="v">RM 8.2k</div>
+                <div class="l">Revenue this week</div>
+                <div class="delta down">↓ 2%</div>
+              </div>
+            </div>
+
+            <!-- Quick pill row -->
+            <div class="pill-row" style="margin-top: 16px;">
+              <button class="pill-chip" style="background: #1e293b; color: white; border-color: transparent;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve All
+              </button>
+              <button class="pill-chip primary" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; border: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                New Session
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Team
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg>
+                Filter
+              </button>
+            </div>
+
+            <!-- Activity -->
+            <div class="sec-h">
+              <div class="t">Bookings</div>
+              <div class="see">All bookings →</div>
+            </div>
+            <div class="list">
+              <div class="list-item">
+                <div class="av" style="background: linear-gradient(135deg, #fb923c, #c2410c)">AR</div>
+                <div class="meta">
+                  <div class="nm">Aiman Razak</div>
+                  <div class="sub">Onboarding 101 · Tomorrow 10:00 AM</div>
+                </div>
+                <div class="right">
+                  <span class="status-pill info">Pending</span>
+                  <span style="font-size: 10px; color: var(--muted);">RM 1,200</span>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="av" style="background: linear-gradient(135deg, #c084fc, #7e22ce)">LP</div>
+                <div class="meta">
+                  <div class="nm">Lina Putri</div>
+                  <div class="sub">Compliance · Thu 2:30 PM</div>
+                </div>
+                <div class="right">
+                  <span class="status-pill warn">Conflict</span>
+                  <span style="font-size: 10px; color: var(--muted);">RM 2,400</span>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="av" style="background: linear-gradient(135deg, #38bdf8, #0369a1)">DV</div>
+                <div class="meta">
+                  <div class="nm">Daniel Voon</div>
+                  <div class="sub">Leadership Lab · Fri 9:00 AM</div>
+                </div>
+                <div class="right">
+                  <span class="status-pill ok">Confirmed</span>
+                  <span style="font-size: 10px; color: var(--muted);">RM 3,800</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Insight card -->
+            <div class="ai-card">
+              <div class="label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                AI INSIGHT
+              </div>
+              <h4>You could save 4 hours/week</h4>
+              <p>Enable auto-approval for trainers with ≥4.5★ rating and returning clients.</p>
+              <button class="ai-cta">Try it →</button>
+            </div>
+
+            <button class="cta-pill">Open Full Dashboard →</button>
+          </div>
+
+          <!-- Bottom dock: 4 tabs -->
+          <nav class="dock">
+            <div class="tab active">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3L12 3Z"/></svg>
+              Home
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg>
+              Cards
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+              Activity
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+              Profile
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="margin-top: 36px; text-align: center; color: var(--muted); font-size: 13px;">
+    All three use bottom dock nav, hero card, 4-tile quick actions, and pill buttons — only the layout DNA differs.
+    Pick the vibe and I'll port it into <code>HRDashboardClient.tsx</code>.
+  </p>
+
+</div>
+
+<script>
+  // Tab switching (visual only — just toggles active class)
+  document.querySelectorAll('.dock').forEach(dock => {
+    dock.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        dock.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  });
+
+  // QA tiles & pill chips: simple press feedback
+  document.querySelectorAll('.qa-tile, .qa-square, .pill-chip').forEach(t => {
+    t.addEventListener('click', () => {
+      t.style.transform = 'scale(0.96)';
+      setTimeout(() => t.style.transform = '', 130);
+    });
+  });
+
+  // CTA pill: ripple-like brief feedback
+  document.querySelectorAll('.cta-pill, .hero-cta, .ai-cta').forEach(b => {
+    b.addEventListener('click', e => {
+      const r = document.createElement('span');
+      const rect = b.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      r.style.cssText = `position:absolute;border-radius:50%;background:rgba(255,255,255,0.4);width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;pointer-events:none;transform:scale(0);transition:transform .5s,opacity .6s;opacity:1`;
+      b.style.position = 'relative';
+      b.style.overflow = 'hidden';
+      b.appendChild(r);
+      requestAnimationFrame(() => { r.style.transform = 'scale(2)'; r.style.opacity = '0'; });
+      setTimeout(() => r.remove(), 700);
+    });
+  });
+</script>
+</body>
+</html>

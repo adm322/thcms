@@ -5,6 +5,8 @@ import { GET as getFeatured } from "@/app/api/hr/featured/route";
 import { GET as getAiRecs } from "@/app/api/ai/recommend/route";
 import { GET as getActions } from "@/app/api/hr/actions/route";
 import { NextRequest } from "next/server";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +21,12 @@ async function safeFetch<T>(fn: () => Promise<Response>, fallback: T): Promise<T
 }
 
 export default async function HRDashboardPage() {
+  const session = await getSession();
+  if (!session) redirect("/login");
+  if (session.role !== "HR") redirect("/");
+
   const stats = await safeFetch(() => getStats(), { 
-    employeesCount: 0, activeBookingsCount: 0, pendingClaimsCount: 0, completionRate: 0,
+    employeesCount: 0, activeBookingsCount: 0, completionRate: 0,
     upcomingClasses: 0, alerts: 0, hrdfUsage: 0
   });
   const calData = await safeFetch(() => getCalendar(), { bookings: [], upcoming: [], monthlyStats: {} });

@@ -1,0 +1,43 @@
+﻿version: 1
+plan:
+  name: TrainHub Verification
+  max_concurrency: 1
+  max_consecutive_failures: 1
+  max_cycles: 1
+  auto_reject_retries: 1
+  verifier_config:
+    default_verifiers: []
+    audit_sample_rate: 0.0
+tasks:
+  - id: verify-trainhub
+    title: Verify TrainHub codebase
+    role: verify-as-task
+    prompt: |
+      Run a full verification of the TrainHub codebase at E:\Project Repo\thcms.
+
+      Context:
+      - Stack: Next.js 16, Prisma + SQLite, React, TypeScript, Tailwind CSS
+      - Type check: npx tsc --noEmit
+      - Test command: node --experimental-test-module-mocks --import tsx --test
+
+      Steps:
+      1. Run `npx tsc --noEmit` — must pass with zero errors
+      2. Run `git diff --name-only HEAD` to see recently changed files and focus there
+      3. Scan TypeScript files for common issues:
+         - Missing `.take()` on Prisma queries
+         - N+1 includes (queries inside loops)
+         - API routes missing try/catch + error responses
+         - React components with useEffect intervals missing cleanup
+         - Type safety issues (any leaks, missing null checks)
+         - Unused imports or variables
+
+      Output format:
+      ```
+      VERIFIED ✅ — [what passed]
+      CONCERN ⚠️ — [file:line]: [issue] — suggest fix
+      BUG ❌ — [file:line]: [definite problem] — [fix]
+      ```
+
+      End with `VERDICT: PASS` or `VERDICT: FAIL` with a summary.
+    assigned_to: verifier
+    max_retries: 1
