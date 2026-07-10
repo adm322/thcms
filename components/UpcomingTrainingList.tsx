@@ -79,7 +79,7 @@ const TrainingItem = React.memo(function TrainingItem({
           {/* Date badge */}
           <div
             className={cn(
-              "flex-shrink-0 flex flex-col items-center justify-center rounded-lg px-3 py-2 min-w-[56px] text-center",
+              "flex-shrink-0 flex flex-col items-center justify-center rounded-lg px-3 py-2 min-w-14 text-center",
               isToday ? "bg-primary text-primary-foreground" : "bg-muted"
             )}
           >

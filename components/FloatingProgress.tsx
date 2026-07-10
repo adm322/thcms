@@ -57,7 +57,7 @@ export function FloatingProgress({ data, onDismiss }: FloatingProgressProps) {
       aria-live="polite"
       className={`
         fixed bottom-6 right-6 z-[100] flex items-start gap-3
-        rounded-2xl shadow-2xl border p-4 max-w-[320px]
+        rounded-2xl shadow-2xl border p-4 max-w-xs
         backdrop-blur-md transition-all duration-300
         ${isError
           ? "bg-rose-50/95 dark:bg-rose-950/80 border-rose-200 dark:border-rose-800/60"
