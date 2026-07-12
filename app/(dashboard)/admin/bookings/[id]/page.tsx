@@ -111,7 +111,7 @@ export default function AdminBookingDetail({ params }: { params: Promise<{ id: s
                 {booking.meetingLink && (
                   <div className="flex items-center gap-2 text-xs">
                     <span className="text-muted-foreground">Virtual Link:</span>
-                    <a href={booking.meetingLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-mono truncate max-w-[150px] sm:max-w-none">
+                    <a href={booking.meetingLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-mono truncate max-w-40 sm:max-w-none">
                       {booking.meetingLink}
                     </a>
                   </div>

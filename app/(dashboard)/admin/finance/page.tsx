@@ -138,7 +138,7 @@ function InvoiceTable({ invoices }: { invoices: any[] }) {
                 <tr key={inv.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-4 py-3 font-medium text-xs">{inv.invoiceNumber}</td>
                   <td className="px-4 py-3 text-xs text-muted-foreground">{inv.companyName}</td>
-                  <td className="px-4 py-3 text-xs max-w-[160px] truncate">{inv.programTitle}</td>
+                  <td className="px-4 py-3 text-xs max-w-40 truncate">{inv.programTitle}</td>
                   <td className="px-4 py-3 text-xs text-right tabular-nums">RM {inv.programFee?.toLocaleString()}</td>
                   <td className="px-4 py-3 text-xs text-right tabular-nums">RM {inv.trainerFee?.toLocaleString()}</td>
                   <td className="px-4 py-3 text-xs text-right tabular-nums text-violet-600">RM {inv.platformFee?.toLocaleString()}</td>

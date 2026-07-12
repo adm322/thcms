@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Search, MapPin, Clock, Users, Star, GraduationCap, ChevronRight } from "lucide-react";
 
 const CATEGORIES = ["All", "Leadership", "Technical", "Soft Skills", "Compliance", "Team Building", "HR Operations"];
@@ -149,11 +150,13 @@ export function MarketplaceClient() {
                   >
                     <span className="text-2xl opacity-30">{icon}</span>
                     {p.thumbnailUrl && (
-                      <img
+                      <Image
                         src={p.thumbnailUrl}
                         alt=""
+                        fill
+                        sizes="64px"
+                        priority={true}
                         className="absolute inset-0 w-full h-full object-cover"
-                        loading="lazy"
                         onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                       />
                     )}
