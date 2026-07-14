@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Search, MapPin, Clock, Users, Star, GraduationCap, ChevronRight } from "lucide-react";
 
 const CATEGORIES = ["All", "Leadership", "Technical", "Soft Skills", "Compliance", "Team Building", "HR Operations"];
@@ -133,7 +134,7 @@ export function MarketplaceClient() {
         </div>
       ) : (
         <div className="space-y-3">
-          {programs.map((p) => {
+          {programs.map((p, i) => {
             const gradient = categoryGradients[p.category] || "from-gray-500 to-gray-600";
             const icon = categoryIcons[p.category] || "📚";
             return (
@@ -149,12 +150,14 @@ export function MarketplaceClient() {
                   >
                     <span className="text-2xl opacity-30">{icon}</span>
                     {p.thumbnailUrl && (
-                      <img
+                      <Image
                         src={p.thumbnailUrl}
                         alt=""
-                        className="absolute inset-0 w-full h-full object-cover"
-                        loading="lazy"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                        priority={i < 4}
+                        onError={(e) => { (e.target as HTMLElement).style.display = "none"; }}
                       />
                     )}
                   </div>
