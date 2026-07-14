@@ -2,7 +2,8 @@ import { prisma } from '../lib/prisma';
 import * as crypto from 'crypto';
 
 async function main() {
-  const hash = crypto.createHash("sha256").update("password123").digest("hex");
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = `scrypt:${salt}:${crypto.scryptSync("password123", salt, 64).toString("hex")}`;
 
   // Find Petronas company to link the participant to
   const petronas = await prisma.company.findFirst({
