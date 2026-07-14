@@ -5,6 +5,10 @@ dev.db-journal
 .env.local
 *.log
 
+# chrome-log-server — generated error logs (do not commit)
+chrome-log-server/logs/
+chrome-log-server/logs/latest.log
+
 # InsForge & AI agent skills
 .insforge
 .agent
