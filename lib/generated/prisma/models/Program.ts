@@ -54,6 +54,7 @@ export type ProgramMinAggregateOutputType = {
   featuredAt: Date | null
   proposalUrl: string | null
   proposalLabel: string | null
+  proposalContent: string | null
   thumbnailUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -75,6 +76,7 @@ export type ProgramMaxAggregateOutputType = {
   featuredAt: Date | null
   proposalUrl: string | null
   proposalLabel: string | null
+  proposalContent: string | null
   thumbnailUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -96,6 +98,7 @@ export type ProgramCountAggregateOutputType = {
   featuredAt: number
   proposalUrl: number
   proposalLabel: number
+  proposalContent: number
   thumbnailUrl: number
   createdAt: number
   updatedAt: number
@@ -131,6 +134,7 @@ export type ProgramMinAggregateInputType = {
   featuredAt?: true
   proposalUrl?: true
   proposalLabel?: true
+  proposalContent?: true
   thumbnailUrl?: true
   createdAt?: true
   updatedAt?: true
@@ -152,6 +156,7 @@ export type ProgramMaxAggregateInputType = {
   featuredAt?: true
   proposalUrl?: true
   proposalLabel?: true
+  proposalContent?: true
   thumbnailUrl?: true
   createdAt?: true
   updatedAt?: true
@@ -173,6 +178,7 @@ export type ProgramCountAggregateInputType = {
   featuredAt?: true
   proposalUrl?: true
   proposalLabel?: true
+  proposalContent?: true
   thumbnailUrl?: true
   createdAt?: true
   updatedAt?: true
@@ -281,6 +287,7 @@ export type ProgramGroupByOutputType = {
   featuredAt: Date | null
   proposalUrl: string | null
   proposalLabel: string | null
+  proposalContent: string | null
   thumbnailUrl: string | null
   createdAt: Date
   updatedAt: Date
@@ -325,6 +332,7 @@ export type ProgramWhereInput = {
   featuredAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   proposalUrl?: Prisma.StringNullableFilter<"Program"> | string | null
   proposalLabel?: Prisma.StringNullableFilter<"Program"> | string | null
+  proposalContent?: Prisma.StringNullableFilter<"Program"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Program"> | Date | string
@@ -333,6 +341,7 @@ export type ProgramWhereInput = {
   bookings?: Prisma.BookingListRelationFilter
   votes?: Prisma.ProgramVoteListRelationFilter
   itinerary?: Prisma.ItineraryItemListRelationFilter
+  studio?: Prisma.XOR<Prisma.LearningStudioNullableScalarRelationFilter, Prisma.LearningStudioWhereInput> | null
 }
 
 export type ProgramOrderByWithRelationInput = {
@@ -351,6 +360,7 @@ export type ProgramOrderByWithRelationInput = {
   featuredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   proposalUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   proposalLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  proposalContent?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -359,6 +369,7 @@ export type ProgramOrderByWithRelationInput = {
   bookings?: Prisma.BookingOrderByRelationAggregateInput
   votes?: Prisma.ProgramVoteOrderByRelationAggregateInput
   itinerary?: Prisma.ItineraryItemOrderByRelationAggregateInput
+  studio?: Prisma.LearningStudioOrderByWithRelationInput
 }
 
 export type ProgramWhereUniqueInput = Prisma.AtLeast<{
@@ -380,6 +391,7 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   featuredAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   proposalUrl?: Prisma.StringNullableFilter<"Program"> | string | null
   proposalLabel?: Prisma.StringNullableFilter<"Program"> | string | null
+  proposalContent?: Prisma.StringNullableFilter<"Program"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Program"> | Date | string
@@ -388,6 +400,7 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   bookings?: Prisma.BookingListRelationFilter
   votes?: Prisma.ProgramVoteListRelationFilter
   itinerary?: Prisma.ItineraryItemListRelationFilter
+  studio?: Prisma.XOR<Prisma.LearningStudioNullableScalarRelationFilter, Prisma.LearningStudioWhereInput> | null
 }, "id">
 
 export type ProgramOrderByWithAggregationInput = {
@@ -406,6 +419,7 @@ export type ProgramOrderByWithAggregationInput = {
   featuredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   proposalUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   proposalLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  proposalContent?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -435,6 +449,7 @@ export type ProgramScalarWhereWithAggregatesInput = {
   featuredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
   proposalUrl?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
   proposalLabel?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  proposalContent?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
   thumbnailUrl?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Program"> | Date | string
@@ -455,6 +470,7 @@ export type ProgramCreateInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -463,6 +479,7 @@ export type ProgramCreateInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateInput = {
@@ -481,6 +498,7 @@ export type ProgramUncheckedCreateInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -488,6 +506,7 @@ export type ProgramUncheckedCreateInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioUncheckedCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramUpdateInput = {
@@ -505,6 +524,7 @@ export type ProgramUpdateInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -513,6 +533,7 @@ export type ProgramUpdateInput = {
   bookings?: Prisma.BookingUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateInput = {
@@ -531,6 +552,7 @@ export type ProgramUncheckedUpdateInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -538,6 +560,7 @@ export type ProgramUncheckedUpdateInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUncheckedUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUncheckedUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramCreateManyInput = {
@@ -556,6 +579,7 @@ export type ProgramCreateManyInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -576,6 +600,7 @@ export type ProgramUpdateManyMutationInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -597,6 +622,7 @@ export type ProgramUncheckedUpdateManyInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -628,6 +654,7 @@ export type ProgramCountOrderByAggregateInput = {
   featuredAt?: Prisma.SortOrder
   proposalUrl?: Prisma.SortOrder
   proposalLabel?: Prisma.SortOrder
+  proposalContent?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -655,6 +682,7 @@ export type ProgramMaxOrderByAggregateInput = {
   featuredAt?: Prisma.SortOrder
   proposalUrl?: Prisma.SortOrder
   proposalLabel?: Prisma.SortOrder
+  proposalContent?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -676,6 +704,7 @@ export type ProgramMinOrderByAggregateInput = {
   featuredAt?: Prisma.SortOrder
   proposalUrl?: Prisma.SortOrder
   proposalLabel?: Prisma.SortOrder
+  proposalContent?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -732,10 +761,6 @@ export type ProgramUncheckedUpdateManyWithoutTrainerNestedInput = {
   update?: Prisma.ProgramUpdateWithWhereUniqueWithoutTrainerInput | Prisma.ProgramUpdateWithWhereUniqueWithoutTrainerInput[]
   updateMany?: Prisma.ProgramUpdateManyWithWhereWithoutTrainerInput | Prisma.ProgramUpdateManyWithWhereWithoutTrainerInput[]
   deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -798,6 +823,20 @@ export type ProgramUpdateOneRequiredWithoutItineraryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramUpdateToOneWithWhereWithoutItineraryInput, Prisma.ProgramUpdateWithoutItineraryInput>, Prisma.ProgramUncheckedUpdateWithoutItineraryInput>
 }
 
+export type ProgramCreateNestedOneWithoutStudioInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutStudioInput, Prisma.ProgramUncheckedCreateWithoutStudioInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutStudioInput
+  connect?: Prisma.ProgramWhereUniqueInput
+}
+
+export type ProgramUpdateOneRequiredWithoutStudioNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutStudioInput, Prisma.ProgramUncheckedCreateWithoutStudioInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutStudioInput
+  upsert?: Prisma.ProgramUpsertWithoutStudioInput
+  connect?: Prisma.ProgramWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramUpdateToOneWithWhereWithoutStudioInput, Prisma.ProgramUpdateWithoutStudioInput>, Prisma.ProgramUncheckedUpdateWithoutStudioInput>
+}
+
 export type ProgramCreateWithoutTrainerInput = {
   id?: string
   title: string
@@ -813,6 +852,7 @@ export type ProgramCreateWithoutTrainerInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -820,6 +860,7 @@ export type ProgramCreateWithoutTrainerInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutTrainerInput = {
@@ -837,6 +878,7 @@ export type ProgramUncheckedCreateWithoutTrainerInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -844,6 +886,7 @@ export type ProgramUncheckedCreateWithoutTrainerInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioUncheckedCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutTrainerInput = {
@@ -890,6 +933,7 @@ export type ProgramScalarWhereInput = {
   featuredAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   proposalUrl?: Prisma.StringNullableFilter<"Program"> | string | null
   proposalLabel?: Prisma.StringNullableFilter<"Program"> | string | null
+  proposalContent?: Prisma.StringNullableFilter<"Program"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Program"> | Date | string
@@ -910,6 +954,7 @@ export type ProgramCreateWithoutModulesInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -917,6 +962,7 @@ export type ProgramCreateWithoutModulesInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutModulesInput = {
@@ -935,12 +981,14 @@ export type ProgramUncheckedCreateWithoutModulesInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioUncheckedCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutModulesInput = {
@@ -974,6 +1022,7 @@ export type ProgramUpdateWithoutModulesInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -981,6 +1030,7 @@ export type ProgramUpdateWithoutModulesInput = {
   bookings?: Prisma.BookingUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutModulesInput = {
@@ -999,12 +1049,14 @@ export type ProgramUncheckedUpdateWithoutModulesInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUncheckedUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUncheckedUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramCreateWithoutBookingsInput = {
@@ -1022,6 +1074,7 @@ export type ProgramCreateWithoutBookingsInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1029,6 +1082,7 @@ export type ProgramCreateWithoutBookingsInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutBookingsInput = {
@@ -1047,12 +1101,14 @@ export type ProgramUncheckedCreateWithoutBookingsInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioUncheckedCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutBookingsInput = {
@@ -1086,6 +1142,7 @@ export type ProgramUpdateWithoutBookingsInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1093,6 +1150,7 @@ export type ProgramUpdateWithoutBookingsInput = {
   modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutBookingsInput = {
@@ -1111,12 +1169,14 @@ export type ProgramUncheckedUpdateWithoutBookingsInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUncheckedUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUncheckedUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramCreateWithoutVotesInput = {
@@ -1134,6 +1194,7 @@ export type ProgramCreateWithoutVotesInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1141,6 +1202,7 @@ export type ProgramCreateWithoutVotesInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
   bookings?: Prisma.BookingCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutVotesInput = {
@@ -1159,12 +1221,14 @@ export type ProgramUncheckedCreateWithoutVotesInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutProgramInput
   itinerary?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioUncheckedCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutVotesInput = {
@@ -1198,6 +1262,7 @@ export type ProgramUpdateWithoutVotesInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1205,6 +1270,7 @@ export type ProgramUpdateWithoutVotesInput = {
   modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutVotesInput = {
@@ -1223,12 +1289,14 @@ export type ProgramUncheckedUpdateWithoutVotesInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUncheckedUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUncheckedUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramCreateWithoutItineraryInput = {
@@ -1246,6 +1314,7 @@ export type ProgramCreateWithoutItineraryInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1253,6 +1322,7 @@ export type ProgramCreateWithoutItineraryInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
   bookings?: Prisma.BookingCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutItineraryInput = {
@@ -1271,12 +1341,14 @@ export type ProgramUncheckedCreateWithoutItineraryInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutProgramInput
   votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutProgramInput
+  studio?: Prisma.LearningStudioUncheckedCreateNestedOneWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutItineraryInput = {
@@ -1310,6 +1382,7 @@ export type ProgramUpdateWithoutItineraryInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1317,6 +1390,7 @@ export type ProgramUpdateWithoutItineraryInput = {
   modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutItineraryInput = {
@@ -1335,12 +1409,134 @@ export type ProgramUncheckedUpdateWithoutItineraryInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUncheckedUpdateOneWithoutProgramNestedInput
+}
+
+export type ProgramCreateWithoutStudioInput = {
+  id?: string
+  title: string
+  description: string
+  category: string
+  durationHours?: number
+  maxParticipants?: number
+  pricePerPax?: number
+  locationType?: string
+  syllabus?: string | null
+  status?: string
+  featured?: boolean
+  featuredAt?: Date | string | null
+  proposalUrl?: string | null
+  proposalLabel?: string | null
+  proposalContent?: string | null
+  thumbnailUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  trainer: Prisma.UserCreateNestedOneWithoutProgramsInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutProgramInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutProgramInput
+  votes?: Prisma.ProgramVoteCreateNestedManyWithoutProgramInput
+  itinerary?: Prisma.ItineraryItemCreateNestedManyWithoutProgramInput
+}
+
+export type ProgramUncheckedCreateWithoutStudioInput = {
+  id?: string
+  trainerId: string
+  title: string
+  description: string
+  category: string
+  durationHours?: number
+  maxParticipants?: number
+  pricePerPax?: number
+  locationType?: string
+  syllabus?: string | null
+  status?: string
+  featured?: boolean
+  featuredAt?: Date | string | null
+  proposalUrl?: string | null
+  proposalLabel?: string | null
+  proposalContent?: string | null
+  thumbnailUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutProgramInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutProgramInput
+  votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutProgramInput
+  itinerary?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutProgramInput
+}
+
+export type ProgramCreateOrConnectWithoutStudioInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutStudioInput, Prisma.ProgramUncheckedCreateWithoutStudioInput>
+}
+
+export type ProgramUpsertWithoutStudioInput = {
+  update: Prisma.XOR<Prisma.ProgramUpdateWithoutStudioInput, Prisma.ProgramUncheckedUpdateWithoutStudioInput>
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutStudioInput, Prisma.ProgramUncheckedCreateWithoutStudioInput>
+  where?: Prisma.ProgramWhereInput
+}
+
+export type ProgramUpdateToOneWithWhereWithoutStudioInput = {
+  where?: Prisma.ProgramWhereInput
+  data: Prisma.XOR<Prisma.ProgramUpdateWithoutStudioInput, Prisma.ProgramUncheckedUpdateWithoutStudioInput>
+}
+
+export type ProgramUpdateWithoutStudioInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  durationHours?: Prisma.FloatFieldUpdateOperationsInput | number
+  maxParticipants?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerPax?: Prisma.FloatFieldUpdateOperationsInput | number
+  locationType?: Prisma.StringFieldUpdateOperationsInput | string
+  syllabus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trainer?: Prisma.UserUpdateOneRequiredWithoutProgramsNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutProgramNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutProgramNestedInput
+  votes?: Prisma.ProgramVoteUpdateManyWithoutProgramNestedInput
+  itinerary?: Prisma.ItineraryItemUpdateManyWithoutProgramNestedInput
+}
+
+export type ProgramUncheckedUpdateWithoutStudioInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  trainerId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  durationHours?: Prisma.FloatFieldUpdateOperationsInput | number
+  maxParticipants?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerPax?: Prisma.FloatFieldUpdateOperationsInput | number
+  locationType?: Prisma.StringFieldUpdateOperationsInput | string
+  syllabus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutProgramNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutProgramNestedInput
+  votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutProgramNestedInput
+  itinerary?: Prisma.ItineraryItemUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramCreateManyTrainerInput = {
@@ -1358,6 +1554,7 @@ export type ProgramCreateManyTrainerInput = {
   featuredAt?: Date | string | null
   proposalUrl?: string | null
   proposalLabel?: string | null
+  proposalContent?: string | null
   thumbnailUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1378,6 +1575,7 @@ export type ProgramUpdateWithoutTrainerInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1385,6 +1583,7 @@ export type ProgramUpdateWithoutTrainerInput = {
   bookings?: Prisma.BookingUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutTrainerInput = {
@@ -1402,6 +1601,7 @@ export type ProgramUncheckedUpdateWithoutTrainerInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1409,6 +1609,7 @@ export type ProgramUncheckedUpdateWithoutTrainerInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutProgramNestedInput
   votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutProgramNestedInput
   itinerary?: Prisma.ItineraryItemUncheckedUpdateManyWithoutProgramNestedInput
+  studio?: Prisma.LearningStudioUncheckedUpdateOneWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateManyWithoutTrainerInput = {
@@ -1426,6 +1627,7 @@ export type ProgramUncheckedUpdateManyWithoutTrainerInput = {
   featuredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   proposalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proposalLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1505,6 +1707,7 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   featuredAt?: boolean
   proposalUrl?: boolean
   proposalLabel?: boolean
+  proposalContent?: boolean
   thumbnailUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1513,6 +1716,7 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   bookings?: boolean | Prisma.Program$bookingsArgs<ExtArgs>
   votes?: boolean | Prisma.Program$votesArgs<ExtArgs>
   itinerary?: boolean | Prisma.Program$itineraryArgs<ExtArgs>
+  studio?: boolean | Prisma.Program$studioArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
 
@@ -1532,6 +1736,7 @@ export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   featuredAt?: boolean
   proposalUrl?: boolean
   proposalLabel?: boolean
+  proposalContent?: boolean
   thumbnailUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1554,6 +1759,7 @@ export type ProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   featuredAt?: boolean
   proposalUrl?: boolean
   proposalLabel?: boolean
+  proposalContent?: boolean
   thumbnailUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1576,18 +1782,20 @@ export type ProgramSelectScalar = {
   featuredAt?: boolean
   proposalUrl?: boolean
   proposalLabel?: boolean
+  proposalContent?: boolean
   thumbnailUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trainerId" | "title" | "description" | "category" | "durationHours" | "maxParticipants" | "pricePerPax" | "locationType" | "syllabus" | "status" | "featured" | "featuredAt" | "proposalUrl" | "proposalLabel" | "thumbnailUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["program"]>
+export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trainerId" | "title" | "description" | "category" | "durationHours" | "maxParticipants" | "pricePerPax" | "locationType" | "syllabus" | "status" | "featured" | "featuredAt" | "proposalUrl" | "proposalLabel" | "proposalContent" | "thumbnailUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["program"]>
 export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   trainer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   modules?: boolean | Prisma.Program$modulesArgs<ExtArgs>
   bookings?: boolean | Prisma.Program$bookingsArgs<ExtArgs>
   votes?: boolean | Prisma.Program$votesArgs<ExtArgs>
   itinerary?: boolean | Prisma.Program$itineraryArgs<ExtArgs>
+  studio?: boolean | Prisma.Program$studioArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProgramIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1605,6 +1813,7 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     bookings: Prisma.$BookingPayload<ExtArgs>[]
     votes: Prisma.$ProgramVotePayload<ExtArgs>[]
     itinerary: Prisma.$ItineraryItemPayload<ExtArgs>[]
+    studio: Prisma.$LearningStudioPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1622,6 +1831,10 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     featuredAt: Date | null
     proposalUrl: string | null
     proposalLabel: string | null
+    /**
+     * * AI-generated proposal document content (executive summary, pricing, timeline, trainer bio).
+     */
+    proposalContent: string | null
     thumbnailUrl: string | null
     createdAt: Date
     updatedAt: Date
@@ -2024,6 +2237,7 @@ export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.
   bookings<T extends Prisma.Program$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   votes<T extends Prisma.Program$votesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$votesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   itinerary<T extends Prisma.Program$itineraryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$itineraryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItineraryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  studio<T extends Prisma.Program$studioArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$studioArgs<ExtArgs>>): Prisma.Prisma__LearningStudioClient<runtime.Types.Result.GetResult<Prisma.$LearningStudioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2068,6 +2282,7 @@ export interface ProgramFieldRefs {
   readonly featuredAt: Prisma.FieldRef<"Program", 'DateTime'>
   readonly proposalUrl: Prisma.FieldRef<"Program", 'String'>
   readonly proposalLabel: Prisma.FieldRef<"Program", 'String'>
+  readonly proposalContent: Prisma.FieldRef<"Program", 'String'>
   readonly thumbnailUrl: Prisma.FieldRef<"Program", 'String'>
   readonly createdAt: Prisma.FieldRef<"Program", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Program", 'DateTime'>
@@ -2563,6 +2778,25 @@ export type Program$itineraryArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ItineraryItemScalarFieldEnum | Prisma.ItineraryItemScalarFieldEnum[]
+}
+
+/**
+ * Program.studio
+ */
+export type Program$studioArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningStudio
+   */
+  select?: Prisma.LearningStudioSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningStudio
+   */
+  omit?: Prisma.LearningStudioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningStudioInclude<ExtArgs> | null
+  where?: Prisma.LearningStudioWhereInput
 }
 
 /**

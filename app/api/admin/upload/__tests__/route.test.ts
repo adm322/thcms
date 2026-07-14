@@ -31,7 +31,7 @@ test("POST returns 400 for invalid form data", async () => {
   });
   request.formData = async () => { throw new Error("Invalid format"); };
 
-  const response = await POST(request);
+  const response = await POST(request, { params: Promise.resolve({}) });
   assert.equal(response.status, 400);
 
   const json = await response.json();

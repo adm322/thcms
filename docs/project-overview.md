@@ -7,7 +7,7 @@
 TrainHub is a two-sided platform:
 - **HR Departments** browse programs, book training, manage employees, run evaluations, plan annual training budgets
 - **Training Vendors** publish programs, build quizzes, manage availability, track earnings
-- **Platform Admin** oversees bookings, approves training plans, manages reimbursements, tracks invoices
+- **Platform Admin** oversees bookings, approves training plans, tracks invoices
 
 ## Quick Start
 
@@ -49,6 +49,7 @@ Open **http://localhost:3000**
 - **Messages Inbox** — Split-pane chat with trainers
 - Leave management, attendance tracking, claims management
 - Vote & Request, Support Tickets, AI recommendations
+- **📱 Mobile view** — Full-featured mobile dashboard at `/m` with employee management, booking wizard, calendar, and QR code display
 
 ### For Training Vendors
 - **Program Builder** — 3-step wizard to create programs with modules, quizzes, materials
@@ -57,21 +58,31 @@ Open **http://localhost:3000**
 - **Messages Inbox** — Chat with HR departments
 - **Earnings Dashboard** — Revenue tracking with breakdown
 - **Smart Actions** — Upcoming training alerts, HRDF claim deadlines, zero-booking program warnings
+- **📱 Mobile view** — Program management, availability, earnings, and evaluations on mobile
 
 ### For Platform Admins
 - **Training Plans Oversight** — All-company view, approve/reject with reasons, add notes for HR
 - **Training Calendar** — Month/year views, color-coded by category, event click details
 - **Booking Management** — Training checklist (15 items), dual-party HRDF tracking
 - **Team Building Review** — Approve/reject requests with documents, HRDF tracking
-- Reimbursements, invoices, trainer directory, support tickets
+- Invoices, trainer directory, support tickets
+- Trainer invite flow with temp password generation
 - Sales & Finance dashboards with Recharts
 - Featured programs, changelog
+- **📱 Mobile view** — Bookings, programs, trainers, invoices, finance, and trainer invite wizard
+
+### For Participants
+- **Dashboard** — Upcoming classes, completed hours, quiz scores, certificates earned
+- **QR Scanner** — Scan to check in to classes
+- **Class detail** — Program info, modules, quiz access
+- **📱 Mobile-first** — `/m/participant` with full app-shell experience
 
 ## Tech Stack
-Next.js 16.2 • React 19 • TypeScript • Tailwind CSS v4 • shadcn/ui • Prisma 7 • SQLite • JWT (jose) • Recharts • jspdf • qrcode
+Next.js 16.2 • React 19 • TypeScript • Tailwind CSS v4 • shadcn/ui base-nova • Prisma 7 • SQLite • JWT (jose) • Recharts • jspdf • qrcode
 
-## Database
-24 Prisma models — Users, Companies, Programs, Modules, Quizzes, Questions, Materials, Bookings, Participants, Evaluations, Invoices, Reimbursements, Employees, Leaves, Attendance, Claims, Payroll, Messages, Reviews, ProgramVotes, SupportTickets, Changelog, TeamBuildingRequests, TrainerAvailabilities, TrainingPlanItems
-
-## Seed Data
-6 companies, 10 users, 12 programs, 72+ employees, 23 bookings, 19 training plan items, 12 evaluations, 18 invoices — full realistic Malaysian HR data
+## Architecture
+- **Desktop dashboard** at `/admin`, `/trainer`, `/hr`, `/participant` — sidebar layout with Vercel-inspired design
+- **Mobile dashboard** at `/m` — full-screen app shell with role-specific views, bypasses desktop sidebar
+- **Shared service layer** at `lib/services/` — data-fetching functions shared by API routes and pages (admin, hr, trainer services)
+- **Wizard component library** at `components/wizard/` — reusable stepper + navigation used by 4 mobile forms
+- **Login view selector** — users choose mobile or desktop dashboard at login, persisted in localStorage

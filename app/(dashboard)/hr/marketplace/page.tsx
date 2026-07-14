@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -130,7 +131,7 @@ export default function HRMarketplace() {
         </div>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {programs.map((p) => {
+          {programs.map((p, i) => {
             const gradient = categoryGradients[p.category] || "from-gray-500 to-gray-600";
             const icon = categoryIcons[p.category] || "📚";
             return (
@@ -143,21 +144,23 @@ export default function HRMarketplace() {
                     </div>
                     {/* Image overlay — hides gradient when loaded */}
                     {p.thumbnailUrl && (
-                      <img
+                      <Image
                         src={p.thumbnailUrl}
                         alt={p.title}
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={i < 3}
+                        onError={(e) => { (e.target as HTMLElement).style.display = "none"; }}
                       />
                     )}
-                    <div className="absolute top-3 left-3">
+                    <div className="absolute top-3 left-3 z-10">
                       <Badge className="bg-black/60 text-white border-0 text-[10px] backdrop-blur-sm">{p.category}</Badge>
                     </div>
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-3 right-3 z-10">
                       <Badge className="bg-black/60 text-white border-0 text-[10px] backdrop-blur-sm capitalize"><MapPin className="mr-1 h-2.5 w-2.5" />{p.locationType}</Badge>
                     </div>
-                    <div className="absolute bottom-3 right-3">
+                    <div className="absolute bottom-3 right-3 z-10">
                       <Badge className="bg-white/90 text-primary border-0 text-sm font-bold shadow-sm">RM {p.pricePerPax}</Badge>
                     </div>
                   </div>

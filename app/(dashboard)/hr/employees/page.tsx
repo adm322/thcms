@@ -106,7 +106,7 @@ export default function HREmployees() {
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="text-xs text-muted-foreground hidden sm:inline">{emp.email}</span>
-                    <Badge variant={emp.status === "ACTIVE" ? "default" : "secondary"} className="text-xs">{emp.status}</Badge>
+                    <Badge variant={emp.status === "ACTIVE" ? "status-success" : "status-neutral"} className="text-xs">{emp.status}</Badge>
                   </div>
                 </CardContent>
               </Card>

@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TrainHub Mobile — Admin / Trainer / Participant Mockups</title>
+<style>
+  :root {
+    --bg: #f3f5f9;
+    --bg-soft: #eef1f6;
+    --card: #ffffff;
+    --border: #e6eaf2;
+    --text: #0e1a2b;
+    --muted: #6b7a90;
+
+    --c-rose: #ef4444;
+
+    --shadow-sm: 0 2px 6px rgba(14, 26, 43, 0.06);
+    --shadow: 0 8px 20px -4px rgba(14, 26, 43, 0.10);
+    --shadow-fab: 0 14px 28px -8px rgba(0,0,0,0.4);
+    --radius-pill: 999px;
+  }
+  /* Admin palette — purple */
+  .phone-admin {
+    --brand: #8b5cf6;
+    --brand-deep: #6d28d9;
+    --brand-soft: #f3e8ff;
+    --shadow-fab: 0 14px 28px -8px rgba(139, 92, 246, 0.5);
+  }
+  /* Trainer palette — green/teal */
+  .phone-trainer {
+    --brand: #10c46c;
+    --brand-deep: #059669;
+    --brand-soft: #d1fae5;
+    --shadow-fab: 0 14px 28px -8px rgba(16, 196, 108, 0.5);
+  }
+  /* Participant palette — blue (CelcomDigi-leaning) */
+  .phone-participant {
+    --brand: #0ea5e9;
+    --brand-deep: #0369a1;
+    --brand-soft: #e0f2fe;
+    --shadow-fab: 0 14px 28px -8px rgba(14, 165, 233, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 36px 20px 80px; }
+  h1 { margin: 0 0 4px; font-size: 24px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 6px; font-size: 13px; max-width: 760px; }
+  .legend { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 28px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: white; border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 12px; color: var(--muted); box-shadow: var(--shadow-sm); }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+
+  .phone-col { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .phone-col h2 { margin: 0; font-size: 16px; letter-spacing: -0.01em; text-align: center; }
+  .phone-col h2 small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; margin-top: 2px; }
+
+  /* Phone shell */
+  .phone {
+    width: 380px;
+    height: 800px;
+    border-radius: 44px;
+    background: #0d1322;
+    padding: 12px;
+    box-shadow: 0 30px 60px -20px rgba(14, 26, 43, 0.45), inset 0 0 0 2px rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .screen {
+    width: 100%; height: 100%;
+    border-radius: 34px;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+  }
+
+  /* Status bar — dark blurred strip so white text shows on top of any scroll content underneath */
+  .status-bar {
+    flex-shrink: 0;
+    height: 50px;
+    padding: 14px 22px 6px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 14px; font-weight: 600;
+    color: white;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    z-index: 5;
+  }
+  .dynamic-island {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 90px; height: 26px; background: #000; border-radius: 18px;
+    z-index: 6;
+  }
+
+  /* Scroll */
+  .scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 14px 16px 24px;
+    scrollbar-width: none;
+  }
+  .scroll::-webkit-scrollbar { display: none; }
+
+  /* === Components === */
+
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    background: white;
+    border-radius: var(--radius-pill);
+    padding: 10px 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+  }
+  .search svg { width: 16px; height: 16px; color: var(--muted); }
+  .search input { flex: 1; border: none; outline: none; font: inherit; color: var(--text); background: transparent; min-width: 0; }
+  .search input::placeholder { color: var(--muted); }
+  .search .kbd { font-size: 10px; padding: 2px 6px; background: var(--bg); border-radius: 6px; color: var(--muted); }
+
+  .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 14px; }
+  .greet { line-height: 1.15; }
+  .greet .hi { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .greet .name { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #ffd28b, #ff7a45); display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; box-shadow: 0 2px 6px rgba(14,26,43,0.18); }
+  .icon-btn { width: 38px; height: 38px; border-radius: 50%; background: white; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm); color: var(--text); position: relative; }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn .badge { position: absolute; top: 6px; right: 6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 9px; background: var(--c-rose); color: white; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px white; }
+  .ic-stack { display: flex; gap: 8px; }
+
+  /* Hero */
+  .hero {
+    border-radius: 24px;
+    padding: 18px 18px 16px;
+    color: white;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+    box-shadow: 0 14px 30px -10px var(--shadow-fab);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before { content: ""; position: absolute; top: -50%; right: -30%; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 65%); pointer-events: none; }
+  .hero::after { content: ""; position: absolute; bottom: -60%; left: -20%; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 65%); pointer-events: none; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.88; }
+  .hero-title { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; margin-top: 6px; line-height: 1.2; }
+  .hero-title .count { display: inline-flex; align-items: baseline; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 700; margin-left: 4px; }
+  .hero-stats { display: flex; gap: 8px; margin-top: 14px; }
+  .hero-stat { background: rgba(255,255,255,0.16); border-radius: 12px; padding: 8px 10px; flex: 1; }
+  .hero-stat .v { font-size: 15px; font-weight: 800; line-height: 1.1; }
+  .hero-stat .l { font-size: 10px; opacity: 0.85; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 8px 14px; background: white; color: var(--brand-deep); border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; border: none; }
+
+  /* Scan hero (participant) */
+  .scan-hero {
+    background: linear-gradient(160deg, var(--brand-deep) 0%, var(--brand) 100%);
+    border-radius: 24px;
+    padding: 18px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 14px 30px -10px var(--shadow-fab);
+  }
+  .scan-hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2), transparent 50%); }
+  .scan-hero .eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.85; }
+  .scan-hero h3 { margin: 4px 0 14px; font-size: 18px; font-weight: 800; line-height: 1.2; }
+  .scan-cta {
+    width: 100%;
+    padding: 14px 18px;
+    background: white;
+    color: var(--brand-deep);
+    border: none;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .scan-cta svg { width: 20px; height: 20px; }
+  .scan-hint { font-size: 11px; opacity: 0.8; margin-top: 10px; text-align: center; }
+
+  /* Outlined action squares */
+  .qa-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
+  .qa-square { background: white; border: 1.5px solid var(--border); border-radius: 16px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text); font-size: 10px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .qa-square .ic { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--brand); }
+  .qa-square .ic svg { width: 22px; height: 22px; }
+  .qa-square:active, .qa-square.active { background: var(--brand-soft); border-color: var(--brand); }
+
+  /* Pill chips */
+  .pill-row { display: flex; gap: 8px; overflow-x: auto; margin-top: 16px; padding: 4px 0 8px; scrollbar-width: none; }
+  .pill-row::-webkit-scrollbar { display: none; }
+  .pill-chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; background: white; border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; color: var(--text); box-shadow: var(--shadow-sm); cursor: pointer; }
+  .pill-chip.primary { background: linear-gradient(135deg, var(--brand), var(--brand-deep)); color: white; border: none; }
+  .pill-chip.primary svg { color: white; }
+  .pill-chip svg { width: 14px; height: 14px; color: var(--muted); }
+
+  /* Section header */
+  .sec-h { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 10px; }
+  .sec-h .t { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .sec-h .see { font-size: 11px; font-weight: 700; color: var(--brand); }
+
+  /* Carousel */
+  .carousel { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px 10px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+  .carousel::-webkit-scrollbar { display: none; }
+  .carousel-item { flex-shrink: 0; width: 230px; border-radius: 20px; padding: 16px; background: white; box-shadow: var(--shadow-sm); scroll-snap-align: start; cursor: pointer; }
+  .carousel-item.gradient-a { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: #064e3b; }
+  .carousel-item.gradient-b { background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #1e3a8a; }
+  .carousel-item.gradient-c { background: linear-gradient(135deg, #fdf4ff, #fae8ff); color: #6b21a8; }
+  .carousel-item.gradient-warm { background: linear-gradient(135deg, #fff7ed, #fed7aa); color: #7c2d12; }
+  .carousel-item .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-pill); background: rgba(0,0,0,0.08); margin-bottom: 10px; }
+  .carousel-item h4 { margin: 0; font-size: 14px; font-weight: 700; line-height: 1.3; }
+  .carousel-item p { margin: 6px 0 0; font-size: 11px; line-height: 1.4; opacity: 0.78; }
+  .carousel-item .arrow { display: inline-flex; align-items: center; gap: 4px; margin-top: 12px; font-size: 11px; font-weight: 700; }
+
+  /* Timeline */
+  .timeline { display: flex; flex-direction: column; gap: 0; background: white; border-radius: 18px; padding: 4px 14px; box-shadow: var(--shadow-sm); }
+  .timeline-item { display: flex; gap: 12px; padding: 10px 0; }
+  .timeline-dot { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--bg-soft); color: var(--text); flex-shrink: 0; position: relative; }
+  .timeline-dot svg { width: 16px; height: 16px; }
+  .timeline-dot::after { content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); width: 2px; height: calc(100% + 20px); background: var(--border); }
+  .timeline-item:last-child .timeline-dot::after { display: none; }
+  .timeline-content { flex: 1; padding-top: 6px; }
+  .timeline-content .tt { font-size: 13px; font-weight: 700; line-height: 1.3; }
+  .timeline-content .ts { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Scan history card (participant) */
+  .scan-history {
+    background: white;
+    border-radius: 18px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .scan-history .qr-mini {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--brand-soft), white);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--brand);
+    flex-shrink: 0;
+  }
+  .scan-history .qr-mini svg { width: 26px; height: 26px; }
+  .scan-history .meta { flex: 1; min-width: 0; }
+  .scan-history .nm { font-size: 13px; font-weight: 700; line-height: 1.2; }
+  .scan-history .sub { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+  .status-pill { font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-pill); background: var(--bg-soft); color: var(--muted); }
+  .status-pill.ok { background: #d1fae5; color: #065f46; }
+  .status-pill.info { background: #dbeafe; color: #1e40af; }
+  .status-pill.warn { background: #fef3c7; color: #92400e; }
+
+  /* CTA pill */
+  .cta-pill { width: 100%; margin-top: 18px; padding: 14px 18px; background: linear-gradient(135deg, var(--brand), var(--brand-deep)); color: white; border: none; border-radius: var(--radius-pill); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 12px 24px -6px var(--shadow-fab); display: inline-flex; align-items: center; justify-content: center; gap: 8px; position: relative; overflow: hidden; }
+
+  /* === DOCK + FAB === */
+  .dock-wrap {
+    position: relative;
+    margin: 12px;
+    z-index: 6;
+  }
+  .dock {
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid rgba(230,234,242,0.9);
+    border-radius: 26px;
+    padding: 10px 6px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 80px 1fr 1fr;
+    align-items: center;
+    box-shadow: 0 14px 34px -10px rgba(14,26,43,0.20);
+    position: relative;
+  }
+  .dock .tab { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px 4px; color: var(--muted); font-size: 10px; font-weight: 600; border-radius: 14px; cursor: pointer; user-select: none; transition: color 0.18s; }
+  .dock .tab svg { width: 22px; height: 22px; }
+  .dock .tab.active { color: var(--brand); }
+  .dock .tab.active::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; margin-top: 2px; }
+  .tab-badge { position: absolute; top: 4px; min-width: 16px; height: 16px; padding: 0 4px; background: var(--c-rose); color: white; font-size: 9px; font-weight: 700; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px white; }
+
+  .fab {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+    color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 5px solid white;
+    box-shadow: var(--shadow-fab);
+    cursor: pointer;
+    margin: 0 auto;
+    transform: translateY(-26px);
+    transition: transform 0.15s;
+    position: relative;
+  }
+  .fab:hover { transform: translateY(-30px) scale(1.04); }
+  .fab:active { transform: translateY(-22px) scale(0.96); }
+  .fab svg { width: 26px; height: 26px; }
+  .fab::before { content: ""; position: absolute; inset: -8px; border-radius: 50%; background: linear-gradient(135deg, var(--brand), var(--brand-deep)); opacity: 0.25; filter: blur(8px); z-index: -1; }
+
+  /* FAB menu */
+  .fab-menu { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); border-radius: 22px; padding: 8px; display: none; flex-direction: column; box-shadow: 0 20px 40px -10px rgba(14,26,43,0.25); border: 1px solid var(--border); z-index: 10; }
+  .fab-menu.open { display: flex; animation: fadeUp 0.2s ease-out; }
+  @keyframes fadeUp { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  .fab-menu .item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; color: var(--text); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .fab-menu .item:hover { background: var(--bg); }
+  .fab-menu .item .ic { width: 32px; height: 32px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: inline-flex; align-items: center; justify-content: center; }
+  .fab-menu .item .ic svg { width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>TrainHub Mobile · Admin / Trainer / Participant</h1>
+  <p class="sub">Same v3 design system as HR — bottom dock + center FAB, outlined tile grid, pill chips, gradient hero. Each role gets its own brand color so users instantly know which dashboard they're looking at. Participant is scan-first: the QR scanner is the dominant action and the FAB opens the camera.</p>
+
+  <div class="legend">
+    <span class="pill"><span class="dot" style="background: #8b5cf6"></span> Admin · purple</span>
+    <span class="pill"><span class="dot" style="background: #10c46c"></span> Trainer · green</span>
+    <span class="pill"><span class="dot" style="background: #0ea5e9"></span> Participant · blue (scan-first)</span>
+    <span class="pill">v3 design system: hero + 4-tile grid + pills + carousel + timeline + dock w/ FAB</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- ============================== -->
+    <!-- ADMIN                            -->
+    <!-- ============================== -->
+    <div class="phone-col">
+      <h2>Admin · Platform Overseer<small>Org health · user mgmt · branches</small></h2>
+
+      <div class="phone phone-admin">
+        <div class="screen">
+
+          <div class="status-bar">
+            <span>9:41</span>
+            <div style="display: inline-flex; align-items: center; gap: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm16-2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l3.5-3.5a8.5 8.5 0 0 0-7 0L12 21Z"/></svg>
+              <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M22 10v4h-3v-4h3Z"/></svg>
+            </div>
+          </div>
+          <div class="dynamic-island"></div>
+
+          <div class="scroll">
+
+            <!-- Search -->
+            <div class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input placeholder="Search users, branches, programs…" />
+              <span class="kbd">⌘ K</span>
+            </div>
+
+            <!-- Top bar -->
+            <div class="top-bar">
+              <div class="greet">
+                <div class="hi">Platform Admin</div>
+                <div class="name">Hi, Hafiz 👋</div>
+              </div>
+              <div class="ic-stack">
+                <div class="icon-btn" style="position: relative;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+                  <span class="badge">12</span>
+                </div>
+                <div class="avatar" style="background: linear-gradient(135deg, #c084fc, #7e22ce);">HZ</div>
+              </div>
+            </div>
+
+            <!-- Hero: Org Health -->
+            <div class="hero">
+              <div class="hero-eyebrow">Org Health Score</div>
+              <div class="hero-title">92 / 100 <span class="count">↑ 4</span></div>
+              <div class="hero-stats">
+                <div class="hero-stat"><div class="v">3</div><div class="l">Branches</div></div>
+                <div class="hero-stat"><div class="v">42</div><div class="l">Trainers</div></div>
+                <div class="hero-stat"><div class="v">1.2k</div><div class="l">Members</div></div>
+              </div>
+              <button class="hero-cta">Open report →</button>
+            </div>
+
+            <!-- Tile grid (admin actions) -->
+            <div class="qa-row">
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+                Approve
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+                Users
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V12h6v9"/></svg></div>
+                Branches
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
+                Reports
+              </div>
+            </div>
+
+            <!-- Pill chips -->
+            <div class="pill-row">
+              <button class="pill-chip primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                Add User
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/></svg>
+                Permissions
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Revenue
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                Audit
+              </button>
+            </div>
+
+            <!-- System alerts carousel -->
+            <div class="sec-h">
+              <div class="t">System Alerts</div>
+              <div class="see">View all (4)</div>
+            </div>
+            <div class="carousel">
+              <div class="carousel-item gradient-c">
+                <span class="badge">2 NEW</span>
+                <h4>3 trainer contracts expiring</h4>
+                <p>Lina, Aiman, Daniel — renew by next Friday.</p>
+                <span class="arrow">Review →</span>
+              </div>
+              <div class="carousel-item gradient-a">
+                <span class="badge">UPDATED</span>
+                <h4>Branch KL HQ quota raised</h4>
+                <p>New monthly cap: 60 sessions.</p>
+                <span class="arrow">Acknowledge →</span>
+              </div>
+              <div class="carousel-item gradient-warm">
+                <span class="badge">BLOCKED</span>
+                <h4>Invoice INV-2419 stuck payment</h4>
+                <p>Bank retry needed for Acme Sdn Bhd.</p>
+                <span class="arrow">Resolve →</span>
+              </div>
+            </div>
+
+            <!-- Activity -->
+            <div class="sec-h">
+              <div class="t">Platform Activity</div>
+              <div class="see">Filter</div>
+            </div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--brand); background: var(--brand-soft);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">5 new trainers approved · KL HQ</div>
+                  <div class="ts">Today · 9:14 AM</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: #10c46c;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">Quarterly revenue report generated</div>
+                  <div class="ts">Yesterday · 6:00 PM</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--c-rose);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">Branch JB flagged 2 session conflicts</div>
+                  <div class="ts">2 days ago</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="cta-pill">Open Admin Console →</button>
+          </div>
+
+          <!-- FAB menu -->
+          <div class="fab-menu">
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>Add User</div>
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/></svg></div>New Branch</div>
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/></svg></div>Send Notice</div>
+          </div>
+
+          <!-- Dock with FAB -->
+          <div class="dock-wrap">
+            <nav class="dock">
+              <div class="tab active">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3L12 3Z"/></svg>
+                <span>Home</span>
+              </div>
+              <div class="tab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V12h6v9"/></svg>
+                <span>Branches</span>
+              </div>
+              <button class="fab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+              <div class="tab" style="position: relative;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"/></svg>
+                <span>Inbox</span>
+                <span class="tab-badge" style="right: 16px;">12</span>
+              </div>
+              <div class="tab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+                <span>Profile</span>
+              </div>
+            </nav>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- TRAINER                          -->
+    <!-- ============================== -->
+    <div class="phone-col">
+      <h2>Trainer · Provider<small>My sessions · earnings · check-in</small></h2>
+
+      <div class="phone phone-trainer">
+        <div class="screen">
+
+          <div class="status-bar">
+            <span>9:41</span>
+            <div style="display: inline-flex; align-items: center; gap: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm16-2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l3.5-3.5a8.5 8.5 0 0 0-7 0L12 21Z"/></svg>
+              <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M22 10v4h-3v-4h3Z"/></svg>
+            </div>
+          </div>
+          <div class="dynamic-island"></div>
+
+          <div class="scroll">
+
+            <div class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input placeholder="Search bookings, materials…" />
+              <span class="kbd">⌘ K</span>
+            </div>
+
+            <div class="top-bar">
+              <div class="greet">
+                <div class="hi">Good morning</div>
+                <div class="name">Hi, Aiman 👋</div>
+              </div>
+              <div class="ic-stack">
+                <div class="icon-btn" style="position: relative;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+                  <span class="badge">3</span>
+                </div>
+                <div class="avatar" style="background: linear-gradient(135deg, #5eead4, #0d9488);">AR</div>
+              </div>
+            </div>
+
+            <!-- Hero: today's sessions + earnings -->
+            <div class="hero">
+              <div class="hero-eyebrow">Today, Wednesday</div>
+              <div class="hero-title">3 sessions · 2 next <span class="count">RM 1.2k</span></div>
+              <div class="hero-stats">
+                <div class="hero-stat"><div class="v">42</div><div class="l">Pax</div></div>
+                <div class="hero-stat"><div class="v">4.8★</div><div class="l">Rating</div></div>
+                <div class="hero-stat"><div class="v">RM 8.4k</div><div class="l">This Wk</div></div>
+              </div>
+              <button class="hero-cta">Open schedule →</button>
+            </div>
+
+            <!-- Trainer tile grid -->
+            <div class="qa-row">
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg></div>
+                Check-In
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                Earnings
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/></svg></div>
+                Materials
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 9 16.5 13 18.5 21 12 16.5 5.5 21 7.5 13 2 9 9 9"/></svg></div>
+                Reviews
+              </div>
+            </div>
+
+            <div class="pill-row">
+              <button class="pill-chip primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                New Program
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18"/></svg></div>
+                Availability
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 9 16.5 13 18.5 21 12 16.5 5.5 21 7.5 13 2 9 9 9"/></svg></div>
+                Ask Review
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg></div>
+                Reschedule
+              </button>
+            </div>
+
+            <!-- Today's sessions carousel -->
+            <div class="sec-h">
+              <div class="t">Today's Sessions</div>
+              <div class="see">View calendar</div>
+            </div>
+            <div class="carousel">
+              <div class="carousel-item gradient-b">
+                <span class="badge">10:00 AM · ROOM 4</span>
+                <h4>Onboarding 101</h4>
+                <p>18 pax · 90 min · Acme Sdn Bhd</p>
+                <span class="arrow">Open session →</span>
+              </div>
+              <div class="carousel-item gradient-a">
+                <span class="badge">2:30 PM · ROOM 2</span>
+                <h4>Compliance Refresher</h4>
+                <p>24 pax · 60 min · Beta Corp</p>
+                <span class="arrow">Open session →</span>
+              </div>
+              <div class="carousel-item gradient-warm">
+                <span class="badge">5:00 PM · AUDITORIUM</span>
+                <h4>Leadership Lab</h4>
+                <p>40 pax · 120 min · Gamma Group</p>
+                <span class="arrow">Open session →</span>
+              </div>
+            </div>
+
+            <div class="sec-h">
+              <div class="t">Recent Activity</div>
+              <div class="see">All</div>
+            </div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--brand); background: var(--brand-soft);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">Onboarding 101 · 18/18 attended</div>
+                  <div class="ts">2 hours ago</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--c-rose);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">Payout RM 1,240 credited</div>
+                  <div class="ts">Yesterday</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="color: var(--c-rose);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 9 16.5 13 18.5 21 12 16.5 5.5 21 7.5 13 2 9 9 9"/></svg></div>
+                <div class="timeline-content">
+                  <div class="tt">5★ review from Lina (Compliance)</div>
+                  <div class="ts">2 days ago</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="cta-pill">Open Schedule →</button>
+          </div>
+
+          <div class="fab-menu">
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>New Program</div>
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/></svg></div>Upload Material</div>
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg></div>Set Availability</div>
+          </div>
+
+          <div class="dock-wrap">
+            <nav class="dock">
+              <div class="tab active">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3L12 3Z"/></svg>
+                <span>Home</span>
+              </div>
+              <div class="tab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18"/></svg>
+                <span>Schedule</span>
+              </div>
+              <button class="fab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+              <div class="tab" style="position: relative;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"/></svg>
+                <span>Inbox</span>
+                <span class="tab-badge" style="right: 16px;">3</span>
+              </div>
+              <div class="tab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+                <span>Profile</span>
+              </div>
+            </nav>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PARTICIPANT — scan-first         -->
+    <!-- ============================== -->
+    <div class="phone-col">
+      <h2>Participant · Learner<small>Scan-first · attendance is the priority</small></h2>
+
+      <div class="phone phone-participant">
+        <div class="screen">
+
+          <div class="status-bar">
+            <span>9:41</span>
+            <div style="display: inline-flex; align-items: center; gap: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm16-2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-4-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l3.5-3.5a8.5 8.5 0 0 0-7 0L12 21Z"/></svg>
+              <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M22 10v4h-3v-4h3Z"/></svg>
+            </div>
+          </div>
+          <div class="dynamic-island"></div>
+
+          <div class="scroll">
+
+            <div class="top-bar">
+              <div class="greet">
+                <div class="hi">My Learning</div>
+                <div class="name">Hi, Mei Ling 👋</div>
+              </div>
+              <div class="ic-stack">
+                <div class="icon-btn" style="position: relative;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+                  <span class="badge">1</span>
+                </div>
+                <div class="avatar" style="background: linear-gradient(135deg, #38bdf8, #0369a1);">ML</div>
+              </div>
+            </div>
+
+            <!-- SCAN HERO — primary action -->
+            <div class="scan-hero">
+              <div class="eyebrow">TODAY · 10:00 AM</div>
+              <h3>Onboarding 101 starts in 30 min</h3>
+              <button class="scan-cta">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <path d="M14 14h3v3M21 17v4h-4M14 21h7"/>
+                </svg>
+                Scan QR to Check-In
+              </button>
+              <div class="scan-hint">Point your camera at the room QR code · works offline</div>
+            </div>
+
+            <!-- Tile grid -->
+            <div class="qa-row">
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg></div>
+                Bookings
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 14l-1.5 8L12 19l4.5 3L15 14"/></svg></div>
+                Certs
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+                Calendar
+              </div>
+              <div class="qa-square">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+                Browse
+              </div>
+            </div>
+
+            <div class="pill-row">
+              <button class="pill-chip primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                Scan Again
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Submit Feedback
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 9 16.5 13 18.5 21 12 16.5 5.5 21 7.5 13 2 9 9 9"/></svg>
+                Rate Trainer
+              </button>
+              <button class="pill-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Request
+              </button>
+            </div>
+
+            <div class="sec-h">
+              <div class="t">Upcoming Classes</div>
+              <div class="see">All bookings</div>
+            </div>
+            <div class="carousel">
+              <div class="carousel-item gradient-b">
+                <span class="badge">TODAY · 10 AM</span>
+                <h4>Onboarding 101</h4>
+                <p>Room 4 · 90 min · Aiman Razak</p>
+                <span class="arrow">Open class →</span>
+              </div>
+              <div class="carousel-item gradient-c">
+                <span class="badge">THU · 2:30 PM</span>
+                <h4>Compliance Refresher</h4>
+                <p>Room 2 · 60 min · Lina Putri</p>
+                <span class="arrow">Open class →</span>
+              </div>
+              <div class="carousel-item gradient-a">
+                <span class="badge">FRI · 9:00 AM</span>
+                <h4>Leadership Lab</h4>
+                <p>Auditorium · 120 min · Daniel Voon</p>
+                <span class="arrow">Open class →</span>
+              </div>
+            </div>
+
+            <!-- Scan history (attention-priority for participant) -->
+            <div class="sec-h">
+              <div class="t">Recent Check-Ins</div>
+              <div class="see">All activity</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div class="scan-history">
+                <div class="qr-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3"/></svg></div>
+                <div class="meta">
+                  <div class="nm">Workplace Safety 101</div>
+                  <div class="sub">Mon, Jun 22 · 9:00 AM</div>
+                </div>
+                <span class="status-pill ok">Present</span>
+              </div>
+              <div class="scan-history">
+                <div class="qr-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3"/></svg></div>
+                <div class="meta">
+                  <div class="nm">Effective Communication</div>
+                  <div class="sub">Wed, Jun 17 · 2:00 PM</div>
+                </div>
+                <span class="status-pill ok">Present</span>
+              </div>
+              <div class="scan-history">
+                <div class="qr-mini" style="color: var(--muted);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3"/></svg></div>
+                <div class="meta">
+                  <div class="nm">Cybersecurity Basics</div>
+                  <div class="sub">Fri, Jun 12 · missed</div>
+                </div>
+                <span class="status-pill warn">Missed</span>
+              </div>
+            </div>
+
+            <button class="cta-pill">Open My Classes →</button>
+          </div>
+
+          <!-- FAB menu — Scan-heavy for participant -->
+          <div class="fab-menu">
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></div>Scan to Check-In</div>
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg></div>My Bookings</div>
+            <div class="item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/></svg></div>Submit Feedback</div>
+          </div>
+
+          <!-- Dock with QR FAB -->
+          <div class="dock-wrap">
+            <nav class="dock">
+              <div class="tab active">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3L12 3Z"/></svg>
+                <span>Home</span>
+              </div>
+              <div class="tab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
+                <span>Classes</span>
+              </div>
+              <button class="fab" aria-label="Scan QR">
+                <!-- QR scanner icon, not generic + -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <path d="M14 14h3v3M21 17v4h-4M14 21h7"/>
+                </svg>
+              </button>
+              <div class="tab" style="position: relative;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"/></svg>
+                <span>Inbox</span>
+                <span class="tab-badge" style="right: 16px;">1</span>
+              </div>
+              <div class="tab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+                <span>Profile</span>
+              </div>
+            </nav>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="margin-top: 36px; text-align: center; color: var(--muted); font-size: 13px;">
+    All three share the same v3 system — only brand color and content differs.<br/>
+    <strong style="color: var(--text);">Participant's FAB is a QR scanner icon</strong>, not a "+" — making the camera the permanent home for attendance check-in.<br/>
+    Tap any FAB and a role-specific quick-create menu pops up.
+  </p>
+
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.dock').forEach(dock => {
+    dock.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        dock.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  });
+
+  // QA tiles & pill chips feedback
+  document.querySelectorAll('.qa-square, .pill-chip').forEach(t => {
+    t.addEventListener('click', () => {
+      t.style.transform = 'scale(0.96)';
+      setTimeout(() => t.style.transform = '', 130);
+    });
+  });
+
+  // FAB menu toggle (per phone)
+  document.querySelectorAll('.phone').forEach(phone => {
+    const fab = phone.querySelector('.fab');
+    const fabMenu = phone.querySelector('.fab-menu');
+    if (!fab || !fabMenu) return;
+    fab.addEventListener('click', e => {
+      e.stopPropagation();
+      fabMenu.classList.toggle('open');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.fab-menu.open').forEach(m => m.classList.remove('open'));
+  });
+
+  // CTA ripple
+  document.querySelectorAll('.cta-pill, .hero-cta, .scan-cta').forEach(b => {
+    b.addEventListener('click', e => {
+      const r = document.createElement('span');
+      const rect = b.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      r.style.cssText = `position:absolute;border-radius:50%;background:rgba(255,255,255,0.4);width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;pointer-events:none;transform:scale(0);transition:transform .5s,opacity .6s;opacity:1`;
+      b.style.position = 'relative';
+      b.style.overflow = 'hidden';
+      b.appendChild(r);
+      requestAnimationFrame(() => { r.style.transform = 'scale(2)'; r.style.opacity = '0'; });
+      setTimeout(() => r.remove(), 700);
+    });
+  });
+</script>
+</body>
+</html>
