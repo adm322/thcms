@@ -48,7 +48,8 @@ export async function POST(request: NextRequest) {
         data: validEmployees,
       });
       imported += result.count;
-    } catch {
+    } catch (err) {
+      console.error(`Employee bulk import failed for ${validEmployees.length} records:`, err);
       errors += validEmployees.length;
     }
   }

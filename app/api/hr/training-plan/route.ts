@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json().catch(() => null);
-  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  let body: any;
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
 
   const { title, category, department, targetCount, targetMonth, targetYear, estimatedCost, priority, matchedProgramId, notes } = body;
 
@@ -87,23 +87,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "title, category, targetCount, targetMonth, and targetYear are required" }, { status: 400 });
   }
 
-  const item = await prisma.trainingPlanItem.create({
-    data: {
-      companyId: session.companyId,
-      hrId: session.id,
-      title,
-      category,
-      department: department || null,
-      targetCount: targetCount || 1,
-      targetMonth,
-      targetYear,
-      estimatedCost: estimatedCost || 0,
-      priority: priority || "MEDIUM",
-      status: "DRAFT",
-      matchedProgramId: matchedProgramId || null,
-      notes: notes || null,
-    },
-  });
-
-  return NextResponse.json(item, { status: 201 });
+  try {
+    const item = await prisma.trainingPlanItem.create({
+      data: {
+        companyId: session.companyId,
+        hrId: session.id,
+        title,
+        category,
+        department: department || null,
+        targetCount: targetCount || 1,
+        targetMonth,
+        targetYear,
+        estimatedCost: estimatedCost || 0,
+        priority: priority || "MEDIUM",
+        status: "DRAFT",
+        matchedProgramId: matchedProgramId || null,
+        notes: notes || null,
+      },
+    });
+    return NextResponse.json(item, { status: 201 });
+  } catch (err) {
+    console.error("Failed to create training plan item:", err);
+    return NextResponse.json({ error: "Failed to create training plan item" }, { status: 500 });
+  }
 }

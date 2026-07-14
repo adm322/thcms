@@ -239,7 +239,7 @@ function TrainerAvailabilityBadge({ trainerId, date }: { trainerId: string; date
         const day = (data.days || []).find((d: any) => d.date === date.slice(0, 10));
         if (day) setStatus(day.status);
       })
-      .catch(() => {});
+      .catch(console.error);
   }, [trainerId, date]);
 
   if (!status) return null;

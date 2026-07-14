@@ -81,22 +81,26 @@ export async function POST(request: NextRequest) {
 
   const totalFee = participantCount * program.pricePerPax;
 
-  const booking = await prisma.booking.create({
-    data: {
-      programId,
-      hrId: session.id,
-      companyId: session.companyId,
-      programDate: new Date(programDate),
-      totalFee,
-      depositPaid: 0,
-      depositStatus: "UNPAID",
-      status: "PENDING",
-      venuePreference: venuePreference || "as_program",
-      venueAddress: venueAddress || null,
-      venueConfirmed: !!(venueAddress),
-      meetingLink: (isHybrid || isOnline) ? meetingLink : null,
-    },
-  });
-
-  return NextResponse.json(booking, { status: 201 });
+  try {
+    const booking = await prisma.booking.create({
+      data: {
+        programId,
+        hrId: session.id,
+        companyId: session.companyId,
+        programDate: new Date(programDate),
+        totalFee,
+        depositPaid: 0,
+        depositStatus: "UNPAID",
+        status: "PENDING",
+        venuePreference: venuePreference || "as_program",
+        venueAddress: venueAddress || null,
+        venueConfirmed: !!(venueAddress),
+        meetingLink: (isHybrid || isOnline) ? meetingLink : null,
+      },
+    });
+    return NextResponse.json(booking, { status: 201 });
+  } catch (err) {
+    console.error("Failed to create booking:", err);
+    return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
+  }
 }
