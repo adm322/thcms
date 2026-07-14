@@ -649,3 +649,14 @@ model TrainerAvailability {
   @@index([trainerId])
   @@index([date])
 }
+
+// ─── System Settings (admin-configurable) ──────────────────
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   // JSON string
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+}

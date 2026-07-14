@@ -28,7 +28,9 @@ import {
   CircleDot,
 } from "lucide-react";
 import { SlideRenderer, resetSlideNumber } from "./SlideRenderer";
+import { SlideViewer } from "./SlideViewer";
 import type { Slide } from "./slide-types";
+import { isStructuredSlide } from "./slide-types";
 
 export type ImageFrequency = "all" | "half" | "none";
 
@@ -226,14 +228,27 @@ export function PresentationMode({
           style={{ aspectRatio: "16 / 9" }}
           onClick={handleSlideClick}
         >
-          {/* The `slide` prop type is the discriminated union, which TS
-              narrows lazily — renderer's prop type is correct. */}
-          <SlideRenderer
-            slide={current}
-            totalSlides={total}
-            programTitle={programTitle}
-            className="absolute inset-0"
-          />
+          {isStructuredSlide(current) ? (
+            <SlideViewer
+              slide={{
+                index,
+                title: current.title,
+                bulletPoints: current.bulletPoints,
+                infographic: current.infographic as { type: "stat"|"quote"|"list"|"comparison"|"process"; title?: string; data?: Record<string, unknown> } | undefined,
+                speakerNotes: current.speakerNotes,
+              }}
+              totalSlides={total}
+              programTitle={programTitle}
+              className="absolute inset-0"
+            />
+          ) : (
+            <SlideRenderer
+              slide={current}
+              totalSlides={total}
+              programTitle={programTitle}
+              className="absolute inset-0"
+            />
+          )}
         </div>
       </div>
 

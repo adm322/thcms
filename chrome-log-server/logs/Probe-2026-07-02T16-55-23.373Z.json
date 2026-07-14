@@ -1,6 +1,0 @@
-{
-  "type": "Probe",
-  "message": "preflight test",
-  "url": "http://localhost:3000/login",
-  "time": "2026-07-03T09:00:00Z"
-}

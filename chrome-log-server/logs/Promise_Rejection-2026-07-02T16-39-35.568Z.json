@@ -1,7 +1,0 @@
-{
-  "type": "Promise Rejection",
-  "message": "API timeout",
-  "stack": "Error: API timeout\n    at async (app.js:1:1)",
-  "url": "http://localhost:3000/dashboard",
-  "time": "2026-07-03T10:00:02.000Z"
-}

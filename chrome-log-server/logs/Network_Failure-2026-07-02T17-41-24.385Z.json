@@ -1,9 +1,0 @@
-{
-  "type": "Network Failure",
-  "message": "Failed to fetch",
-  "url": "http://localhost:9999/nope",
-  "method": "GET",
-  "stack": "TypeError: Failed to fetch\n    at window.fetch (http://localhost:3000/chrome-log-interceptor.js:68:14)\n    at eval (eval at evaluate (:303:30), <anonymous>:2:7)\n    at UtilityScript.evaluate (<anonymous>:305:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
-  "page": "http://localhost:3000/trainer/programs/cmr3ofgqk0041y0qutaa0n913/studio",
-  "time": "2026-07-02T17:41:24.384Z"
-}

@@ -134,7 +134,7 @@ export function MarketplaceClient() {
         </div>
       ) : (
         <div className="space-y-3">
-          {programs.map((p) => {
+          {programs.map((p, i) => {
             const gradient = categoryGradients[p.category] || "from-gray-500 to-gray-600";
             const icon = categoryIcons[p.category] || "📚";
             return (
@@ -154,10 +154,10 @@ export function MarketplaceClient() {
                         src={p.thumbnailUrl}
                         alt=""
                         fill
+                        className="object-cover"
                         sizes="64px"
-                        priority={true}
-                        className="absolute inset-0 w-full h-full object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        priority={i < 4}
+                        onError={(e) => { (e.target as HTMLElement).style.display = "none"; }}
                       />
                     )}
                   </div>

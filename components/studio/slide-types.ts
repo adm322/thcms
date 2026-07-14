@@ -17,6 +17,17 @@ export interface HtmlSlide {
   speakerNotes?: string;
 }
 
+/**
+ * v4+ shape: structured JSON returned by DeepSeek, rendered by SlideViewer
+ * React components (not dangerouslySetInnerHTML). No `type` or `html` field.
+ */
+export interface StructuredSlide {
+  title: string;
+  bulletPoints: string[];
+  infographic?: unknown; // Shape: { type: "stat"|"quote"|"list"|"comparison"|"process", title?: string, data?: Record<string, unknown> }
+  speakerNotes?: string;
+}
+
 /** Legacy discriminated union — kept only for back-compat rendering. */
 export interface TitleSlide {
   type: "title";
@@ -106,16 +117,21 @@ export type LegacySlide =
   | SectionSlide
   | SummarySlide;
 
-export type Slide = HtmlSlide | LegacySlide;
+export type Slide = HtmlSlide | LegacySlide | StructuredSlide;
 
-export type SlideType = Slide["type"];
+export type SlideType = HtmlSlide["type"] | LegacySlide["type"];
 
 /** Type guard: is the slide a new-style HTML slide? */
 export function isHtmlSlide(s: Slide): s is HtmlSlide {
-  return s.type === "html" && typeof (s as HtmlSlide).html === "string";
+  return "type" in s && s.type === "html" && typeof (s as HtmlSlide).html === "string";
 }
 
 /** Type guard: is the slide a legacy discriminated shape? */
 export function isLegacySlide(s: Slide): s is LegacySlide {
-  return s.type !== "html";
+  return "type" in s && s.type !== "html";
+}
+
+/** Type guard: is the slide a new structured (v4) slide rendered by SlideViewer? */
+export function isStructuredSlide(s: Slide): s is StructuredSlide {
+  return !("type" in s) && "title" in s && "bulletPoints" in s;
 }

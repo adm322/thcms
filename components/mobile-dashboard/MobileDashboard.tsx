@@ -377,7 +377,7 @@ function HeroBlock({ b, hero }: { b: Brand; hero: MobileHeroProps }) {
       />
       {/* radial highlight */}
       <div
-        className="absolute -top-1/2 -right-1/4 w-[220px] h-[220px] rounded-full pointer-events-none"
+        className="absolute -top-1/2 -right-1/4 size-56 rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, rgba(255,255,255,0.18), transparent 65%)" }}
         aria-hidden
       />
@@ -480,7 +480,7 @@ function CarouselCard({ item }: { item: CarouselItem }) {
     <Link
       href={item.href ?? "#"}
       className={cn(
-        "shrink-0 snap-start w-[230px] rounded-2xl p-4 shadow-sm active:scale-[0.98] transition-transform",
+        "shrink-0 snap-start w-56 rounded-2xl p-4 shadow-sm active:scale-[0.98] transition-transform",
         tone.bg,
       )}
     >
