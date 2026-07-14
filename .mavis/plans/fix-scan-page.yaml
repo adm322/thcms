@@ -1,0 +1,31 @@
+﻿version: 1
+plan:
+  name: 'fix-scan-page-imports'
+  max_concurrency: 2
+  max_consecutive_failures: 1
+  auto_reject_retries: 1
+  verifier_config:
+    default_verifiers: [verifier]
+    audit_sample_rate: 0.0
+tasks:
+  - id: fix-scan-page
+    title: 'Fix unused imports in mobile scan page'
+    prompt: |
+      Fix two issues in E:\Project Repo\thcms\app\m\participant\scan\page.tsx:
+
+      1. Remove the unused import `cn` from `@/lib/utils` on line 16.
+      2. Remove the unused `videoRef` variable declared on line 25 (const videoRef = useRef<HTMLDivElement>(null);).
+
+      These variables are declared but never referenced in the JSX or logic.
+
+      After fixing, run `npx tsc --noEmit` to confirm no TypeScript errors.
+      Report the changed lines.
+    assigned_to: coder
+    verified_by: verifier
+    verify_prompt: |
+      Verify the following in E:\Project Repo\thcms\app\m\participant\scan\page.tsx:
+      1. `cn` is no longer imported from `@/lib/utils`.
+      2. `videoRef` variable is removed.
+      3. Run `npx tsc --noEmit` — must report zero TypeScript errors.
+      FAIL if any of the above are not true.
+    max_retries: 1

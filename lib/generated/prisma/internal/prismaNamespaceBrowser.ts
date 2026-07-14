@@ -64,12 +64,9 @@ export const ModelName = {
   Participant: 'Participant',
   Evaluation: 'Evaluation',
   Invoice: 'Invoice',
-  Reimbursement: 'Reimbursement',
   Employee: 'Employee',
   Leave: 'Leave',
   Attendance: 'Attendance',
-  Payroll: 'Payroll',
-  Claim: 'Claim',
   Message: 'Message',
   Review: 'Review',
   ProgramVote: 'ProgramVote',
@@ -80,7 +77,10 @@ export const ModelName = {
   TrainingPlanItem: 'TrainingPlanItem',
   Notification: 'Notification',
   CodeOfConduct: 'CodeOfConduct',
-  TrainerAvailability: 'TrainerAvailability'
+  LearningStudio: 'LearningStudio',
+  RAGChunk: 'RAGChunk',
+  TrainerAvailability: 'TrainerAvailability',
+  SystemSetting: 'SystemSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -100,6 +100,8 @@ export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   passwordHash: 'passwordHash',
+  passwordAlgo: 'passwordAlgo',
+  mustChangePassword: 'mustChangePassword',
   name: 'name',
   role: 'role',
   companyId: 'companyId',
@@ -155,6 +157,7 @@ export const ProgramScalarFieldEnum = {
   featuredAt: 'featuredAt',
   proposalUrl: 'proposalUrl',
   proposalLabel: 'proposalLabel',
+  proposalContent: 'proposalContent',
   thumbnailUrl: 'thumbnailUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -195,6 +198,9 @@ export const QuizResultScalarFieldEnum = {
   participantId: 'participantId',
   quizId: 'quizId',
   score: 'score',
+  answers: 'answers',
+  attemptNumber: 'attemptNumber',
+  passed: 'passed',
   createdAt: 'createdAt'
 } as const
 
@@ -309,22 +315,6 @@ export const InvoiceScalarFieldEnum = {
 export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
 
 
-export const ReimbursementScalarFieldEnum = {
-  id: 'id',
-  bookingId: 'bookingId',
-  trainerId: 'trainerId',
-  amount: 'amount',
-  description: 'description',
-  receiptUrl: 'receiptUrl',
-  status: 'status',
-  adminNotes: 'adminNotes',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ReimbursementScalarFieldEnum = (typeof ReimbursementScalarFieldEnum)[keyof typeof ReimbursementScalarFieldEnum]
-
-
 export const EmployeeScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
@@ -372,47 +362,6 @@ export const AttendanceScalarFieldEnum = {
 } as const
 
 export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
-
-
-export const PayrollScalarFieldEnum = {
-  id: 'id',
-  employeeId: 'employeeId',
-  periodStart: 'periodStart',
-  periodEnd: 'periodEnd',
-  basicSalary: 'basicSalary',
-  allowances: 'allowances',
-  deductions: 'deductions',
-  overtimePay: 'overtimePay',
-  epfEmployee: 'epfEmployee',
-  epfEmployer: 'epfEmployer',
-  socsoEmployee: 'socsoEmployee',
-  socsoEmployer: 'socsoEmployer',
-  eisEmployee: 'eisEmployee',
-  eisEmployer: 'eisEmployer',
-  pcb: 'pcb',
-  zakat: 'zakat',
-  tabungHaji: 'tabungHaji',
-  netPay: 'netPay',
-  status: 'status',
-  createdAt: 'createdAt'
-} as const
-
-export type PayrollScalarFieldEnum = (typeof PayrollScalarFieldEnum)[keyof typeof PayrollScalarFieldEnum]
-
-
-export const ClaimScalarFieldEnum = {
-  id: 'id',
-  employeeId: 'employeeId',
-  type: 'type',
-  amount: 'amount',
-  description: 'description',
-  receiptUrl: 'receiptUrl',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ClaimScalarFieldEnum = (typeof ClaimScalarFieldEnum)[keyof typeof ClaimScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {
@@ -584,6 +533,39 @@ export const CodeOfConductScalarFieldEnum = {
 export type CodeOfConductScalarFieldEnum = (typeof CodeOfConductScalarFieldEnum)[keyof typeof CodeOfConductScalarFieldEnum]
 
 
+export const LearningStudioScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  sourceFileUrl: 'sourceFileUrl',
+  sourceText: 'sourceText',
+  slidesJson: 'slidesJson',
+  quizId: 'quizId',
+  generatedAt: 'generatedAt',
+  chunksEmbedded: 'chunksEmbedded',
+  embeddedAt: 'embeddedAt',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LearningStudioScalarFieldEnum = (typeof LearningStudioScalarFieldEnum)[keyof typeof LearningStudioScalarFieldEnum]
+
+
+export const RAGChunkScalarFieldEnum = {
+  id: 'id',
+  learningStudioId: 'learningStudioId',
+  chunkIndex: 'chunkIndex',
+  content: 'content',
+  embedding: 'embedding',
+  createdAt: 'createdAt'
+} as const
+
+export type RAGChunkScalarFieldEnum = (typeof RAGChunkScalarFieldEnum)[keyof typeof RAGChunkScalarFieldEnum]
+
+
 export const TrainerAvailabilityScalarFieldEnum = {
   id: 'id',
   trainerId: 'trainerId',
@@ -597,6 +579,16 @@ export const TrainerAvailabilityScalarFieldEnum = {
 export type TrainerAvailabilityScalarFieldEnum = (typeof TrainerAvailabilityScalarFieldEnum)[keyof typeof TrainerAvailabilityScalarFieldEnum]
 
 
+export const SystemSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -605,10 +597,35 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const NullsOrder = {
   first: 'first',
   last: 'last'
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 

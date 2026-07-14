@@ -1,43 +1,63 @@
 /**
- * AI Utility — pluggable: mock now, OpenAI via API key
- * Priority: OPENAI_API_KEY > mock
+ * AI Utility — pluggable: reads from SystemSetting table first, falls back to env.
+ * Priority: SystemSetting > OPENAI_API_KEY env > mock
  */
+
+import { isAutomationEnabled, getApiModelConfig } from "@/lib/services/settings.service";
 
 interface AIResponse {
   text: string;
   data?: any;
 }
 
-// ─── AI Provider Helper ────────────────────────────────────────
+export async function callAI(prompt: string, systemPrompt?: string): Promise<string | null> {
+  // Check if AI features are enabled in settings
+  const aiEnabled = await isAutomationEnabled("aiFeatures").catch(() => true);
+  if (!aiEnabled) return null;
 
-type AIProvider = "openai" | "mock";
+  // Try settings first, fall back to env
+  let apiKey: string;
+  let baseUrl: string;
+  let model: string;
 
-function getAIProvider(): AIProvider {
-  if (process.env.OPENAI_API_KEY) return "openai";
-  return "mock";
-}
-
-async function callAI(prompt: string, systemPrompt?: string): Promise<string | null> {
-  const provider = getAIProvider();
-  if (provider === "mock") return null;
-
-  const apiKey = process.env.OPENAI_API_KEY!;
+  try {
+    const config = await getApiModelConfig();
+    if (config.apiKey) {
+      apiKey = config.apiKey;
+      baseUrl = config.baseUrl;
+      model = config.model;
+    } else if (process.env.OPENAI_API_KEY) {
+      apiKey = process.env.OPENAI_API_KEY;
+      baseUrl = "https://api.openai.com/v1";
+      model = "gpt-4o-mini";
+    } else {
+      return null;
+    }
+  } catch {
+    if (process.env.OPENAI_API_KEY) {
+      apiKey = process.env.OPENAI_API_KEY;
+      baseUrl = "https://api.openai.com/v1";
+      model = "gpt-4o-mini";
+    } else {
+      return null;
+    }
+  }
 
   try {
     const messages = systemPrompt
       ? [{ role: "system" as const, content: systemPrompt }, { role: "user" as const, content: prompt }]
       : [{ role: "user" as const, content: prompt }];
 
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    const res = await fetch(`${baseUrl}/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({ model: "gpt-4o-mini", messages }),
+      body: JSON.stringify({ model, messages }),
     });
 
     const data = await res.json();
     return data.choices?.[0]?.message?.content || null;
   } catch (error) {
-    console.error(`AI API error (${provider}):`, error);
+    console.error("AI API error:", error);
     return null;
   }
 }

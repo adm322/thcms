@@ -354,7 +354,6 @@ export type BookingWhereInput = {
   participants?: Prisma.ParticipantListRelationFilter
   evaluations?: Prisma.EvaluationListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
-  reimbursements?: Prisma.ReimbursementListRelationFilter
   messages?: Prisma.MessageListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   trainingPlanItems?: Prisma.TrainingPlanItemListRelationFilter
@@ -388,7 +387,6 @@ export type BookingOrderByWithRelationInput = {
   participants?: Prisma.ParticipantOrderByRelationAggregateInput
   evaluations?: Prisma.EvaluationOrderByRelationAggregateInput
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
-  reimbursements?: Prisma.ReimbursementOrderByRelationAggregateInput
   messages?: Prisma.MessageOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   trainingPlanItems?: Prisma.TrainingPlanItemOrderByRelationAggregateInput
@@ -425,7 +423,6 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   participants?: Prisma.ParticipantListRelationFilter
   evaluations?: Prisma.EvaluationListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
-  reimbursements?: Prisma.ReimbursementListRelationFilter
   messages?: Prisma.MessageListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   trainingPlanItems?: Prisma.TrainingPlanItemListRelationFilter
@@ -512,7 +509,6 @@ export type BookingCreateInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
@@ -543,7 +539,6 @@ export type BookingUncheckedCreateInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
@@ -574,7 +569,6 @@ export type BookingUpdateInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
@@ -605,7 +599,6 @@ export type BookingUncheckedUpdateInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
@@ -950,20 +943,6 @@ export type BookingUpdateOneRequiredWithoutInvoicesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutInvoicesInput, Prisma.BookingUpdateWithoutInvoicesInput>, Prisma.BookingUncheckedUpdateWithoutInvoicesInput>
 }
 
-export type BookingCreateNestedOneWithoutReimbursementsInput = {
-  create?: Prisma.XOR<Prisma.BookingCreateWithoutReimbursementsInput, Prisma.BookingUncheckedCreateWithoutReimbursementsInput>
-  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutReimbursementsInput
-  connect?: Prisma.BookingWhereUniqueInput
-}
-
-export type BookingUpdateOneRequiredWithoutReimbursementsNestedInput = {
-  create?: Prisma.XOR<Prisma.BookingCreateWithoutReimbursementsInput, Prisma.BookingUncheckedCreateWithoutReimbursementsInput>
-  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutReimbursementsInput
-  upsert?: Prisma.BookingUpsertWithoutReimbursementsInput
-  connect?: Prisma.BookingWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutReimbursementsInput, Prisma.BookingUpdateWithoutReimbursementsInput>, Prisma.BookingUncheckedUpdateWithoutReimbursementsInput>
-}
-
 export type BookingCreateNestedOneWithoutMessagesInput = {
   create?: Prisma.XOR<Prisma.BookingCreateWithoutMessagesInput, Prisma.BookingUncheckedCreateWithoutMessagesInput>
   connectOrCreate?: Prisma.BookingCreateOrConnectWithoutMessagesInput
@@ -1034,7 +1013,6 @@ export type BookingCreateWithoutHrInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
@@ -1064,7 +1042,6 @@ export type BookingUncheckedCreateWithoutHrInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
@@ -1146,7 +1123,6 @@ export type BookingCreateWithoutCompanyInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
@@ -1176,7 +1152,6 @@ export type BookingUncheckedCreateWithoutCompanyInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
@@ -1231,7 +1206,6 @@ export type BookingCreateWithoutProgramInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
@@ -1261,7 +1235,6 @@ export type BookingUncheckedCreateWithoutProgramInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
@@ -1316,7 +1289,6 @@ export type BookingCreateWithoutParticipantsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
@@ -1346,7 +1318,6 @@ export type BookingUncheckedCreateWithoutParticipantsInput = {
   meetingLink?: string | null
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
@@ -1392,7 +1363,6 @@ export type BookingUpdateWithoutParticipantsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
@@ -1422,7 +1392,6 @@ export type BookingUncheckedUpdateWithoutParticipantsInput = {
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
@@ -1452,7 +1421,6 @@ export type BookingCreateWithoutEvaluationsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
@@ -1482,7 +1450,6 @@ export type BookingUncheckedCreateWithoutEvaluationsInput = {
   meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
@@ -1528,7 +1495,6 @@ export type BookingUpdateWithoutEvaluationsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
@@ -1558,7 +1524,6 @@ export type BookingUncheckedUpdateWithoutEvaluationsInput = {
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
@@ -1588,7 +1553,6 @@ export type BookingCreateWithoutInvoicesInput = {
   company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
@@ -1618,7 +1582,6 @@ export type BookingUncheckedCreateWithoutInvoicesInput = {
   meetingLink?: string | null
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
@@ -1664,7 +1627,6 @@ export type BookingUpdateWithoutInvoicesInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
@@ -1694,143 +1656,6 @@ export type BookingUncheckedUpdateWithoutInvoicesInput = {
   meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
-  messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
-  trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
-}
-
-export type BookingCreateWithoutReimbursementsInput = {
-  id?: string
-  programDate: Date | string
-  totalFee?: number
-  depositPaid?: number
-  depositStatus?: string
-  status?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  hrdfScheme?: string | null
-  employerHrdfSubmitted?: boolean
-  employerHrdfSubmittedAt?: Date | string | null
-  trainerHrdfSubmitted?: boolean
-  trainerHrdfSubmittedAt?: Date | string | null
-  trainerDocumentsUrl?: string | null
-  venuePreference?: string | null
-  venueAddress?: string | null
-  venueConfirmed?: boolean
-  meetingLink?: string | null
-  program: Prisma.ProgramCreateNestedOneWithoutBookingsInput
-  hr: Prisma.UserCreateNestedOneWithoutBookingsAsHRInput
-  company: Prisma.CompanyCreateNestedOneWithoutBookingsInput
-  participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
-  evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
-  trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
-}
-
-export type BookingUncheckedCreateWithoutReimbursementsInput = {
-  id?: string
-  programId: string
-  hrId: string
-  companyId: string
-  programDate: Date | string
-  totalFee?: number
-  depositPaid?: number
-  depositStatus?: string
-  status?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  hrdfScheme?: string | null
-  employerHrdfSubmitted?: boolean
-  employerHrdfSubmittedAt?: Date | string | null
-  trainerHrdfSubmitted?: boolean
-  trainerHrdfSubmittedAt?: Date | string | null
-  trainerDocumentsUrl?: string | null
-  venuePreference?: string | null
-  venueAddress?: string | null
-  venueConfirmed?: boolean
-  meetingLink?: string | null
-  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
-  evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
-  trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
-}
-
-export type BookingCreateOrConnectWithoutReimbursementsInput = {
-  where: Prisma.BookingWhereUniqueInput
-  create: Prisma.XOR<Prisma.BookingCreateWithoutReimbursementsInput, Prisma.BookingUncheckedCreateWithoutReimbursementsInput>
-}
-
-export type BookingUpsertWithoutReimbursementsInput = {
-  update: Prisma.XOR<Prisma.BookingUpdateWithoutReimbursementsInput, Prisma.BookingUncheckedUpdateWithoutReimbursementsInput>
-  create: Prisma.XOR<Prisma.BookingCreateWithoutReimbursementsInput, Prisma.BookingUncheckedCreateWithoutReimbursementsInput>
-  where?: Prisma.BookingWhereInput
-}
-
-export type BookingUpdateToOneWithWhereWithoutReimbursementsInput = {
-  where?: Prisma.BookingWhereInput
-  data: Prisma.XOR<Prisma.BookingUpdateWithoutReimbursementsInput, Prisma.BookingUncheckedUpdateWithoutReimbursementsInput>
-}
-
-export type BookingUpdateWithoutReimbursementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  programDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  totalFee?: Prisma.FloatFieldUpdateOperationsInput | number
-  depositPaid?: Prisma.FloatFieldUpdateOperationsInput | number
-  depositStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  hrdfScheme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  employerHrdfSubmitted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  employerHrdfSubmittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  trainerHrdfSubmitted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  trainerHrdfSubmittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  trainerDocumentsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  program?: Prisma.ProgramUpdateOneRequiredWithoutBookingsNestedInput
-  hr?: Prisma.UserUpdateOneRequiredWithoutBookingsAsHRNestedInput
-  company?: Prisma.CompanyUpdateOneRequiredWithoutBookingsNestedInput
-  participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
-  evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
-  trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
-}
-
-export type BookingUncheckedUpdateWithoutReimbursementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  programId?: Prisma.StringFieldUpdateOperationsInput | string
-  hrId?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  programDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  totalFee?: Prisma.FloatFieldUpdateOperationsInput | number
-  depositPaid?: Prisma.FloatFieldUpdateOperationsInput | number
-  depositStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  hrdfScheme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  employerHrdfSubmitted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  employerHrdfSubmittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  trainerHrdfSubmitted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  trainerHrdfSubmittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  trainerDocumentsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  venuePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  venueAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  venueConfirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
-  evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
@@ -1861,7 +1686,6 @@ export type BookingCreateWithoutMessagesInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
 }
@@ -1891,7 +1715,6 @@ export type BookingUncheckedCreateWithoutMessagesInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
 }
@@ -1937,7 +1760,6 @@ export type BookingUpdateWithoutMessagesInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
 }
@@ -1967,7 +1789,6 @@ export type BookingUncheckedUpdateWithoutMessagesInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
 }
@@ -1997,7 +1818,6 @@ export type BookingCreateWithoutReviewsInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemCreateNestedManyWithoutBookingInput
 }
@@ -2027,7 +1847,6 @@ export type BookingUncheckedCreateWithoutReviewsInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutBookingInput
 }
@@ -2073,7 +1892,6 @@ export type BookingUpdateWithoutReviewsInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
 }
@@ -2103,7 +1921,6 @@ export type BookingUncheckedUpdateWithoutReviewsInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
 }
@@ -2133,7 +1950,6 @@ export type BookingCreateWithoutTrainingPlanItemsInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutBookingInput
 }
@@ -2163,7 +1979,6 @@ export type BookingUncheckedCreateWithoutTrainingPlanItemsInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutBookingInput
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutBookingInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutBookingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutBookingInput
 }
@@ -2209,7 +2024,6 @@ export type BookingUpdateWithoutTrainingPlanItemsInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
 }
@@ -2239,7 +2053,6 @@ export type BookingUncheckedUpdateWithoutTrainingPlanItemsInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
 }
@@ -2291,7 +2104,6 @@ export type BookingUpdateWithoutHrInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
@@ -2321,7 +2133,6 @@ export type BookingUncheckedUpdateWithoutHrInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
@@ -2397,7 +2208,6 @@ export type BookingUpdateWithoutCompanyInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
@@ -2427,7 +2237,6 @@ export type BookingUncheckedUpdateWithoutCompanyInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
@@ -2503,7 +2312,6 @@ export type BookingUpdateWithoutProgramInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUpdateManyWithoutBookingNestedInput
@@ -2533,7 +2341,6 @@ export type BookingUncheckedUpdateWithoutProgramInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutBookingNestedInput
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutBookingNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutBookingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutBookingNestedInput
   trainingPlanItems?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutBookingNestedInput
@@ -2571,7 +2378,6 @@ export type BookingCountOutputType = {
   participants: number
   evaluations: number
   invoices: number
-  reimbursements: number
   messages: number
   reviews: number
   trainingPlanItems: number
@@ -2581,7 +2387,6 @@ export type BookingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   participants?: boolean | BookingCountOutputTypeCountParticipantsArgs
   evaluations?: boolean | BookingCountOutputTypeCountEvaluationsArgs
   invoices?: boolean | BookingCountOutputTypeCountInvoicesArgs
-  reimbursements?: boolean | BookingCountOutputTypeCountReimbursementsArgs
   messages?: boolean | BookingCountOutputTypeCountMessagesArgs
   reviews?: boolean | BookingCountOutputTypeCountReviewsArgs
   trainingPlanItems?: boolean | BookingCountOutputTypeCountTrainingPlanItemsArgs
@@ -2616,13 +2421,6 @@ export type BookingCountOutputTypeCountEvaluationsArgs<ExtArgs extends runtime.T
  */
 export type BookingCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InvoiceWhereInput
-}
-
-/**
- * BookingCountOutputType without action
- */
-export type BookingCountOutputTypeCountReimbursementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReimbursementWhereInput
 }
 
 /**
@@ -2675,7 +2473,6 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   participants?: boolean | Prisma.Booking$participantsArgs<ExtArgs>
   evaluations?: boolean | Prisma.Booking$evaluationsArgs<ExtArgs>
   invoices?: boolean | Prisma.Booking$invoicesArgs<ExtArgs>
-  reimbursements?: boolean | Prisma.Booking$reimbursementsArgs<ExtArgs>
   messages?: boolean | Prisma.Booking$messagesArgs<ExtArgs>
   reviews?: boolean | Prisma.Booking$reviewsArgs<ExtArgs>
   trainingPlanItems?: boolean | Prisma.Booking$trainingPlanItemsArgs<ExtArgs>
@@ -2768,7 +2565,6 @@ export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   participants?: boolean | Prisma.Booking$participantsArgs<ExtArgs>
   evaluations?: boolean | Prisma.Booking$evaluationsArgs<ExtArgs>
   invoices?: boolean | Prisma.Booking$invoicesArgs<ExtArgs>
-  reimbursements?: boolean | Prisma.Booking$reimbursementsArgs<ExtArgs>
   messages?: boolean | Prisma.Booking$messagesArgs<ExtArgs>
   reviews?: boolean | Prisma.Booking$reviewsArgs<ExtArgs>
   trainingPlanItems?: boolean | Prisma.Booking$trainingPlanItemsArgs<ExtArgs>
@@ -2794,7 +2590,6 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     participants: Prisma.$ParticipantPayload<ExtArgs>[]
     evaluations: Prisma.$EvaluationPayload<ExtArgs>[]
     invoices: Prisma.$InvoicePayload<ExtArgs>[]
-    reimbursements: Prisma.$ReimbursementPayload<ExtArgs>[]
     messages: Prisma.$MessagePayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     trainingPlanItems: Prisma.$TrainingPlanItemPayload<ExtArgs>[]
@@ -3221,7 +3016,6 @@ export interface Prisma__BookingClient<T, Null = never, ExtArgs extends runtime.
   participants<T extends Prisma.Booking$participantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   evaluations<T extends Prisma.Booking$evaluationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$evaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoices<T extends Prisma.Booking$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reimbursements<T extends Prisma.Booking$reimbursementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$reimbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messages<T extends Prisma.Booking$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Booking$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trainingPlanItems<T extends Prisma.Booking$trainingPlanItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$trainingPlanItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TrainingPlanItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3743,30 +3537,6 @@ export type Booking$invoicesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
-}
-
-/**
- * Booking.reimbursements
- */
-export type Booking$reimbursementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Reimbursement
-   */
-  select?: Prisma.ReimbursementSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Reimbursement
-   */
-  omit?: Prisma.ReimbursementOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReimbursementInclude<ExtArgs> | null
-  where?: Prisma.ReimbursementWhereInput
-  orderBy?: Prisma.ReimbursementOrderByWithRelationInput | Prisma.ReimbursementOrderByWithRelationInput[]
-  cursor?: Prisma.ReimbursementWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ReimbursementScalarFieldEnum | Prisma.ReimbursementScalarFieldEnum[]
 }
 
 /**

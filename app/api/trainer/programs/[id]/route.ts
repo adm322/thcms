@@ -102,12 +102,11 @@ export async function DELETE(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  // Cascade delete: bookings → participants, evaluations, invoices, reimbursements, messages, reviews
+  // Cascade delete: bookings → participants, evaluations, invoices, messages, reviews
   const bookings = await prisma.booking.findMany({ where: { programId: id }, select: { id: true } });
   const bookingIds = bookings.map((b) => b.id);
   if (bookingIds.length > 0) {
     await prisma.review.deleteMany({ where: { bookingId: { in: bookingIds } } });
-    await prisma.reimbursement.deleteMany({ where: { bookingId: { in: bookingIds } } });
     await prisma.invoice.deleteMany({ where: { bookingId: { in: bookingIds } } });
     await prisma.message.deleteMany({ where: { bookingId: { in: bookingIds } } });
     await prisma.evaluation.deleteMany({ where: { bookingId: { in: bookingIds } } });

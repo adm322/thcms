@@ -10,21 +10,24 @@ datasource db {
 // ─── User & Auth ───────────────────────────────────────────
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  name         String
-  role         String   @default("HR") // ADMIN | TRAINER | HR | PARTICIPANT
-  companyId    String?
-  company      Company? @relation(fields: [companyId], references: [id])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  passwordHash       String
+  /** Hash algorithm marker: "bcrypt-10" | "sha256-legacy" | null. Null = legacy. */
+  passwordAlgo       String?
+  /** When true, the user must set a new password on next login. */
+  mustChangePassword Boolean  @default(false)
+  name               String
+  role               String   @default("HR") // ADMIN | TRAINER | HR | PARTICIPANT
+  companyId          String?
+  company            Company? @relation(fields: [companyId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   // Relations
   trainerProfile    TrainerProfile?
   programs          Program[]
   bookingsAsHR      Booking[]        @relation("HRBookings")
-  reimbursements    Reimbursement[]
   sentMessages      Message[]        @relation("SenderMessages")
   receivedMessages  Message[]        @relation("ReceiverMessages")
   reviews           Review[]         @relation("HRReviews")
@@ -97,6 +100,8 @@ model Program {
   featuredAt      DateTime?
   proposalUrl     String?
   proposalLabel   String?
+  /** AI-generated proposal document content (executive summary, pricing, timeline, trainer bio). */
+  proposalContent String?
   thumbnailUrl    String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -105,6 +110,7 @@ model Program {
   bookings        Booking[]
   votes           ProgramVote[]
   itinerary       ItineraryItem[]
+  studio          LearningStudio?
 
   @@index([trainerId])
   @@index([status])
@@ -152,11 +158,14 @@ model QuizResult {
   quizId        String
   quiz          Quiz        @relation(fields: [quizId], references: [id], onDelete: Cascade)
   score         Float
+  answers       Json?
+  attemptNumber Int         @default(1)
+  passed        Boolean     @default(false)
   createdAt     DateTime    @default(now())
 
-  @@unique([participantId, quizId])
   @@index([participantId])
   @@index([quizId])
+  @@index([participantId, quizId, attemptNumber])
 }
 
 model Question {
@@ -221,7 +230,6 @@ model Booking {
   participants     Participant[]
   evaluations      Evaluation[]
   invoices         Invoice[]
-  reimbursements   Reimbursement[]
   messages         Message[]
   reviews          Review[]
   trainingPlanItems TrainingPlanItem[]
@@ -301,24 +309,6 @@ model Invoice {
   @@index([status]) // H4 — revenue aggregation queries
 }
 
-model Reimbursement {
-  id          String   @id @default(cuid())
-  bookingId   String
-  booking     Booking  @relation(fields: [bookingId], references: [id])
-  trainerId   String
-  trainer     User     @relation(fields: [trainerId], references: [id])
-  amount      Float
-  description String?
-  receiptUrl  String?
-  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | PAID
-  adminNotes  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([bookingId])
-  @@index([trainerId])
-  @@index([status]) // H3 — pending reimbursement count
-}
 
 // ─── Employee Records (HR's internal database) ─────────────
 
@@ -341,15 +331,13 @@ model Employee {
   participants   Participant[]
   leaves         Leave[]
   attendances    Attendance[]
-  payrolls       Payroll[]
-  claims         Claim[]
 
   @@index([companyId])
   @@index([icNumber])
   @@index([companyId, status]) // M2 — employee list by company + active/inactive filter
 }
 
-// ─── HR Modules: Leave, Attendance, Payroll, Claims ────────
+// ─── HR Modules: Leave, Attendance ────────
 
 model Leave {
   id          String   @id @default(cuid())
@@ -384,46 +372,6 @@ model Attendance {
   @@index([employeeId, date]) // M1 — attendance lookup by employee + date range
 }
 
-model Payroll {
-  id            String   @id @default(cuid())
-  employeeId    String
-  employee      Employee @relation(fields: [employeeId], references: [id])
-  periodStart   DateTime
-  periodEnd     DateTime
-  basicSalary   Float    @default(0)
-  allowances    Float    @default(0)
-  deductions    Float    @default(0)
-  overtimePay   Float    @default(0)
-  epfEmployee   Float    @default(0)
-  epfEmployer   Float    @default(0)
-  socsoEmployee Float    @default(0)
-  socsoEmployer Float    @default(0)
-  eisEmployee   Float    @default(0)
-  eisEmployer   Float    @default(0)
-  pcb           Float    @default(0)
-  zakat         Float    @default(0)
-  tabungHaji    Float    @default(0)
-  netPay        Float    @default(0)
-  status        String   @default("DRAFT") // DRAFT | FINALISED | PAID
-  createdAt     DateTime @default(now())
-
-  @@index([employeeId])
-}
-
-model Claim {
-  id          String   @id @default(cuid())
-  employeeId  String
-  employee    Employee @relation(fields: [employeeId], references: [id])
-  type        String   // MILEAGE | TRAVEL | MEAL | MEDICAL | OPTICAL | DENTAL | OTHER
-  amount      Float
-  description String?
-  receiptUrl  String?
-  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | PAID
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([employeeId])
-}
 
 // ─── Communication & Reviews ───────────────────────────────
 
@@ -647,6 +595,44 @@ model CodeOfConduct {
   updatedAt DateTime @updatedAt
 }
 
+// ─── Learning Studio ─────────────────────────────────────────
+
+model LearningStudio {
+  id        String   @id @default(cuid())
+  programId String   @unique
+  program   Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  sourceFileUrl  String?
+  sourceText     String?
+  slidesJson     String?
+  quizId         String?
+  generatedAt    DateTime?
+
+  chunksEmbedded Boolean   @default(false)
+  embeddedAt     DateTime?
+
+  /// pending | generating | ready | failed
+  status         String    @default("ready")
+  errorMessage   String?
+  /// When the background job started (used for ETA + timeout)
+  startedAt      DateTime?
+  finishedAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RAGChunk {
+  id               String   @id @default(cuid())
+  learningStudioId String
+  chunkIndex       Int
+  content          String
+  embedding        String   // base64-encoded float32 array
+  createdAt        DateTime @default(now())
+
+  @@index([learningStudioId])
+}
+
 // ─── Trainer Availability ──────────────────────────────────
 
 model TrainerAvailability {
@@ -662,4 +648,15 @@ model TrainerAvailability {
   @@unique([trainerId, date])
   @@index([trainerId])
   @@index([date])
+}
+
+// ─── System Settings (admin-configurable) ──────────────────
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   // JSON string
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
 }

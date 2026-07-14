@@ -52,10 +52,12 @@ export async function uploadFile(
   }
 
   // Fallback to local disk for development
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(uploadsDir, { recursive: true });
-  
+  // Use UPLOAD_BASE_DIR if set (e.g., absolute path for standalone server), else process.cwd()
+  const baseDir = process.env.UPLOAD_BASE_DIR || process.cwd();
+  const uploadsDir = path.join(baseDir, "public", "uploads");
   const filePath = path.join(uploadsDir, fileName);
+  // Ensure the full directory path exists (e.g. uploads/studio/) before writing
+  await mkdir(path.dirname(filePath), { recursive: true });
   await writeFile(filePath, fileBuffer);
 
   return { url: `/uploads/${fileName}` };
