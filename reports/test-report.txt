@@ -1,0 +1,641 @@
+
+> trainhub@0.1.0 test /app
+> node --experimental-test-module-mocks --import tsx --test
+
+TAP version 13
+# Subtest: PATCH returns 400 when body is invalid JSON
+ok 1 - PATCH returns 400 when body is invalid JSON
+  ---
+  duration_ms: 930.387929
+  type: 'test'
+  ...
+# (node:25927) ExperimentalWarning: Module mocking is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: POST returns 400 for invalid form data
+ok 2 - POST returns 400 for invalid form data
+  ---
+  duration_ms: 786.343115
+  type: 'test'
+  ...
+# Subtest: POST /api/ai/insights - returns 400 for invalid JSON
+ok 3 - POST /api/ai/insights - returns 400 for invalid JSON
+  ---
+  duration_ms: 12.349046
+  type: 'test'
+  ...
+# Subtest: POST /api/ai/insights - returns 400 for missing comments
+ok 4 - POST /api/ai/insights - returns 400 for missing comments
+  ---
+  duration_ms: 1.563937
+  type: 'test'
+  ...
+# Subtest: POST /api/ai/insights - returns 400 for non-array comments
+ok 5 - POST /api/ai/insights - returns 400 for non-array comments
+  ---
+  duration_ms: 1.985436
+  type: 'test'
+  ...
+# Subtest: POST /api/ai/quiz
+    # Subtest: returns 400 on invalid JSON
+    ok 1 - returns 400 on invalid JSON
+      ---
+      duration_ms: 13.135628
+      type: 'test'
+      ...
+    1..1
+ok 6 - POST /api/ai/quiz
+  ---
+  duration_ms: 14.347114
+  type: 'suite'
+  ...
+# Login error: SyntaxError: Unexpected token 'i', "invalid-json" is not valid JSON
+#     at JSON.parse (<anonymous>)
+#     at parseJSONFromBytes (node:internal/deps/undici/undici:5852:19)
+#     at successSteps (node:internal/deps/undici/undici:5833:27)
+#     at fullyReadBody (node:internal/deps/undici/undici:4725:9)
+#     at async consumeBody (node:internal/deps/undici/undici:5842:7)
+#     at async POST (/app/app/api/auth/login/route.ts:7:18)
+#     at async TestContext.<anonymous> (/app/app/api/auth/login/__tests__/route.test.ts:13:17)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async TestContext.<anonymous> (/app/app/api/auth/login/__tests__/route.test.ts:7:3)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+# Login error: SyntaxError: Unexpected end of JSON input
+#     at JSON.parse (<anonymous>)
+#     at parseJSONFromBytes (node:internal/deps/undici/undici:5852:19)
+#     at successSteps (node:internal/deps/undici/undici:5833:27)
+#     at consumeBody (node:internal/deps/undici/undici:5839:9)
+#     at NextRequest.json (node:internal/deps/undici/undici:5779:18)
+#     at POST (/app/app/api/auth/login/route.ts:7:32)
+#     at TestContext.<anonymous> (/app/app/api/auth/login/__tests__/route.test.ts:24:23)
+#     at Test.runInAsyncScope (node:async_hooks:214:14)
+#     at Test.run (node:internal/test_runner/test:1047:25)
+#     at Test.start (node:internal/test_runner/test:944:17)
+# Subtest: POST /api/auth/login
+    # Subtest: returns 500 when request JSON parsing fails (e.g. invalid JSON)
+    ok 1 - returns 500 when request JSON parsing fails (e.g. invalid JSON)
+      ---
+      duration_ms: 15.000493
+      type: 'test'
+      ...
+    # Subtest: returns 500 when request JSON parsing fails (e.g. no body)
+    ok 2 - returns 500 when request JSON parsing fails (e.g. no body)
+      ---
+      duration_ms: 1.711356
+      type: 'test'
+      ...
+    # Subtest: returns 400 when body does not match schema
+    ok 3 - returns 400 when body does not match schema
+      ---
+      duration_ms: 3.694675
+      type: 'test'
+      ...
+    1..3
+ok 7 - POST /api/auth/login
+  ---
+  duration_ms: 22.096664
+  type: 'test'
+  ...
+# (node:26367) ExperimentalWarning: Module mocking is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: POST returns 400 on invalid JSON
+ok 8 - POST returns 400 on invalid JSON
+  ---
+  duration_ms: 372.273348
+  type: 'test'
+  ...
+# (node:26485) ExperimentalWarning: Module mocking is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Trainer availability PUT - Invalid JSON
+ok 9 - Trainer availability PUT - Invalid JSON
+  ---
+  duration_ms: 501.750325
+  type: 'test'
+  ...
+# Trainer stats error: Error: Database connection failed
+#     at Proxy.import_prisma.prisma.program.count (/app/app/api/trainer/stats/route.test.ts:17:11)
+#     at GET (/app/app/api/trainer/stats/route.ts:13:22)
+#     at async TestContext.<anonymous> (/app/app/api/trainer/stats/route.test.ts:21:22)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+# Subtest: Trainer stats internal error
+ok 10 - Trainer stats internal error
+  ---
+  duration_ms: 19.344359
+  type: 'test'
+  ...
+# Subtest: formatRM
+    # Subtest: formats positive numbers correctly
+    ok 1 - formats positive numbers correctly
+      ---
+      duration_ms: 327.962666
+      type: 'test'
+      ...
+    # Subtest: formats zero correctly
+    ok 2 - formats zero correctly
+      ---
+      duration_ms: 0.580863
+      type: 'test'
+      ...
+    # Subtest: formats negative numbers correctly
+    ok 3 - formats negative numbers correctly
+      ---
+      duration_ms: 0.402205
+      type: 'test'
+      ...
+    # Subtest: formats decimal numbers correctly
+    ok 4 - formats decimal numbers correctly
+      ---
+      duration_ms: 0.521409
+      type: 'test'
+      ...
+    # Subtest: formats large numbers with commas correctly
+    ok 5 - formats large numbers with commas correctly
+      ---
+      duration_ms: 0.397986
+      type: 'test'
+      ...
+    1..5
+ok 11 - formatRM
+  ---
+  duration_ms: 332.537161
+  type: 'suite'
+  ...
+# Subtest: formatRent
+    # Subtest: formats a standard number correctly
+    ok 1 - formats a standard number correctly
+      ---
+      duration_ms: 0.616887
+      type: 'test'
+      ...
+    # Subtest: formats zero correctly
+    ok 2 - formats zero correctly
+      ---
+      duration_ms: 0.548749
+      type: 'test'
+      ...
+    # Subtest: formats large numbers correctly
+    ok 3 - formats large numbers correctly
+      ---
+      duration_ms: 0.878589
+      type: 'test'
+      ...
+    # Subtest: formats decimal values correctly
+    ok 4 - formats decimal values correctly
+      ---
+      duration_ms: 0.776232
+      type: 'test'
+      ...
+    1..4
+ok 12 - formatRent
+  ---
+  duration_ms: 4.06097
+  type: 'suite'
+  ...
+# Subtest: formatDate
+    # Subtest: formats valid ISO string
+    ok 1 - formats valid ISO string
+      ---
+      duration_ms: 11.950632
+      type: 'test'
+      ...
+    # Subtest: formats valid ISO dates correctly
+    ok 2 - formats valid ISO dates correctly
+      ---
+      duration_ms: 0.94186
+      type: 'test'
+      ...
+    # Subtest: handles invalid date string by returning the original string
+    ok 3 - handles invalid date string by returning the original string
+      ---
+      duration_ms: 0.32212
+      type: 'test'
+      ...
+    # Subtest: returns the original string for invalid dates
+    ok 4 - returns the original string for invalid dates
+      ---
+      duration_ms: 0.275999
+      type: 'test'
+      ...
+    1..4
+ok 13 - formatDate
+  ---
+  duration_ms: 14.205276
+  type: 'suite'
+  ...
+# Subtest: isFavorableMonth
+    # Subtest: should return unfavorable for January with a warning
+    ok 1 - should return unfavorable for January with a warning
+      ---
+      duration_ms: 3.821725
+      type: 'test'
+      ...
+    # Subtest: should return unfavorable for February with a warning
+    ok 2 - should return unfavorable for February with a warning
+      ---
+      duration_ms: 0.549124
+      type: 'test'
+      ...
+    # Subtest: should return favorable for March with a warning
+    ok 3 - should return favorable for March with a warning
+      ---
+      duration_ms: 0.426484
+      type: 'test'
+      ...
+    # Subtest: should return favorable for April with no warning
+    ok 4 - should return favorable for April with no warning
+      ---
+      duration_ms: 0.341004
+      type: 'test'
+      ...
+    # Subtest: should return favorable for May with a warning
+    ok 5 - should return favorable for May with a warning
+      ---
+      duration_ms: 0.333721
+      type: 'test'
+      ...
+    # Subtest: should return favorable for June and July with no warning
+    ok 6 - should return favorable for June and July with no warning
+      ---
+      duration_ms: 0.59348
+      type: 'test'
+      ...
+    # Subtest: should return favorable for August with a warning
+    ok 7 - should return favorable for August with a warning
+      ---
+      duration_ms: 0.530731
+      type: 'test'
+      ...
+    # Subtest: should return favorable for September with no warning
+    ok 8 - should return favorable for September with no warning
+      ---
+      duration_ms: 0.56542
+      type: 'test'
+      ...
+    # Subtest: should return favorable for October with a warning
+    ok 9 - should return favorable for October with a warning
+      ---
+      duration_ms: 0.442419
+      type: 'test'
+      ...
+    # Subtest: should return unfavorable for November with a warning
+    ok 10 - should return unfavorable for November with a warning
+      ---
+      duration_ms: 0.788563
+      type: 'test'
+      ...
+    # Subtest: should return unfavorable for December with a warning
+    ok 11 - should return unfavorable for December with a warning
+      ---
+      duration_ms: 0.412756
+      type: 'test'
+      ...
+    # Subtest: should default to unfavorable with year-end closure warning for invalid months (e.g. 13)
+    ok 12 - should default to unfavorable with year-end closure warning for invalid months (e.g. 13)
+      ---
+      duration_ms: 0.27343
+      type: 'test'
+      ...
+    1..12
+ok 14 - isFavorableMonth
+  ---
+  duration_ms: 12.849342
+  type: 'suite'
+  ...
+# Subtest: isBlackoutPeriod
+    # Subtest: should return null for dates outside blackout periods
+    ok 1 - should return null for dates outside blackout periods
+      ---
+      duration_ms: 0.766707
+      type: 'test'
+      ...
+    # Subtest: Hari Raya Aidilfitri (2026-04-17 to 2026-04-26)
+        # Subtest: should match the start date
+        ok 1 - should match the start date
+          ---
+          duration_ms: 0.401265
+          type: 'test'
+          ...
+        # Subtest: should match an intermediate date
+        ok 2 - should match an intermediate date
+          ---
+          duration_ms: 0.314857
+          type: 'test'
+          ...
+        # Subtest: should match the end date
+        ok 3 - should match the end date
+          ---
+          duration_ms: 0.232933
+          type: 'test'
+          ...
+        # Subtest: should not match the day before
+        ok 4 - should not match the day before
+          ---
+          duration_ms: 0.282576
+          type: 'test'
+          ...
+        # Subtest: should not match the day after
+        ok 5 - should not match the day after
+          ---
+          duration_ms: 0.320944
+          type: 'test'
+          ...
+        1..5
+    ok 2 - Hari Raya Aidilfitri (2026-04-17 to 2026-04-26)
+      ---
+      duration_ms: 1.985982
+      type: 'suite'
+      ...
+    # Subtest: Chinese New Year (2026-02-16 to 2026-02-20)
+        # Subtest: should match the start date
+        ok 1 - should match the start date
+          ---
+          duration_ms: 0.604004
+          type: 'test'
+          ...
+        # Subtest: should match an intermediate date
+        ok 2 - should match an intermediate date
+          ---
+          duration_ms: 0.410402
+          type: 'test'
+          ...
+        # Subtest: should match the end date
+        ok 3 - should match the end date
+          ---
+          duration_ms: 0.228655
+          type: 'test'
+          ...
+        # Subtest: should not match the day before
+        ok 4 - should not match the day before
+          ---
+          duration_ms: 0.24069
+          type: 'test'
+          ...
+        # Subtest: should not match the day after
+        ok 5 - should not match the day after
+          ---
+          duration_ms: 0.202551
+          type: 'test'
+          ...
+        1..5
+    ok 3 - Chinese New Year (2026-02-16 to 2026-02-20)
+      ---
+      duration_ms: 2.134042
+      type: 'suite'
+      ...
+    # Subtest: Year-End (2026-12-20 to 2026-12-31)
+        # Subtest: should match the start date
+        ok 1 - should match the start date
+          ---
+          duration_ms: 0.373389
+          type: 'test'
+          ...
+        # Subtest: should match an intermediate date
+        ok 2 - should match an intermediate date
+          ---
+          duration_ms: 0.200604
+          type: 'test'
+          ...
+        # Subtest: should match the end date
+        ok 3 - should match the end date
+          ---
+          duration_ms: 0.224567
+          type: 'test'
+          ...
+        # Subtest: should not match the day before
+        ok 4 - should not match the day before
+          ---
+          duration_ms: 0.226579
+          type: 'test'
+          ...
+        # Subtest: should not match the day after
+        ok 5 - should not match the day after
+          ---
+          duration_ms: 0.193433
+          type: 'test'
+          ...
+        1..5
+    ok 4 - Year-End (2026-12-20 to 2026-12-31)
+      ---
+      duration_ms: 1.818657
+      type: 'suite'
+      ...
+    # Subtest: should handle time components correctly (assume midnight UTC if missing, test with time within period)
+    ok 5 - should handle time components correctly (assume midnight UTC if missing, test with time within period)
+      ---
+      duration_ms: 0.212948
+      type: 'test'
+      ...
+    1..5
+ok 15 - isBlackoutPeriod
+  ---
+  duration_ms: 7.484338
+  type: 'suite'
+  ...
+# Subtest: getHariRayaDates
+    # Subtest: should return the correct dates for Hari Raya
+    ok 1 - should return the correct dates for Hari Raya
+      ---
+      duration_ms: 0.344288
+      type: 'test'
+      ...
+    1..1
+ok 16 - getHariRayaDates
+  ---
+  duration_ms: 0.526336
+  type: 'suite'
+  ...
+# Subtest: getBlackoutPeriods
+    # Subtest: should return the correct static array of blackout periods
+    ok 1 - should return the correct static array of blackout periods
+      ---
+      duration_ms: 0.396201
+      type: 'test'
+      ...
+    1..1
+ok 17 - getBlackoutPeriods
+  ---
+  duration_ms: 0.56833
+  type: 'suite'
+  ...
+# Subtest: isPublicHoliday
+    # Subtest: should return the holiday object for a known public holiday (National)
+    ok 1 - should return the holiday object for a known public holiday (National)
+      ---
+      duration_ms: 0.522525
+      type: 'test'
+      ...
+    # Subtest: should return the holiday object for a known public holiday (State)
+    ok 2 - should return the holiday object for a known public holiday (State)
+      ---
+      duration_ms: 0.335339
+      type: 'test'
+      ...
+    # Subtest: should return null for a date that is not a public holiday
+    ok 3 - should return null for a date that is not a public holiday
+      ---
+      duration_ms: 0.202462
+      type: 'test'
+      ...
+    # Subtest: should return null for dates in different years
+    ok 4 - should return null for dates in different years
+      ---
+      duration_ms: 0.218075
+      type: 'test'
+      ...
+    # Subtest: should return null for invalid date strings
+    ok 5 - should return null for invalid date strings
+      ---
+      duration_ms: 0.279751
+      type: 'test'
+      ...
+    # Subtest: should return null for an empty string
+    ok 6 - should return null for an empty string
+      ---
+      duration_ms: 0.33163
+      type: 'test'
+      ...
+    1..6
+ok 18 - isPublicHoliday
+  ---
+  duration_ms: 2.464197
+  type: 'suite'
+  ...
+# Subtest: getActivePeriods
+    # Subtest: returns empty array for a date with no active periods
+    ok 1 - returns empty array for a date with no active periods
+      ---
+      duration_ms: 0.554858
+      type: 'test'
+      ...
+    # Subtest: includes a period on its exact start date
+    ok 2 - includes a period on its exact start date
+      ---
+      duration_ms: 0.303742
+      type: 'test'
+      ...
+    # Subtest: includes a period on its exact end date
+    ok 3 - includes a period on its exact end date
+      ---
+      duration_ms: 0.317754
+      type: 'test'
+      ...
+    # Subtest: includes a period for a date strictly within it
+    ok 4 - includes a period for a date strictly within it
+      ---
+      duration_ms: 0.261372
+      type: 'test'
+      ...
+    # Subtest: returns multiple periods when dates overlap
+    ok 5 - returns multiple periods when dates overlap
+      ---
+      duration_ms: 0.52017
+      type: 'test'
+      ...
+    # Subtest: returns empty array for invalid date string
+    ok 6 - returns empty array for invalid date string
+      ---
+      duration_ms: 0.318645
+      type: 'test'
+      ...
+    1..6
+ok 19 - getActivePeriods
+  ---
+  duration_ms: 2.832034
+  type: 'suite'
+  ...
+# Subtest: getRamadanStart
+    # Subtest: should return correct date for 2026
+    ok 1 - should return correct date for 2026
+      ---
+      duration_ms: 0.561242
+      type: 'test'
+      ...
+    1..1
+ok 20 - getRamadanStart
+  ---
+  duration_ms: 0.90817
+  type: 'suite'
+  ...
+# Subtest: getHolidaysForMonth
+    # Subtest: should return holidays for a month with holidays (e.g., January 2026)
+    ok 1 - should return holidays for a month with holidays (e.g., January 2026)
+      ---
+      duration_ms: 1.095657
+      type: 'test'
+      ...
+    # Subtest: should return an empty array for a month with no holidays (e.g., November 2026)
+    ok 2 - should return an empty array for a month with no holidays (e.g., November 2026)
+      ---
+      duration_ms: 0.308944
+      type: 'test'
+      ...
+    # Subtest: should return an empty array for a different year (e.g., 2025)
+    ok 3 - should return an empty array for a different year (e.g., 2025)
+      ---
+      duration_ms: 3.724743
+      type: 'test'
+      ...
+    # Subtest: should handle edge cases like invalid months
+    ok 4 - should handle edge cases like invalid months
+      ---
+      duration_ms: 0.311906
+      type: 'test'
+      ...
+    1..4
+ok 21 - getHolidaysForMonth
+  ---
+  duration_ms: 5.902831
+  type: 'suite'
+  ...
+# Subtest: cn utility function
+    # Subtest: merges basic classes correctly
+    ok 1 - merges basic classes correctly
+      ---
+      duration_ms: 23.524744
+      type: 'test'
+      ...
+    # Subtest: handles conditional classes
+    ok 2 - handles conditional classes
+      ---
+      duration_ms: 1.000853
+      type: 'test'
+      ...
+    # Subtest: merges tailwind classes (overriding)
+    ok 3 - merges tailwind classes (overriding)
+      ---
+      duration_ms: 1.198388
+      type: 'test'
+      ...
+    # Subtest: handles arrays of classes
+    ok 4 - handles arrays of classes
+      ---
+      duration_ms: 0.681464
+      type: 'test'
+      ...
+    # Subtest: handles undefined, null, and empty strings gracefully
+    ok 5 - handles undefined, null, and empty strings gracefully
+      ---
+      duration_ms: 0.354747
+      type: 'test'
+      ...
+    # Subtest: complex combinations
+    ok 6 - complex combinations
+      ---
+      duration_ms: 0.773771
+      type: 'test'
+      ...
+    1..6
+ok 22 - cn utility function
+  ---
+  duration_ms: 31.784009
+  type: 'test'
+  ...
+1..22
+# tests 81
+# suites 15
+# pass 81
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3945.282812
