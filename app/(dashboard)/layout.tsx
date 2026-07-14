@@ -5,9 +5,9 @@ import { useAuth } from "@/components/AuthProvider";
 import { useLang } from "@/components/LanguageProvider";
 import { Sidebar } from "@/components/Sidebar";
 import { NotificationBell } from "@/components/NotificationBell";
-import { NextActionBanner } from "@/components/NextActionBanner";
 import { Loader2, Menu, X, Sun, Moon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export default function DashboardLayout({
@@ -111,8 +111,8 @@ export default function DashboardLayout({
           {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Notifications */}
-          <NotificationBell />
+          {/* Notifications (single unified inbox — covers both notifications and contextual actions) */}
+          <NotificationBell role={user.role} />
 
           {/* User area */}
           <button onClick={toggleDark} className="rounded-md p-2 hover:bg-accent" title="Toggle theme">
@@ -125,7 +125,7 @@ export default function DashboardLayout({
           >
             {lang === "en" ? "BM" : "EN"}
           </button>
-          <span className="text-sm text-muted-foreground hidden sm:inline">{user?.name}</span>
+          <Link href="/profile" className="text-sm text-muted-foreground hidden sm:inline hover:text-foreground hover:underline">{user?.name}</Link>
           <button
             onClick={logout}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors ml-2"
@@ -143,11 +143,6 @@ export default function DashboardLayout({
             {children}
           </div>
         </main>
-
-        {/* Floating action widget */}
-        {user.role !== "PARTICIPANT" && (
-          <NextActionBanner role={user.role as "HR" | "ADMIN" | "TRAINER"} />
-        )}
       </div>
     </div>
     </div>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Dashboard — Dense Utility</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --surface: #14171c;
+    --surface-2: #1b1f25;
+    --line: #232830;
+    --fg: #e6e8eb;
+    --muted: #8a93a0;
+    --accent: #38bdf8;
+    --good: #22c55e;
+    --warn: #f59e0b;
+    --bad: #ef4444;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--fg);
+    font-size: 14px;
+    line-height: 1.4;
+    padding-bottom: 80px;
+  }
+  .phone { max-width: 420px; margin: 0 auto; min-height: 100vh; }
+
+  /* Top bar */
+  .top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg); position: sticky; top: 0; z-index: 5;
+  }
+  .crumb { font-size: 12px; color: var(--muted); }
+  .crumb strong { color: var(--fg); font-weight: 600; }
+  .right { display: flex; gap: 8px; align-items: center; }
+  .pill {
+    background: var(--surface-2); border: 1px solid var(--line);
+    padding: 4px 8px; border-radius: 999px; font-size: 11px;
+    color: var(--muted); display: inline-flex; align-items: center; gap: 5px;
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+
+  /* KPI grid */
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border-bottom: 1px solid var(--line); }
+  .kpi { background: var(--bg); padding: 12px 14px; }
+  .kpi .l { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .kpi .v { font-size: 22px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .kpi .d { font-size: 11px; margin-top: 2px; color: var(--muted); }
+  .kpi .d.up { color: var(--good); }
+  .kpi .d.dn { color: var(--bad); }
+  .kpi .spark { height: 16px; margin-top: 6px; }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex; gap: 6px; padding: 10px 12px;
+    background: var(--bg); border-bottom: 1px solid var(--line);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .toolbar::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0; padding: 5px 10px; font-size: 12px;
+    background: var(--surface); border: 1px solid var(--line);
+    color: var(--muted); border-radius: 6px;
+  }
+  .tab.active { background: var(--surface-2); color: var(--fg); border-color: #2f3742; }
+  .spacer { flex: 1; }
+  .srch {
+    flex-shrink: 0; padding: 5px 10px; font-size: 12px;
+    background: var(--surface); border: 1px solid var(--line);
+    color: var(--muted); border-radius: 6px;
+  }
+
+  /* Table-like list */
+  .list { background: var(--bg); }
+  .row {
+    display: grid; grid-template-columns: 56px 1fr auto;
+    align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .row:active { background: var(--surface); }
+  .row .id {
+    font-variant-numeric: tabular-nums; font-weight: 600;
+    color: var(--accent); font-size: 13px;
+  }
+  .row .name { font-size: 13px; font-weight: 500; }
+  .row .sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .badge {
+    display: inline-block; font-size: 10px; padding: 2px 6px;
+    border-radius: 4px; font-weight: 600;
+    background: var(--surface-2); color: var(--muted);
+  }
+  .badge.ok { background: rgba(34,197,94,.12); color: var(--good); }
+  .badge.warn { background: rgba(245,158,11,.14); color: var(--warn); }
+  .badge.bad { background: rgba(239,68,68,.14); color: var(--bad); }
+  .right-of-row { text-align: right; font-variant-numeric: tabular-nums; }
+  .right-of-row .t { font-size: 13px; font-weight: 600; }
+  .right-of-row .d { font-size: 11px; color: var(--muted); }
+
+  .group-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 14px 6px; font-size: 11px; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--muted);
+  }
+
+  /* Bottom nav */
+  .nav {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: var(--surface); border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+  }
+  .nav button {
+    background: none; border: 0; padding: 6px 0;
+    font-size: 10px; color: var(--muted);
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .nav .ic { width: 18px; height: 18px; }
+  .nav button.active { color: var(--accent); }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="top">
+      <div class="crumb"><strong>Ops Console</strong> · Today</div>
+      <div class="right">
+        <span class="pill"><span class="dot"></span> Live</span>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi">
+        <div class="l">Active runs</div>
+        <div class="v">12</div>
+        <div class="d up">▲ 2 vs yest</div>
+        <svg class="spark" viewBox="0 0 100 20" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#22c55e" stroke-width="1.5"
+            points="0,14 12,12 24,15 36,10 48,11 60,7 72,9 84,5 100,6"/>
+        </svg>
+      </div>
+      <div class="kpi">
+        <div class="l">On time</div>
+        <div class="v">94.2%</div>
+        <div class="d up">▲ 1.4pp</div>
+        <svg class="spark" viewBox="0 0 100 20" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#38bdf8" stroke-width="1.5"
+            points="0,12 14,10 28,11 42,8 56,9 70,6 84,7 100,4"/>
+        </svg>
+      </div>
+      <div class="kpi">
+        <div class="l">Incidents</div>
+        <div class="v">2</div>
+        <div class="d dn">▼ 1 vs yest</div>
+        <svg class="spark" viewBox="0 0 100 20" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#ef4444" stroke-width="1.5"
+            points="0,6 14,8 28,5 42,9 56,4 70,7 84,10 100,12"/>
+        </svg>
+      </div>
+      <div class="kpi">
+        <div class="l">Staff on duty</div>
+        <div class="v">38 / 42</div>
+        <div class="d">4 absences</div>
+        <svg class="spark" viewBox="0 0 100 20" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#8a93a0" stroke-width="1.5"
+            points="0,4 14,4 28,4 42,5 56,5 70,6 84,6 100,6"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="tab active">All</button>
+      <button class="tab">Delays</button>
+      <button class="tab">Incidents</button>
+      <button class="tab">Cleared</button>
+      <button class="tab">Crew</button>
+      <div class="spacer"></div>
+      <button class="srch">⌕ Filter</button>
+    </div>
+
+    <div class="group-head"><span>Active · 12</span><span>updated 4s ago</span></div>
+    <div class="list">
+      <div class="row">
+        <div class="id">04:12</div>
+        <div><div class="name">Northbound Express</div><div class="sub">Marston → Eastfield · Driver A. Whitfield</div></div>
+        <div class="right-of-row"><div class="t">+0:02</div><div class="d"><span class="badge ok">on time</span></div></div>
+      </div>
+      <div class="row">
+        <div class="id">04:30</div>
+        <div><div class="name">Freight 7K22</div><div class="sub">Yard 3 · Held at signal EF-12</div></div>
+        <div class="right-of-row"><div class="t">+6:14</div><div class="d"><span class="badge warn">delayed</span></div></div>
+      </div>
+      <div class="row">
+        <div class="id">04:55</div>
+        <div><div class="name">Local 2L08</div><div class="sub">Loop · Driver M. Okafor</div></div>
+        <div class="right-of-row"><div class="t">—</div><div class="d"><span class="badge bad">incident</span></div></div>
+      </div>
+      <div class="row">
+        <div class="id">05:18</div>
+        <div><div class="name">Inspection · Unit 2241</div><div class="sub">Engineering bay 2</div></div>
+        <div class="right-of-row"><div class="t">+0:00</div><div class="d"><span class="badge ok">cleared</span></div></div>
+      </div>
+      <div class="row">
+        <div class="id">05:40</div>
+        <div><div class="name">Crew change · 4 ops</div><div class="sub">Sign-on window opens 05:25</div></div>
+        <div class="right-of-row"><div class="t">in 8m</div><div class="d"><span class="badge">scheduled</span></div></div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="active">⌂<br/>Console</button>
+      <button>📅<br/>Runs</button>
+      <button>👥<br/>Crew</button>
+      <button>🔧<br/>Maint</button>
+      <button>⋯<br/>More</button>
+    </nav>
+  </div>
+</body>
+</html>

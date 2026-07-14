@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -23,6 +23,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
+import { MobileViewLink } from "@/components/mobile-dashboard/MobileViewLink";
 
 interface DashboardStats {
   totalBookings: number;
@@ -30,7 +31,6 @@ interface DashboardStats {
   totalPrograms: number;
   totalRevenue: number;
   pendingBookings: number;
-  pendingReimbursements: number;
 }
 
 interface MonthlyStats {
@@ -43,6 +43,25 @@ interface MonthlyStats {
 }
 
 import { useRouter } from "next/navigation";
+
+// H7: Memoized action item — prevents re-render of unchanged items when actions list changes
+const ActionItem = React.memo(function ActionItem({ action }: { action: any }) {
+  return (
+    <div className="px-5 py-3">
+      <div className="flex items-start gap-3">
+        <span className={`mt-1.5 h-2 w-2 rounded-full flex-shrink-0 ${action.urgency === "critical" ? "bg-red-500" : action.urgency === "urgent" ? "bg-amber-500" : "bg-blue-500"}`} />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm">{action.message}</p>
+          {action.action && action.link && (
+            <Link href={action.link} className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline mt-1">
+              {action.action} <ArrowRight className="h-3 w-3" />
+            </Link>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+});
 
 export function AdminDashboardClient({ initialData }: { initialData: any }) {
   const router = useRouter();
@@ -208,20 +227,8 @@ export function AdminDashboardClient({ initialData }: { initialData: any }) {
           </div>
           <CardContent className="p-0">
             <div className="divide-y">
-              {actions.slice(0, 4).map((a: any, i: number) => (
-                <div key={i} className="px-5 py-3">
-                  <div className="flex items-start gap-3">
-                    <span className={`mt-1.5 h-2 w-2 rounded-full flex-shrink-0 ${a.urgency === "critical" ? "bg-red-500" : a.urgency === "urgent" ? "bg-amber-500" : "bg-blue-500"}`} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm">{a.message}</p>
-                      {a.action && a.link && (
-                        <Link href={a.link} className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline mt-1">
-                          {a.action} <ArrowRight className="h-3 w-3" />
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                </div>
+              {actions.slice(0, 4).map((a: any) => (
+                <ActionItem key={a.bookingId ?? a.type} action={a} />
               ))}
             </div>
           </CardContent>
@@ -256,7 +263,6 @@ export function AdminDashboardClient({ initialData }: { initialData: any }) {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { label: "All Bookings", href: "/admin/bookings", icon: ClipboardList },
-            { label: "Reimbursements", href: "/admin/reimbursements", icon: DollarSign },
             { label: "Invoices", href: "/admin/invoices", icon: TrendingUp },
             { label: "Manage Trainers", href: "/admin/trainers", icon: Users },
           ].map((action: any) => (
@@ -302,6 +308,7 @@ export function AdminDashboardClient({ initialData }: { initialData: any }) {
         onClose={() => setDialogOpen(false)}
         onStatusChange={handleStatusChange}
       />
+      <MobileViewLink />
     </div>
   );
 }

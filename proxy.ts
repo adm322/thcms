@@ -1,16 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "trainhub-my-jwt-secret-key-2026-change-in-prod"
-);
+/**
+ * Resolves the JWT secret used to verify cookies on every request. Must stay in
+ * sync with `lib/auth.ts`. In production, JWT_SECRET is REQUIRED — falling back
+ * to a hardcoded string would let anyone forge cookies.
+ */
+function resolveJwtSecret(): Uint8Array {
+  const isProd = process.env.NODE_ENV === "production";
+  const secret = process.env.JWT_SECRET;
+
+  if (secret && secret.length > 0) {
+    return new TextEncoder().encode(secret);
+  }
+
+  if (isProd) {
+    throw new Error(
+      "JWT_SECRET is required in production. Refusing to start with a fallback secret."
+    );
+  }
+
+  // Dev-only stable fallback. Same value as lib/auth.ts so cookies verify across both.
+  console.warn(
+    "[proxy] JWT_SECRET is not set; using a development-only fallback. " +
+      "Set JWT_SECRET in your .env file for stable sessions."
+  );
+  return new TextEncoder().encode("trainhub-dev-jwt-fallback-not-for-production");
+}
+
+const JWT_SECRET = resolveJwtSecret();
 
 const COOKIE_NAME = "trainhub_session";
 
 // Routes that don't require authentication
-const PUBLIC_PATHS = ["/login", "/api/auth", "/quiz", "/class", "/api/quiz", "/api/attendance"];
+const PUBLIC_PATHS = ["/login", "/api/auth", "/quiz", "/class", "/api/quiz", "/api/attendance", "/m/quiz"];
 // Public assets
-const PUBLIC_PREFIXES = ["/_next", "/favicon.ico", "/images", "/thumbnails", "/uploads", "/materials"];
+const PUBLIC_PREFIXES = ["/_next", "/favicon.ico", "/images", "/thumbnails", "/uploads", "/materials", "/chrome-log-interceptor.js"];
 
 async function getSessionUser(request: NextRequest) {
   const token = request.cookies.get(COOKIE_NAME)?.value;
@@ -67,6 +92,20 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
   }
   if (pathname.startsWith("/participant") && user.role !== "PARTICIPANT") {
+    return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
+  }
+
+  // Mobile route equivalents
+  if (pathname.startsWith("/m/admin") && user.role !== "ADMIN") {
+    return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
+  }
+  if (pathname.startsWith("/m/trainer") && user.role !== "TRAINER") {
+    return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
+  }
+  if (pathname.startsWith("/m/hr") && user.role !== "HR") {
+    return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
+  }
+  if (pathname.startsWith("/m/participant") && user.role !== "PARTICIPANT") {
     return NextResponse.redirect(new URL(getDashboardPath(user.role), request.url));
   }
 

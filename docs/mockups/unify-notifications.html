@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Unified Notifications — TrainHub Mockup</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --primary: #6366f1;
+    --primary-fg: #ffffff;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --blue: #3b82f6;
+    --emerald: #10b981;
+    --purple: #a855f7;
+    --accent: #f1f5f9;
+    --shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.18);
+    --shadow-lg: 0 20px 50px -10px rgba(15, 23, 42, 0.28);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1220;
+      --card: #111827;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #1f2937;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { margin: 0 0 4px; font-size: 24px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+  .panel-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .panel-head h2 { margin: 0; font-size: 14px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: var(--muted); font-weight: 600; }
+  .tag.now { background: var(--primary); color: var(--primary-fg); }
+  .mock-screen { position: relative; height: 460px; background:
+    radial-gradient(circle at 20% 0%, rgba(99, 102, 241, 0.05), transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(168, 85, 247, 0.05), transparent 40%),
+    var(--bg);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .navbar { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--card); height: 52px; }
+  .navbar .logo { font-weight: 700; font-size: 13px; margin-right: auto; }
+  .navbar .ico { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: var(--muted); background: transparent; position: relative; }
+  .navbar .ico:hover { background: var(--accent); }
+  .badge { position: absolute; top: 2px; right: 2px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: var(--red); color: #fff; font-size: 9px; font-weight: 700; display: grid; place-items: center; border: 2px solid var(--card); }
+  .bell-svg { width: 18px; height: 18px; }
+  .user-pill { width: 28px; height: 28px; border-radius: 999px; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+  .content { padding: 18px 22px; color: var(--muted); font-size: 12px; }
+  .content .row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .content .skel { height: 10px; background: var(--accent); border-radius: 4px; flex: 1; }
+  .content .skel.short { flex: 0 0 30%; }
+
+  /* Floating pill (BEFORE) */
+  .float-pill {
+    position: absolute; right: 16px; bottom: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg); font-size: 12px; font-weight: 600; color: var(--muted);
+  }
+  .float-pill .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--red); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18); }
+
+  /* Dropdown panel (AFTER) */
+  .dropdown {
+    position: absolute; right: 16px; top: 56px; width: 380px; max-height: 520px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-lg);
+    display: flex; flex-direction: column; overflow: hidden;
+    transform-origin: top right;
+    animation: pop .18s ease-out;
+  }
+  @keyframes pop { from { opacity: 0; transform: scale(0.96) translateY(-6px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .dd-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  .dd-head .title { font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .dd-head .x { color: var(--muted); cursor: pointer; padding: 4px; border-radius: 6px; }
+  .dd-head .x:hover { background: var(--accent); color: var(--text); }
+  .tabs { display: flex; align-items: center; gap: 4px; padding: 8px 10px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .tab { padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+  .tab.active { background: var(--primary); color: var(--primary-fg); }
+  .tab .count { background: rgba(255,255,255,0.22); padding: 1px 6px; border-radius: 999px; font-size: 9px; font-weight: 700; }
+  .tab:not(.active) .count { background: var(--accent); color: var(--muted); }
+  .mark-all { margin-left: auto; font-size: 10px; color: var(--primary); cursor: pointer; }
+  .summary-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--accent); }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; }
+  .chip.red { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+  .chip.amber { background: rgba(245, 158, 11, 0.12); color: var(--amber); }
+  .chip.blue { background: rgba(59, 130, 246, 0.12); color: var(--blue); }
+  .chip.purple { background: rgba(168, 85, 247, 0.12); color: var(--purple); }
+  .chip.emerald { background: rgba(16, 185, 129, 0.12); color: var(--emerald); }
+  .list { overflow-y: auto; flex: 1; }
+  .item { display: flex; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--border); align-items: flex-start; cursor: pointer; }
+  .item:hover { background: var(--accent); }
+  .item.unread { background: rgba(99, 102, 241, 0.04); }
+  .item .icon { width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center; font-size: 14px; flex-shrink: 0; }
+  .icon.red { background: rgba(239, 68, 68, 0.12); color: var(--red); }
+  .icon.amber { background: rgba(245, 158, 11, 0.14); color: var(--amber); }
+  .icon.blue { background: rgba(59, 130, 246, 0.12); color: var(--blue); }
+  .icon.purple { background: rgba(168, 85, 247, 0.12); color: var(--purple); }
+  .icon.gray { background: var(--accent); color: var(--muted); }
+  .item .body { flex: 1; min-width: 0; }
+  .item .body p { margin: 0; font-size: 12px; color: var(--text); }
+  .item.unread .body p.title { font-weight: 600; }
+  .item .meta { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; font-size: 10px; color: var(--muted); }
+  .item .meta a { color: var(--primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
+  .item .unread-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--blue); margin-top: 6px; flex-shrink: 0; }
+  .item .progress { height: 4px; background: var(--accent); border-radius: 999px; margin-top: 6px; overflow: hidden; }
+  .item .progress > span { display: block; height: 100%; border-radius: 999px; }
+  .item .progress.red > span { background: var(--red); }
+  .item .progress.amber > span { background: var(--amber); }
+  .item .progress.emerald > span { background: var(--emerald); }
+  .empty { padding: 40px 14px; text-align: center; color: var(--muted); font-size: 11px; }
+  .empty svg { opacity: 0.3; margin-bottom: 6px; }
+
+  .controls { padding: 14px 18px; background: var(--card); border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .controls label { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .btn { font-size: 11px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; font-weight: 600; }
+  .btn:hover { background: var(--accent); }
+  .btn.on { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+
+  .notes { margin-top: 28px; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; }
+  .notes h3 { margin: 0 0 8px; font-size: 13px; }
+  .notes ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+  .notes ul li code { background: var(--accent); padding: 1px 5px; border-radius: 4px; font-size: 11px; color: var(--text); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Unified Notifications — Before vs After</h1>
+  <p class="sub">Two places telling you to look at things → one. Click the tabs to preview both states. (Mockup only — code untouched.)</p>
+
+  <div class="grid">
+    <!-- ============== BEFORE ============== -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Before</h2>
+        <span class="tag">2 widgets competing</span>
+      </div>
+      <div class="mock-screen">
+        <div class="navbar">
+          <div class="logo">TrainHub</div>
+          <div style="flex:1"></div>
+          <div class="ico">
+            <svg class="bell-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="badge">3</span>
+          </div>
+          <div class="user-pill">A</div>
+        </div>
+        <div class="content">
+          <div class="row"><div class="skel"></div></div>
+          <div class="row"><div class="skel short"></div><div class="skel"></div></div>
+          <div class="row"><div class="skel"></div><div class="skel short"></div></div>
+          <div class="row"><div class="skel short"></div></div>
+        </div>
+        <div class="float-pill" id="before-pill">
+          <span>✨</span>
+          <span>Suggestions</span>
+          <span class="dot"></span>
+        </div>
+      </div>
+      <div class="controls">
+        <label>State:</label>
+        <button class="btn on" onclick="setBefore('idle', this)">Idle</button>
+        <button class="btn" onclick="setBefore('critical', this)">Critical item present</button>
+      </div>
+    </div>
+
+    <!-- ============== AFTER ============== -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>After</h2>
+        <span class="tag now">Single bell</span>
+      </div>
+      <div class="mock-screen" id="after-screen">
+        <div class="navbar">
+          <div class="logo">TrainHub</div>
+          <div style="flex:1"></div>
+          <div class="ico" id="after-bell" style="cursor:pointer" onclick="toggleAfter()">
+            <svg class="bell-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="badge" id="after-badge">5</span>
+          </div>
+          <div class="user-pill">A</div>
+        </div>
+        <div class="content">
+          <div class="row"><div class="skel"></div></div>
+          <div class="row"><div class="skel short"></div><div class="skel"></div></div>
+          <div class="row"><div class="skel"></div><div class="skel short"></div></div>
+        </div>
+
+        <div class="dropdown" id="after-dd">
+          <div class="dd-head">
+            <div class="title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              <span>Inbox</span>
+              <span style="color:var(--muted); font-weight:500; font-size:11px" id="dd-subtitle">5 to look at</span>
+            </div>
+            <span class="x" onclick="toggleAfter()">✕</span>
+          </div>
+
+          <div class="tabs">
+            <div class="tab active" data-tab="all" onclick="setTab('all', this)">All <span class="count">5</span></div>
+            <div class="tab" data-tab="actions" onclick="setTab('actions', this)">✨ Actions <span class="count">2</span></div>
+            <div class="tab" data-tab="bookings" onclick="setTab('bookings', this)">Bookings <span class="count">1</span></div>
+            <div class="tab" data-tab="plans" onclick="setTab('plans', this)">Plans <span class="count">2</span></div>
+            <span class="mark-all" onclick="this.textContent='Marked ✓'">Mark all read</span>
+          </div>
+
+          <!-- Summary chips visible in "actions" tab -->
+          <div class="summary-row" id="summary-row" style="display:none">
+            <span class="chip red">⚠ 1 critical</span>
+            <span class="chip amber">⏱ 3 pending</span>
+            <span class="chip blue">📅 2 upcoming</span>
+            <span class="chip purple">🏛 1 HRDF claim</span>
+          </div>
+
+          <div class="list" id="list"></div>
+        </div>
+      </div>
+      <div class="controls">
+        <label>State:</label>
+        <button class="btn on" onclick="setAfter('idle', this)">Idle (5 unread)</button>
+        <button class="btn" onclick="setAfter('zero', this)">All clear</button>
+        <button class="btn" onclick="setAfter('many', this)">Overloaded (12+)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h3>What's changing</h3>
+    <ul>
+      <li><b>Kill the floating pill</b> — bottom-right "Suggestions" widget is removed; nothing floating over content anymore.</li>
+      <li><b>Bell becomes the single hub</b> — badge counts <code>notifications + critical actions</code>. Tabs: <code>All · Actions · Bookings · Plans · Messages</code>.</li>
+      <li><b>Actions tab</b> replaces the pill panel: summary chips on top (urgent/pending/upcoming/HRDF), then per-action cards with the existing color-coded icons and deadline progress bars.</li>
+      <li><b>Auto-open on critical</b> keeps working — but opens the bell dropdown on the <i>Actions</i> tab, not a floating panel.</li>
+      <li><b>Poll cadence</b> stays the same; we just merge into one dropdown. <code>NotificationBell</code> becomes a small state holder that fetches both endpoints.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  /* ============== BEFORE panel interactions ============== */
+  function setBefore(state, btn) {
+    btn.parentElement.querySelectorAll('.btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const pill = document.getElementById('before-pill');
+    if (state === 'critical') {
+      pill.style.background = 'var(--primary)';
+      pill.style.color = 'var(--primary-fg)';
+      pill.style.borderColor = 'var(--primary)';
+      pill.querySelector('span:first-child').textContent = '⚠️';
+      pill.querySelector('span:nth-child(2)').textContent = 'Needs attention';
+    } else {
+      pill.style.background = '';
+      pill.style.color = '';
+      pill.style.borderColor = '';
+      pill.querySelector('span:first-child').textContent = '✨';
+      pill.querySelector('span:nth-child(2)').textContent = 'Suggestions';
+    }
+  }
+
+  /* ============== AFTER panel data ============== */
+  const data = {
+    all: [
+      { type: 'action', urgency: 'critical', icon: '⚠️', iconClass: 'red', title: 'HRDF claim due in 12 days', body: 'Claim #CLM-2024-087 is approaching deadline. Submit before 10 Jul.', link: '/hr/claims/CLM-2024-087', action: 'Review claim', time: '2h ago', unread: true, progress: { cls: 'red', pct: 7 } },
+      { type: 'action', urgency: 'urgent', icon: '⏱️', iconClass: 'amber', title: '3 approvals pending > 5 days', body: 'Siti, Raju, and Mei have plans awaiting your decision.', link: '/hr/plans?status=pending', action: 'Review plans', time: '5h ago', unread: true },
+      { type: 'plan', icon: '✅', iconClass: 'emerald', title: 'Plan approved: Leadership 101', body: 'Your training plan was approved by HR.', time: '1d ago', unread: true },
+      { type: 'booking', icon: '📅', iconClass: 'blue', title: 'Booking confirmed', body: 'Cybersecurity workshop on 5 Aug 2026.', time: '2d ago', unread: true },
+      { type: 'plan', icon: '❌', iconClass: 'red', title: 'Plan revision needed', body: 'HR requested more details on budget.', link: '/plans/12', action: 'Open plan', time: '3d ago', unread: true },
+    ],
+    actions: [0, 1], // indices into all
+    bookings: [3],
+    plans: [2, 4],
+  };
+
+  let currentTab = 'all';
+  let ddOpen = true;
+
+  function renderList() {
+    const list = document.getElementById('list');
+    const summaryRow = document.getElementById('summary-row');
+    summaryRow.style.display = (currentTab === 'actions') ? 'flex' : 'none';
+
+    let items = [];
+    if (currentTab === 'all') items = data.all;
+    else if (currentTab === 'actions') items = data.actions.map(i => data.all[i]);
+    else if (currentTab === 'bookings') items = data.bookings.map(i => data.all[i]);
+    else if (currentTab === 'plans') items = data.plans.map(i => data.all[i]);
+
+    if (items.length === 0) {
+      list.innerHTML = `<div class="empty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <div>You're all caught up</div></div>`;
+      return;
+    }
+
+    list.innerHTML = items.map(it => `
+      <div class="item ${it.unread ? 'unread' : ''}">
+        <div class="icon ${it.iconClass}">${it.icon}</div>
+        <div class="body">
+          <p class="title">${it.title}</p>
+          ${it.body ? `<p style="color:var(--muted); font-size:11px; margin-top:2px">${it.body}</p>` : ''}
+          ${it.progress ? `<div class="progress ${it.progress.cls}"><span style="width:${it.progress.pct}%"></span></div>` : ''}
+          <div class="meta">
+            <span>${it.time}</span>
+            ${it.link ? `<a href="#">${it.action || 'View'} →</a>` : ''}
+          </div>
+        </div>
+        ${it.unread ? '<div class="unread-dot"></div>' : ''}
+      </div>
+    `).join('');
+  }
+
+  function setTab(tab, el) {
+    currentTab = tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    renderList();
+  }
+
+  function toggleAfter() {
+    ddOpen = !ddOpen;
+    document.getElementById('after-dd').style.display = ddOpen ? 'flex' : 'none';
+  }
+
+  function setAfter(state, btn) {
+    btn.parentElement.querySelectorAll('.btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const badge = document.getElementById('after-badge');
+    const sub = document.getElementById('dd-subtitle');
+    ddOpen = true;
+    document.getElementById('after-dd').style.display = 'flex';
+    if (state === 'zero') {
+      badge.style.display = 'none';
+      sub.textContent = 'All clear';
+      data.all = data.all.map(x => ({ ...x, unread: false }));
+    } else if (state === 'many') {
+      badge.textContent = '12+';
+      badge.style.display = 'grid';
+      sub.textContent = '12 to look at';
+      data.all = data.all.map(x => ({ ...x, unread: true }));
+    } else {
+      badge.textContent = '5';
+      badge.style.display = 'grid';
+      sub.textContent = '5 to look at';
+      data.all = data.all.map(x => ({ ...x, unread: true }));
+    }
+    renderList();
+  }
+
+  renderList();
+</script>
+</body>
+</html>

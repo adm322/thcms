@@ -98,7 +98,7 @@ export default function TrainerEarnings() {
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <span className="font-semibold text-sm">RM {e.totalFee.toLocaleString()}</span>
-                    <Badge variant={e.status === "COMPLETED" ? "default" : e.status === "CONFIRMED" ? "outline" : "secondary"}>
+                    <Badge variant={e.status === "COMPLETED" ? "status-success" : e.status === "CONFIRMED" ? "status-info" : "status-warning"}>
                       {e.status}
                     </Badge>
                   </div>

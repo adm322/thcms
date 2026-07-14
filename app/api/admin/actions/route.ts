@@ -6,7 +6,11 @@ export async function GET() {
   const session = await requireRole("ADMIN");
   if (session instanceof NextResponse) return session;
 
-  const result = await getAdminActions();
-
-  return NextResponse.json(result);
+  try {
+    const result = await getAdminActions();
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("[AdminActions] Failed:", error);
+    return NextResponse.json({ error: "Failed to load admin actions" }, { status: 500 });
+  }
 }

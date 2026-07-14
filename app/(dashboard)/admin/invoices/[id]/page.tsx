@@ -10,7 +10,7 @@ import { useToast } from "@/components/Toast";
 import { ArrowLeft, Building2, User, Calendar, DollarSign, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
-const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = { PAID: "default", SENT: "secondary", OVERDUE: "destructive", CANCELLED: "outline" };
+const statusColors: Record<string, "status-success" | "status-info" | "status-warning" | "status-danger" | "status-neutral"> = { PAID: "status-success", SENT: "status-info", OVERDUE: "status-danger", CANCELLED: "status-neutral" };
 
 export default function AdminInvoiceDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

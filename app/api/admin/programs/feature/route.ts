@@ -1,56 +1,83 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { parseBody } from "@/lib/api-utils";
+import { withAuth } from "@/lib/auth-guards";
+import { z } from "zod";
+
+const FeatureToggleSchema = z.object({
+  id: z.string().min(1).max(64),
+  featured: z.boolean().optional(),
+});
 
 // GET featured + recent programs
-export async function GET() {
-  const [featured, recent] = await Promise.all([
-    prisma.program.findMany({
-      where: { featured: true, status: "PUBLISHED" },
-      include: {
-        trainer: { select: { name: true, trainerProfile: { select: { rating: true } } } },
-        _count: { select: { bookings: true } },
-      },
-      orderBy: { featuredAt: "desc" },
-      take: 6,
-    }),
-    prisma.program.findMany({
-      where: { status: "PUBLISHED" },
-      include: {
-        trainer: { select: { name: true, trainerProfile: { select: { rating: true } } } },
-        _count: { select: { bookings: true } },
-      },
-      orderBy: { createdAt: "desc" },
-      take: 8,
-    }),
-  ]);
+export const GET = withAuth(
+  "ADMIN",
+  async () => {
+    const [featured, recent] = await Promise.all([
+      prisma.program.findMany({
+        where: { featured: true, status: "PUBLISHED" },
+        include: {
+          trainer: { select: { name: true, trainerProfile: { select: { rating: true } } } },
+          _count: { select: { bookings: true } },
+        },
+        orderBy: { featuredAt: "desc" },
+        take: 6,
+      }),
+      prisma.program.findMany({
+        where: { status: "PUBLISHED" },
+        include: {
+          trainer: { select: { name: true, trainerProfile: { select: { rating: true } } } },
+          _count: { select: { bookings: true } },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 8,
+      }),
+    ]);
 
-  return NextResponse.json({
-    featured: featured.map(mapProgram),
-    recent: recent.map(mapProgram),
-  });
-}
+    return NextResponse.json({
+      featured: featured.map(mapProgram),
+      recent: recent.map(mapProgram),
+    });
+  }
+);
 
 // PATCH toggle feature
-export async function PATCH(request: NextRequest) {
-  const body = await parseBody(request);
-  if (body instanceof NextResponse) return body;
+export const PATCH = withAuth(
+  "ADMIN",
+  async ({ request }) => {
+    let body: unknown;
+    try { body = await request.json(); } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
 
-  const { id, featured } = body as { id: string; featured?: boolean };
-  if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+    const parsed = FeatureToggleSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message ?? "Invalid input" },
+        { status: 400 }
+      );
+    }
 
-  const program = await prisma.program.update({
-    where: { id },
-    data: {
-      featured: featured ?? false,
-      featuredAt: featured ? new Date() : null,
-    },
-  });
+    const { id, featured } = parsed.data;
 
-  return NextResponse.json(program);
-}
+    const program = await prisma.program.update({
+      where: { id },
+      data: {
+        featured: featured ?? false,
+        featuredAt: featured ? new Date() : null,
+      },
+    });
 
-function mapProgram(p: any) {
+    return NextResponse.json(program);
+  }
+);
+
+function mapProgram(p: {
+  id: string; title: string; category: string | null; description: string | null;
+  durationHours: number | null; pricePerPax: number | null; locationType: string | null;
+  createdAt: Date; featured: boolean;
+  trainer: { name: string; trainerProfile: { rating: number | null } | null };
+  _count: { bookings: number };
+}) {
   return {
     id: p.id,
     title: p.title,

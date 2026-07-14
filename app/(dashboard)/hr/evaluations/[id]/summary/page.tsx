@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, use, useRef } from "react";
+import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -206,10 +207,10 @@ export default function EvaluationSummary({ params }: { params: Promise<{ id: st
             <CardContent className="flex flex-col items-center space-y-4">
               {qrDataUrl ? (
                 <div className="rounded-xl border bg-white p-6">
-                  <img src={qrDataUrl} alt="QR Code" className="w-[200px] h-[200px]" />
+                  <Image src={qrDataUrl} alt="QR Code" width={200} height={200} className="w-52 h-52" />
                 </div>
               ) : (
-                <div className="w-[200px] h-[200px] bg-muted rounded-xl animate-pulse" />
+                <div className="w-52 h-52 bg-muted rounded-xl animate-pulse" />
               )}
               <p className="text-sm text-muted-foreground text-center max-w-sm">
                 Scan to open this evaluation. Print or share with stakeholders.

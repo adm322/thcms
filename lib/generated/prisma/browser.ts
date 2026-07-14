@@ -83,11 +83,6 @@ export type Evaluation = Prisma.EvaluationModel
  */
 export type Invoice = Prisma.InvoiceModel
 /**
- * Model Reimbursement
- * 
- */
-export type Reimbursement = Prisma.ReimbursementModel
-/**
  * Model Employee
  * 
  */
@@ -102,16 +97,6 @@ export type Leave = Prisma.LeaveModel
  * 
  */
 export type Attendance = Prisma.AttendanceModel
-/**
- * Model Payroll
- * 
- */
-export type Payroll = Prisma.PayrollModel
-/**
- * Model Claim
- * 
- */
-export type Claim = Prisma.ClaimModel
 /**
  * Model Message
  * 
@@ -163,7 +148,22 @@ export type Notification = Prisma.NotificationModel
  */
 export type CodeOfConduct = Prisma.CodeOfConductModel
 /**
+ * Model LearningStudio
+ * 
+ */
+export type LearningStudio = Prisma.LearningStudioModel
+/**
+ * Model RAGChunk
+ * 
+ */
+export type RAGChunk = Prisma.RAGChunkModel
+/**
  * Model TrainerAvailability
  * 
  */
 export type TrainerAvailability = Prisma.TrainerAvailabilityModel
+/**
+ * Model SystemSetting
+ * 
+ */
+export type SystemSetting = Prisma.SystemSettingModel

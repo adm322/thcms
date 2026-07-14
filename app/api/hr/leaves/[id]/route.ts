@@ -1,28 +1,41 @@
-import { NextRequest, NextResponse } from "next/server";
-import { requireRole, parseBody } from "@/lib/api-utils";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { withAuth } from "@/lib/auth-guards";
+import { LeaveStatusSchema } from "@/lib/validations";
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await requireRole("HR");
-  if (session instanceof NextResponse) return session;
+export const PATCH = withAuth(
+  { role: "HR", companyId: true },
+  async ({ session, request, params }) => {
+    const { id } = params as { id: string };
 
-  const { id } = await params;
-  const body = await parseBody(request);
-  if (body instanceof NextResponse) return body;
+    let body: unknown;
+    try { body = await request.json(); } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
 
-  const { status } = body as Record<string, string>;
-  if (!status || !["APPROVED", "REJECTED", "CANCELLED"].includes(status)) {
-    return NextResponse.json({ error: "Valid status required: APPROVED, REJECTED, CANCELLED" }, { status: 400 });
+    const parsed = LeaveStatusSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message ?? "Valid status required: APPROVED, REJECTED, CANCELLED" },
+        { status: 400 }
+      );
+    }
+
+    // Multi-tenant guard: only the owning company can update this leave
+    const existing = await prisma.leave.findFirst({
+      where: { id, employee: { companyId: session.companyId ?? "" } },
+      include: { employee: { select: { name: true } } },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    const leave = await prisma.leave.update({
+      where: { id },
+      data: { status: parsed.data.status, approvedById: session.id },
+      include: { employee: { select: { name: true } } },
+    });
+
+    return NextResponse.json(leave);
   }
-
-  const leave = await prisma.leave.update({
-    where: { id },
-    data: { status, approvedById: session.id },
-    include: { employee: { select: { name: true } } },
-  });
-
-  return NextResponse.json(leave);
-}
+);

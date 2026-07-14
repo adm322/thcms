@@ -1,16 +1,30 @@
-import { NextRequest, NextResponse } from "next/server";
-import { parseBody } from "@/lib/api-utils";
+import { NextResponse } from "next/server";
 import { generateQuizQuestions } from "@/lib/ai";
+import { withAuth } from "@/lib/auth-guards";
+import { QuizGenerateSchema } from "@/lib/validations";
+import { rateLimit } from "@/lib/rate-limit";
 
-export async function POST(request: NextRequest) {
-  const body = await parseBody(request);
-  if (body instanceof NextResponse) return body;
-  
-  const topic = body.topic as string | undefined;
-  const count = body.count as number | undefined;
+export const POST = withAuth(
+  async ({ session, request }) => {
+    if (!rateLimit(`ai:quiz:${session.id}`, 20, 60_000)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
 
-  if (!topic) return NextResponse.json({ error: "topic required" }, { status: 400 });
+    let body: unknown;
+    try { body = await request.json(); } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
 
-  const questions = await generateQuizQuestions(topic, count || 5);
-  return NextResponse.json({ questions });
-}
+    const parsed = QuizGenerateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message ?? "Invalid input" },
+        { status: 400 }
+      );
+    }
+
+    const { topic, count } = parsed.data;
+    const questions = await generateQuizQuestions(topic, count ?? 5);
+    return NextResponse.json({ questions });
+  }
+);
