@@ -1,0 +1,9 @@
+node.exe : [browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during 
+route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: 
+https://nextjs.org/docs/messages/missing-data-scroll-behavior
+At line:1 char:1
++ & "C:\Users\Adaml\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([browser] Detec...scroll-behavior:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

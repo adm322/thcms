@@ -7,9 +7,9 @@ import { CodeConductSidebar } from "./CodeConductSidebar";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, GraduationCap, BookOpen, Users, ClipboardList, FileText,
-  Receipt, DollarSign, Star, Calendar, Compass, MapPin, ThumbsUp, MessageSquare,
+  DollarSign, Star, Calendar, Compass, MapPin, ThumbsUp, MessageSquare,
   TrendingUp, Sparkles, MessageCircle, Clock, FileSpreadsheet, Calculator,
-  BookMarked, HelpCircle, ScrollText,
+  BookMarked, HelpCircle, ScrollText, Bell, CalendarCheck, User, Settings2,
 } from "lucide-react";
 
 interface NavItem {
@@ -25,10 +25,11 @@ interface NavGroup {
 const adminGroups: NavGroup[] = [
   { label: "Overview", items: [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/profile", label: "Profile", icon: User },
+    { href: "/notifications", label: "Notifications", icon: Bell },
   ]},
   { label: "Operations", items: [
     { href: "/admin/bookings", label: "Bookings", icon: ClipboardList },
-    { href: "/admin/reimbursements", label: "Reimbursements", icon: Receipt },
     { href: "/admin/invoices", label: "Invoices", icon: DollarSign },
     { href: "/admin/code-of-conduct", label: "Code of Conduct", icon: ScrollText },
     { href: "/admin/support", label: "Support Tickets", icon: MessageSquare },
@@ -43,11 +44,21 @@ const adminGroups: NavGroup[] = [
     { href: "/admin/sales", label: "Sales Panel", icon: TrendingUp },
     { href: "/admin/finance", label: "Finance", icon: DollarSign },
   ]},
+  { label: "Communication", items: [
+    { href: "/admin/messages", label: "Messages", icon: MessageSquare },
+  ]},
+  { label: "System", items: [
+    { href: "/admin/settings", label: "Settings", icon: Settings2 },
+  ]},
 ];
 
 const trainerGroups: NavGroup[] = [
   { label: "Overview", items: [
     { href: "/trainer", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/trainer/calendar", label: "Calendar", icon: Calendar },
+    { href: "/trainer/availability", label: "Availability", icon: CalendarCheck },
+    { href: "/profile", label: "Profile", icon: User },
+    { href: "/notifications", label: "Notifications", icon: Bell },
   ]},
   { label: "Programs", items: [
     { href: "/trainer/programs", label: "My Programs", icon: BookOpen },
@@ -69,6 +80,8 @@ const trainerGroups: NavGroup[] = [
 const hrGroups: NavGroup[] = [
   { label: "Overview", items: [
     { href: "/hr", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/profile", label: "Profile", icon: User },
+    { href: "/notifications", label: "Notifications", icon: Bell },
   ]},
   { label: "Training", items: [
     { href: "/hr/marketplace", label: "Browse Programs", icon: Compass },
@@ -80,7 +93,6 @@ const hrGroups: NavGroup[] = [
     { href: "/hr/employees", label: "Employees", icon: Users },
     { href: "/hr/leaves", label: "Leave Management", icon: Calendar },
     { href: "/hr/attendance", label: "Attendance", icon: Clock },
-    { href: "/hr/claims", label: "Claims", icon: Receipt },
   ]},
   { label: "Tools", items: [
     { href: "/hr/hrdf-calculator", label: "HRDF Calculator", icon: Calculator },
@@ -100,6 +112,9 @@ const participantGroups: NavGroup[] = [
   { label: "My Hub", items: [
     { href: "/participant", label: "My Classes", icon: BookOpen },
     { href: "/participant/scan", label: "Scan QR", icon: Sparkles },
+    { href: "/participant/bookings", label: "My Bookings", icon: ClipboardList },
+    { href: "/notifications", label: "Notifications", icon: Bell },
+    { href: "/profile", label: "Profile", icon: User },
   ]},
 ];
 

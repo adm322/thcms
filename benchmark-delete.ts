@@ -69,7 +69,6 @@ async function measureOriginal(programId: string) {
   const bookings = await prisma.booking.findMany({ where: { programId }, select: { id: true } });
   for (const b of bookings) {
     await prisma.review.deleteMany({ where: { bookingId: b.id } });
-    await prisma.reimbursement.deleteMany({ where: { bookingId: b.id } });
     await prisma.invoice.deleteMany({ where: { bookingId: b.id } });
     await prisma.message.deleteMany({ where: { bookingId: b.id } });
     await prisma.evaluation.deleteMany({ where: { bookingId: b.id } });
@@ -88,7 +87,6 @@ async function measureOptimized(programId: string) {
 
   if (bookingIds.length > 0) {
     await prisma.review.deleteMany({ where: { bookingId: { in: bookingIds } } });
-    await prisma.reimbursement.deleteMany({ where: { bookingId: { in: bookingIds } } });
     await prisma.invoice.deleteMany({ where: { bookingId: { in: bookingIds } } });
     await prisma.message.deleteMany({ where: { bookingId: { in: bookingIds } } });
     await prisma.evaluation.deleteMany({ where: { bookingId: { in: bookingIds } } });

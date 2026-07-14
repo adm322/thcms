@@ -30,8 +30,8 @@ const leaveTypeLabels: Record<string, string> = {
   PATERNITY: "Paternity", HAJJ: "Hajj", COMPASSIONATE: "Compassionate", MARRIAGE: "Marriage",
 };
 
-const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-  APPROVED: "default", PENDING: "secondary", REJECTED: "destructive", CANCELLED: "outline",
+const statusColors: Record<string, "status-success" | "status-info" | "status-warning" | "status-danger" | "status-neutral"> = {
+  APPROVED: "status-success", PENDING: "status-warning", REJECTED: "status-danger", CANCELLED: "status-neutral",
 };
 
 export default function HRLeaves() {

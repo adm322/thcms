@@ -1,16 +1,17 @@
 import { prisma } from "@/lib/prisma";
 
 export async function getAdminStats() {
-  const totalBookings = await prisma.booking.count();
-  const totalTrainers = await prisma.user.count({ where: { role: "TRAINER" } });
-  const totalPrograms = await prisma.program.count({ where: { status: "PUBLISHED" } });
-  const pendingBookings = await prisma.booking.count({ where: { status: "PENDING" } });
-  const pendingReimbursements = await prisma.reimbursement.count({ where: { status: "PENDING" } });
+  // H5: Run all 5 queries in parallel instead of sequentially
+  const [totalBookings, totalTrainers, totalPrograms, pendingBookings,
+         invoices, totalCompanies] = await Promise.all([
+    prisma.booking.count(),
+    prisma.user.count({ where: { role: "TRAINER" } }),
+    prisma.program.count({ where: { status: "PUBLISHED" } }),
+    prisma.booking.count({ where: { status: "PENDING" } }),
+    prisma.invoice.findMany({ where: { status: { in: ["PAID", "SENT"] } }, select: { amount: true } }),
+    prisma.company.count(),
+  ]);
 
-  const invoices = await prisma.invoice.findMany({
-    where: { status: { in: ["PAID", "SENT"] } },
-    select: { amount: true },
-  });
   const totalRevenue = invoices.reduce((sum, inv) => sum + inv.amount, 0);
 
   return {
@@ -19,84 +20,57 @@ export async function getAdminStats() {
     totalPrograms,
     totalRevenue,
     pendingBookings,
-    pendingReimbursements,
+    totalCompanies,
   };
 }
 
 export async function getAdminCalendar(year?: string | null, month?: string | null) {
-  const dateFilter: any = {};
-  if (month) {
-    const [y, m] = month.split("-").map(Number);
-    dateFilter.programDate = {
-      gte: new Date(y, m - 1, 1),
-      lt: new Date(y, m, 1),
-    };
-  } else if (year) {
-    const y = Number(year);
-    dateFilter.programDate = {
-      gte: new Date(y, 0, 1),
-      lt: new Date(y + 1, 0, 1),
-    };
-  }
-
-  const bookings = await prisma.booking.findMany({
-    where: {
-      ...dateFilter,
-      status: { in: ["CONFIRMED", "COMPLETED", "PENDING"] },
-    },
-    include: {
-      program: {
-        select: {
-          title: true,
-          category: true,
-          locationType: true,
-          durationHours: true,
-          trainer: { select: { id: true, name: true, email: true } },
-        },
-      },
-      company: { select: { name: true, address: true, state: true } },
-      _count: { select: { participants: true } },
-    },
-    orderBy: { programDate: "asc" },
-  });
-
   const now = new Date();
-  const upcomingBookings = await prisma.booking.findMany({
-    where: {
-      programDate: { gte: now },
-      status: { in: ["CONFIRMED", "PENDING"] },
-    },
-    include: {
-      program: {
-        select: {
-          title: true,
-          category: true,
-          locationType: true,
-          durationHours: true,
-          trainer: { select: { id: true, name: true, email: true } },
-        },
-      },
-      company: { select: { name: true, address: true, state: true } },
-      _count: { select: { participants: true } },
-    },
-    orderBy: { programDate: "asc" },
-    take: 15,
-  });
-
   const monthStart = month
     ? new Date(Number(month.split("-")[0]), Number(month.split("-")[1]) - 1, 1)
     : new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0);
 
-  const monthBookings = await prisma.booking.findMany({
-    where: {
-      programDate: { gte: monthStart, lte: monthEnd },
-      status: { in: ["CONFIRMED", "COMPLETED", "PENDING"] },
-    },
-    include: {
-      program: { select: { durationHours: true, category: true } },
-    },
-  });
+  // H8: Run date-range query and upcoming query in parallel (2 queries instead of 3 sequential)
+  const [bookings, upcomingBookings] = await Promise.all([
+    // Main calendar view: bookings in the filtered date range
+    (async () => {
+      const dateFilter: Record<string, unknown> = {};
+      if (month) {
+        const [y, m] = month.split("-").map(Number);
+        dateFilter.programDate = { gte: new Date(y, m - 1, 1), lt: new Date(y, m, 1) };
+      } else if (year) {
+        const y = Number(year);
+        dateFilter.programDate = { gte: new Date(y, 0, 1), lt: new Date(y + 1, 0, 1) };
+      }
+      return prisma.booking.findMany({
+        where: { ...dateFilter, status: { in: ["CONFIRMED", "COMPLETED", "PENDING"] } },
+        include: {
+          program: { select: { title: true, category: true, locationType: true, durationHours: true, trainer: { select: { id: true, name: true, email: true } } } },
+          company: { select: { name: true, address: true, state: true } },
+          _count: { select: { participants: true } },
+        },
+        orderBy: { programDate: "asc" },
+      });
+    })(),
+    // Upcoming: from now, limited to 15
+    prisma.booking.findMany({
+      where: { programDate: { gte: now }, status: { in: ["CONFIRMED", "PENDING"] } },
+      include: {
+        program: { select: { title: true, category: true, locationType: true, durationHours: true, trainer: { select: { id: true, name: true, email: true } } } },
+        company: { select: { name: true, address: true, state: true } },
+        _count: { select: { participants: true } },
+      },
+      orderBy: { programDate: "asc" },
+      take: 15,
+    }),
+  ]);
+
+  // C2/H8: Derive monthlyStats from bookings result — no extra DB query needed
+  // Filter to month window (covers both the case where 'bookings' = date-range and when month param is absent)
+  const monthBookings = bookings.filter(b =>
+    b.programDate >= monthStart && b.programDate <= monthEnd
+  );
 
   const monthlyStats = {
     totalTrainings: monthBookings.length,
@@ -162,12 +136,28 @@ export async function getAdminChangelog() {
 }
 
 export async function getAdminTrainingPlans(year: number, companyId?: string) {
+  // C4: Only select what the client actually uses — no regNumber, address, state, or bookings array
   const companies = await prisma.company.findMany({
     where: companyId ? { id: companyId } : {},
-    include: {
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { employees: true } },
       trainingPlans: {
         where: { targetYear: year },
-        include: {
+        select: {
+          id: true,
+          title: true,
+          category: true,
+          department: true,
+          targetCount: true,
+          targetMonth: true,
+          estimatedCost: true,
+          priority: true,
+          status: true,
+          notes: true,
+          createdAt: true,
+          updatedAt: true,
           booking: {
             select: {
               id: true,
@@ -180,19 +170,23 @@ export async function getAdminTrainingPlans(year: number, companyId?: string) {
         },
         orderBy: [{ targetMonth: "asc" }, { priority: "desc" }],
       },
-      bookings: {
-        where: {
-          programDate: {
-            gte: new Date(`${year}-01-01`),
-            lt: new Date(`${year + 1}-01-01`),
-          },
-          status: { not: "CANCELLED" },
-        },
-        select: { totalFee: true, programDate: true, status: true },
-      },
-      _count: { select: { employees: true } },
     },
   });
+
+  // H6: Use _sum aggregation instead of loading full booking rows for totalSpent
+  const companyIds = companies.map(c => c.id);
+  const yearStart = new Date(`${year}-01-01`);
+  const yearEnd = new Date(`${year + 1}-01-01`);
+  const spendingByCompany = await prisma.booking.groupBy({
+    by: ['companyId'],
+    where: {
+      companyId: { in: companyIds },
+      programDate: { gte: yearStart, lt: yearEnd },
+      status: { not: "CANCELLED" },
+    },
+    _sum: { totalFee: true },
+  });
+  const spendingMap = Object.fromEntries(spendingByCompany.map(r => [r.companyId, r._sum.totalFee ?? 0]));
 
   const data = companies.map((company) => {
     const plans = company.trainingPlans.map((p) => ({
@@ -212,7 +206,7 @@ export async function getAdminTrainingPlans(year: number, companyId?: string) {
         : null,
     }));
 
-    const totalSpent = company.bookings.reduce((s, b) => s + b.totalFee, 0);
+    const totalSpent = spendingMap[company.id] ?? 0;
     const plannedCost = plans.reduce((s, p) => s + p.estimatedCost, 0);
     const completedPlans = plans.filter((p) => p.status === "COMPLETED").length;
     const scheduledPlans = plans.filter((p) => p.status === "SCHEDULED").length;
@@ -258,13 +252,17 @@ export async function getAdminTrainingPlans(year: number, companyId?: string) {
 export async function getAdminActions() {
   const now = new Date();
 
-  // Remove Promise.all inside the service function to avoid database connection spikes!
-  // We execute these queries sequentially.
-  const pendingBookings = await prisma.booking.findMany({
-    where: { status: "PENDING" },
-    include: { program: { select: { title: true } } },
-    orderBy: { createdAt: "desc" },
-  });
+  // C1: Added .take(5) — previously loaded entire pending bookings table into memory.
+  // Separate count query preserves accurate summary total (take:5 only limits the list).
+  const [pendingBookings, totalPendingBookings] = await Promise.all([
+    prisma.booking.findMany({
+      where: { status: "PENDING" },
+      include: { program: { select: { title: true } } },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
+    prisma.booking.count({ where: { status: "PENDING" } }),
+  ]);
 
   const recentCompleted = await prisma.booking.findMany({
     where: { status: "COMPLETED", employerHrdfSubmitted: false },
@@ -273,11 +271,19 @@ export async function getAdminActions() {
     take: 10,
   });
 
-  const pendingReimbursements = await prisma.reimbursement.count({ where: { status: "PENDING" } });
+  const actions: {
+    type?: string | null;
+    urgency: string;
+    message?: string | null;
+    action?: string | null;
+    link?: string | null;
+    bookingId?: string;
+    programTitle?: string;
+    pendingDays?: number;
+    daysSinceCompletion?: number;
+  }[] = [];
 
-  const actions: any[] = [];
-
-  for (const b of pendingBookings.slice(0, 5)) {
+  for (const b of pendingBookings) {
     const pendingDays = Math.floor((now.getTime() - b.createdAt.getTime()) / 86400000);
     actions.push({
       type: "approval",
@@ -311,26 +317,17 @@ export async function getAdminActions() {
     });
   }
 
-  if (pendingReimbursements > 0) {
-    actions.push({
-      type: "reimbursement",
-      urgency: pendingReimbursements > 3 ? "urgent" : "soon",
-      message: `${pendingReimbursements} reimbursement${pendingReimbursements>1?"s":""} waiting for approval`,
-      action: "Review",
-      link: "/admin/reimbursements",
-    });
-  }
-
   return {
     actions: actions.sort((a, b) => {
-      const order: Record<string, number> = { urgent: 0, soon: 1, info: 2 };
-      return (order[a.urgency] ?? 3) - (order[b.urgency] ?? 3);
+      const order: Record<string, number> = { critical: 0, urgent: 1, soon: 2, info: 3 };
+      return (order[a.urgency] ?? 4) - (order[b.urgency] ?? 4);
     }),
     summary: {
-      pendingBookings: pendingBookings.length,
-      completedNoHrdf: recentCompleted.length,
-      pendingReimbursements,
+      criticalCount: actions.filter(a => a.urgency === "critical").length,
       urgentCount: actions.filter(a => a.urgency === "urgent").length,
+      pendingBookings: totalPendingBookings,
+      pendingApprovals: totalPendingBookings,
+      hrdfClaimsDue: recentCompleted.length,
     },
   };
 }

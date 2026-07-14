@@ -1,0 +1,30 @@
+version: 1
+plan:
+  name: fix-mobile-scan-lint
+  max_concurrency: 1
+  max_consecutive_failures: 2
+  max_cycles: 1
+  auto_reject_retries: 1
+  verifier_config:
+    default_verifiers: []
+tasks:
+  - id: fix-scan-lint
+    title: Fix ESLint errors in mobile scan page
+    prompt: |
+      Fix 2 ESLint errors in E:\Project Repo\thcms\app\m\participant\scan\page.tsx:
+
+      1. REMOVE the unused import on line 16: `import { cn } from "@/lib/utils";` — delete the entire line. The `cn` utility is imported but never used.
+
+      2. FIX unescaped quotes on line 177. Change:
+         `<p className="text-xs opacity-50 mt-1">Tap "Start Camera" below</p>`
+         To:
+         `<p className="text-xs opacity-50 mt-1">Tap Start Camera below</p>`
+         (Remove the double quotes around "Start Camera".)
+
+      Then run:
+        npx tsc --noEmit
+        npx eslint app/m/ --max-warnings 999
+
+      Verify both return 0 errors. Report results.
+    assigned_to: coder
+    max_retries: 1

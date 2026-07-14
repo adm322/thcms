@@ -12,6 +12,21 @@ npx tsx prisma/seed.ts
 npm run dev -- --webpack    # Windows: use --webpack (Turbopack has NUL device bug)
 ```
 
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```bash
+# AI Provider (optional - falls back to mock responses)
+OPENAI_API_KEY=your_openai_api_key
+
+# Database (default: SQLite)
+DATABASE_URL=file:./dev.db
+
+# Auth
+JWT_SECRET=your_jwt_secret
+```
+
 Open **http://localhost:3000** — login page with demo quick-login buttons.
 
 > **Production mode** (stable, fast): `npx next build --webpack && npx next start -p 3000`
@@ -32,6 +47,7 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 | HR | `hr@airasia.my` | `password123` |
 | HR | `hr@tm.my` | `password123` |
 | HR | `hr@sdarby.my` | `password123` |
+| Participant | `participant@demo.com` | `password123` |
 
 ---
 
@@ -50,19 +66,23 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 ### Project Structure
 ```
 ├── app/
-│   ├── (auth)/login/              # Login page
+│   ├── (auth)/login/              # Login page (with mobile/desktop view selector)
 │   ├── (dashboard)/
 │   │   ├── admin/                  # Admin dashboard, bookings, invoices, trainers, training-plans, team-building, sales, finance
 │   │   ├── trainer/                # Trainer dashboard, programs, quiz builder, materials, earnings, messages, availability
-│   │   └── hr/                     # HR dashboard, marketplace, bookings, employees, training-planner, team-building, evaluations, sop, hrdf-calculator, leaves, attendance, claims, messages
+│   │   ├── hr/                     # HR dashboard, marketplace, bookings, employees, training-planner, team-building, evaluations, sop, hrdf-calculator, leaves, attendance, claims, messages
+│   │   └── participant/            # Participant dashboard, certificates, quiz history
+│   ├── m/                          # Mobile-first dashboard (role-specific views, full-screen app shell)
 │   ├── api/                        # 60+ REST API routes
 │   ├── globals.css                 # Vercel-inspired design tokens
 │   └── layout.tsx                  # Root layout with auth provider
 ├── components/
 │   ├── ui/                         # shadcn/ui primitives (Button, Card, Input, Badge, Dialog, Tabs, Skeleton...)
+│   ├── mobile-dashboard/           # Mobile role dashboards (Admin, HR, Trainer, Participant) + MobileViewLink
+│   ├── wizard/                     # Reusable wizard stepper & nav (used by 4 forms)
 │   ├── Sidebar.tsx                 # Role-aware sidebar navigation
 │   ├── CalendarView.tsx            # Month/Year training calendar
-│   ├── NextActionBanner.tsx        # Smart contextual action alerts (auto-refreshing)
+│   ├── NotificationBell.tsx        # Unified inbox (notifications + contextual actions, role-aware tabs)
 │   ├── CollapsibleSection.tsx      # Expandable section wrapper
 │   ├── MessagesInbox.tsx           # Split-pane chat inbox
 │   ├── ExportButton.tsx            # Reusable CSV export
@@ -76,7 +96,11 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 │   ├── auth.ts                     # JWT session management
 │   ├── malaysia-holidays.ts        # 2026 Malaysian public holidays + special periods
 │   ├── utils.ts                    # cn() classname merger
-│   └── format.ts                   # MYR formatting utilities
+│   ├── format.ts                   # MYR formatting utilities
+│   └── services/                   # Shared data-fetching layer (used by both API routes and pages)
+│       ├── admin.service.ts        # Admin stats, calendar, changelog, training plans, actions
+│       ├── hr.service.ts           # HR stats, actions, AI recommendations
+│       └── trainer.service.ts      # Trainer stats, actions
 ├── prisma/
 │   ├── schema.prisma               # 24 database models
 │   └── seed.ts                     # Seed script (6 companies, 72+ employees, 19 training plan items)
@@ -108,13 +132,11 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 
 ### Financial
 - **Invoice** — invoice number, amount, status, due date, financial breakdown (program fee, trainer fee, HRDF fee, platform fee, SST, net pay)
-- **Reimbursement** — amount, description, receipt URL, status
 
 ### HR
 - **Employee** — name, IC, email, phone, department, position, date joined, employment type, status
 - **Leave** — type (ANNUAL/MEDICAL/HOSPITALISATION/etc.), dates, days, status
 - **Attendance** — date, clock in/out, status (PRESENT/LATE/ABSENT/etc.)
-- **Claim** — type (MILEAGE/TRAVEL/MEAL/etc.), amount, receipt, status
 - **Payroll** — salary, allowances, deductions, statutory contributions (EPF/SOCSO/EIS/PCB)
 
 ### Planning
@@ -135,15 +157,17 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 
 ### 🛡️ Admin
 - Stats dashboard with monthly summary bar
-- Smart Action Banner (pending approvals, HRDF followups, reimbursements)
+- Smart Action Banner (pending approvals, HRDF followups)
 - Collapsible sections (programs, quick links, changelog)
 - Training Calendar (month/year views, color-coded by category)
 - Booking management with HRDF claim badges + training checklist
 - Training Plans oversight (all companies, approve/reject/notes)
 - Team Building request review with dual HRDF tracking
-- Reimbursement approval, invoice tracking, trainer directory
+- Invoice tracking, trainer directory
+- Trainer invite flow (generates temp password)
 - Sales & Finance dashboards with Recharts
 - Featured programs + changelog
+- **📱 Mobile:** bookings, programs, trainers, invoices, finance, trainer invite wizard
 
 ### 🎓 Trainer
 - Dashboard with availability calendar, stats, upcoming programs
@@ -154,6 +178,7 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 - Quiz builder (MCQs, True/False, Short Answer) + results
 - Messages inbox (split-pane chat)
 - Earnings dashboard with breakdown
+- **📱 Mobile:** programs, program wizard, bookings, availability, calendar, earnings, evaluations
 
 ### 🏢 HR
 - Dashboard with AI recommendations
@@ -169,6 +194,7 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 - Messages inbox (HR ↔ Trainer)
 - Evaluations (QR code, PDF export, evaluation blast)
 - Vote & Request, Support Tickets
+- **📱 Mobile:** employees, add employee wizard, bookings + QR, new booking wizard, calendar, claims
 
 ---
 
@@ -181,7 +207,6 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 /admin/bookings/[id]                # Booking detail + checklist + HRDF
 /admin/training-plans               # All-company training plan oversight
 /admin/team-building                # Team building request review
-/admin/reimbursements               # Manage reimbursements
 /admin/invoices                     # Invoice list
 /admin/invoices/[id]                # Invoice detail + payment breakdown
 /admin/trainers                     # Trainer directory
@@ -220,7 +245,6 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 /hr/employees/upload                # Bulk CSV upload
 /hr/leaves                          # Leave management
 /hr/attendance                      # Attendance tracking
-/hr/claims                          # Claims management
 /hr/evaluations                     # Evaluation list
 /hr/evaluations/[id]/summary        # Performance graph + QR + PDF
 /hr/evaluations/[id]/blast          # Send evaluation
@@ -233,13 +257,50 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 /hr/training-needs                  # AI needs analyzer
 ```
 
-### API Routes (60+)
+### Participant (`/participant`)
 ```
-/api/admin/stats, calendar, bookings, bookings/[id]/status, reimbursements, invoices, invoices/[id], trainers, trainers/availability, programs/feature, changelog, team-building, team-building/[id], training-plans, training-plans/[id], upload, actions, support
+/participant                        # Dashboard with certificates, quiz history, upcoming classes
+```
+
+### Mobile (`/m`) — full-screen app shell
+```
+/m                                  # Role-aware mobile home (auto-detected from session)
+/m/admin/bookings                   # Admin: bookings list
+/m/admin/programs                   # Admin: programs list
+/m/admin/trainers                   # Admin: trainer directory
+/m/admin/trainers/invite            # Admin: invite new trainer (wizard)
+/m/admin/invoices                   # Admin: invoices
+/m/admin/finance                    # Admin: finance dashboard
+/m/trainer/programs                 # Trainer: programs
+/m/trainer/programs/new             # Trainer: new program (wizard)
+/m/trainer/bookings/[id]            # Trainer: booking detail
+/m/trainer/availability             # Trainer: availability calendar
+/m/trainer/calendar                 # Trainer: monthly calendar
+/m/trainer/earnings                 # Trainer: earnings
+/m/trainer/evaluations              # Trainer: evaluations
+/m/hr/employees                     # HR: employee list
+/m/hr/employees/new                 # HR: add employee (wizard)
+/m/hr/bookings/[id]                 # HR: booking detail + QR code
+/m/hr/new-booking                   # HR: new booking (wizard)
+/m/hr/calendar                      # HR: calendar
+/m/hr/claims                        # HR: claims list
+/m/participant                      # Participant: dashboard
+/m/participant/scan                 # Participant: QR scanner
+/m/participant/class/[id]           # Participant: class detail
+/m/participant/bookings/[id]        # Participant: booking detail
+/m/notifications                    # Notifications inbox
+/m/profile                          # Profile + sign out
+```
+
+### API Routes (65+)
+```
+/api/admin/stats, calendar, bookings, bookings/[id]/status, invoices, invoices/[id], trainers, trainers/availability, trainers/invite, programs/feature, changelog, team-building, team-building/[id], training-plans, training-plans/[id], upload, actions, support
 
 /api/trainer/stats, calendar, programs, programs/[id], programs/[id]/clone, programs/[id]/modules, programs/[id]/itinerary, programs/[id]/quizzes, modules/[moduleId], quizzes/[quizId], quizzes/[quizId]/questions, quizzes/[quizId]/results, questions/[questionId], materials, earnings, evaluations, evaluations/[id], availability, actions
 
-/api/hr/stats, programs, programs/[id], bookings, bookings/[id], employees, employees/upload, leaves, leaves/[id], attendance, claims, claims/[id], evaluations, evaluations/[id], evaluations/[id]/blast, evaluations/[id]/summary, training-plan, training-plan/[id], training-plan/summary, hrdf, team-building, vote, support, reviews, messages
+/api/hr/stats, programs, programs/[id], bookings, bookings/[id], employees, employees/upload, leaves, leaves/[id], attendance, evaluations, evaluations/[id], evaluations/[id]/blast, evaluations/[id]/summary, training-plan, training-plan/[id], training-plan/summary, hrdf, team-building, vote, support, reviews, messages
+
+/api/ai/recommend                  # AI-powered program recommendations
 
 /api/auth/login, logout, me
 ```
@@ -255,7 +316,7 @@ Open **http://localhost:3000** — login page with demo quick-login buttons.
 - **23 Bookings** (12 completed, 6 confirmed, 5 pending)
 - **19 Training Plan Items** (Petronas: 16, Maybank: 3) — across draft/matched/scheduled
 - **12 Evaluations** with full response data
-- **18 Invoices**, multiple reimbursements, reviews, messages
+- **18 Invoices**, reviews, messages
 - **6 Support tickets** across categories
 - **7 Changelog entries**, 8 program itineraries
 - Attendance records, leaves, claims, trainer availability

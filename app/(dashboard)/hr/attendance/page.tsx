@@ -55,7 +55,8 @@ export default function HRAttendance() {
               <tbody>
                 {summary.map((e) => {
                   const total = e.present + e.late + e.absent;
-                  const rate = total > 0 ? Math.round((e.present / workDays) * 100) : 0;
+                  // ponytail: cap rate at 100% (present can exceed workDays when overtime/shift work counted)
+                  const rate = total > 0 ? Math.min(100, Math.round((e.present / workDays) * 100)) : 0;
                   return (
                     <tr key={e.employeeId} className="border-b hover:bg-muted/30">
                       <td className="px-4 py-3 font-medium">{e.name}</td><td className="px-4 py-3 text-muted-foreground">{e.dept}</td>

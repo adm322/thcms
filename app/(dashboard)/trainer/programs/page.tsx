@@ -63,8 +63,8 @@ export default function TrainerPrograms() {
     }
   }
 
-  const statusVariant: Record<string, "default" | "secondary" | "outline"> = {
-    DRAFT: "secondary", PUBLISHED: "default", ARCHIVED: "outline",
+  const statusVariant: Record<string, "status-success" | "status-info" | "status-neutral"> = {
+    DRAFT: "status-neutral", PUBLISHED: "status-success", ARCHIVED: "status-neutral",
   };
 
   const counts = {

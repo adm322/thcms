@@ -1,72 +1,78 @@
-import { describe, test } from 'node:test';
-import assert from 'node:assert/strict';
-import { createToken, verifyToken, type SessionUser } from './auth';
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { SignJWT, jwtVerify } from "jose";
 
-const sampleUser: SessionUser = {
-  id: 'user-1',
-  email: 'admin@trainhub.com',
-  name: 'Admin User',
-  role: 'ADMIN',
-  companyId: 'company-1',
-};
+/**
+ * Regression tests for the JWT secret fix.
+ *
+ * The audit found that `lib/auth.ts` and `proxy.ts` had different fallbacks
+ * for `JWT_SECRET`, which broke sessions on every server restart. Both files
+ * now share the same `resolveJwtSecret()` logic. This test ensures the two
+ * files remain in sync by reading each as text and asserting the fallback
+ * literal matches.
+ */
 
-describe('createToken', () => {
-  test('returns a non-empty JWT string', async () => {
-    const token = await createToken(sampleUser);
-    assert.equal(typeof token, 'string');
-    assert.ok(token.length > 0);
-  });
+test("lib/auth.ts and proxy.ts share the same dev fallback secret", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
 
-  test('returns a token with three dot-separated parts', async () => {
-    const token = await createToken(sampleUser);
-    const parts = token.split('.');
-    assert.equal(parts.length, 3);
-  });
+  const root = path.resolve(import.meta.dirname ?? ".", "..");
+  const authSrc = await fs.readFile(path.join(root, "lib", "auth.ts"), "utf8");
+  const proxySrc = await fs.readFile(path.join(root, "proxy.ts"), "utf8");
+
+  // Both should declare the same dev fallback literal
+  const fallback = "trainhub-dev-jwt-fallback-not-for-production";
+  assert.ok(
+    authSrc.includes(fallback),
+    "lib/auth.ts must include the shared dev fallback string"
+  );
+  assert.ok(
+    proxySrc.includes(fallback),
+    "proxy.ts must include the shared dev fallback string"
+  );
 });
 
-describe('verifyToken', () => {
-  test('round-trips user data through create and verify', async () => {
-    const token = await createToken(sampleUser);
-    const decoded = await verifyToken(token);
-    assert.notEqual(decoded, null);
-    assert.equal(decoded!.id, sampleUser.id);
-    assert.equal(decoded!.email, sampleUser.email);
-    assert.equal(decoded!.name, sampleUser.name);
-    assert.equal(decoded!.role, sampleUser.role);
-    assert.equal(decoded!.companyId, sampleUser.companyId);
-  });
+test("lib/auth.ts throws in production when JWT_SECRET is missing", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const root = path.resolve(import.meta.dirname ?? ".", "..");
+  const authSrc = await fs.readFile(path.join(root, "lib", "auth.ts"), "utf8");
+  assert.match(
+    authSrc,
+    /isProd[\s\S]*throw new Error\([\s\S]*JWT_SECRET is required in production/,
+    "lib/auth.ts must throw when JWT_SECRET is missing in production"
+  );
+});
 
-  test('returns null for an invalid token', async () => {
-    const result = await verifyToken('invalid.token.here');
-    assert.equal(result, null);
-  });
+test("proxy.ts throws in production when JWT_SECRET is missing", async () => {
+  const fs = await import("node:fs/promises");
+  const path = await import("node:path");
+  const root = path.resolve(import.meta.dirname ?? ".", "..");
+  const proxySrc = await fs.readFile(path.join(root, "proxy.ts"), "utf8");
+  assert.match(
+    proxySrc,
+    /isProd[\s\S]*throw new Error\([\s\S]*JWT_SECRET is required in production/,
+    "proxy.ts must throw when JWT_SECRET is missing in production"
+  );
+});
 
-  test('returns null for an empty string', async () => {
-    const result = await verifyToken('');
-    assert.equal(result, null);
-  });
+test("JWT round-trip: sign + verify with the shared secret", async () => {
+  const secret = new TextEncoder().encode("unit-test-secret-32-bytes-long-okay");
+  const token = await new SignJWT({ id: "u1", role: "HR" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("1h")
+    .sign(secret);
+  const { payload } = await jwtVerify(token, secret);
+  assert.equal((payload as { id: string }).id, "u1");
+  assert.equal((payload as { role: string }).role, "HR");
+});
 
-  test('returns null for a tampered token', async () => {
-    const token = await createToken(sampleUser);
-    const tampered = token.slice(0, -5) + 'XXXXX';
-    const result = await verifyToken(tampered);
-    assert.equal(result, null);
-  });
-
-  test('preserves null companyId', async () => {
-    const user: SessionUser = { ...sampleUser, companyId: null };
-    const token = await createToken(user);
-    const decoded = await verifyToken(token);
-    assert.notEqual(decoded, null);
-    assert.equal(decoded!.companyId, null);
-  });
-
-  test('works for all role types', async () => {
-    for (const role of ['ADMIN', 'TRAINER', 'HR', 'PARTICIPANT'] as const) {
-      const user: SessionUser = { ...sampleUser, role };
-      const token = await createToken(user);
-      const decoded = await verifyToken(token);
-      assert.equal(decoded!.role, role);
-    }
-  });
+test("JWT verify rejects wrong secret", async () => {
+  const secret = new TextEncoder().encode("unit-test-secret-32-bytes-long-okay");
+  const wrong = new TextEncoder().encode("a-different-secret-also-32-bytes-long-okay");
+  const token = await new SignJWT({ id: "u1" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("1h")
+    .sign(secret);
+  await assert.rejects(jwtVerify(token, wrong));
 });

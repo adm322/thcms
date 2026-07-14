@@ -352,7 +352,9 @@ export default function TrainingPlannerPage() {
 
   const effectiveBudget = budget;
   const effectiveUtilization = Math.round((summary?.totalSpent || 0) / effectiveBudget * 100);
-  const effectiveRemaining = Math.max(0, effectiveBudget - (summary?.totalSpent || 0) - (summary?.plannedCost || 0));
+  // ponytail: remaining = budget − spent only (planned cost is earmarked but not yet committed)
+  const effectiveRemaining = Math.max(0, effectiveBudget - (summary?.totalSpent || 0));
+  const effectiveReserved = Math.max(0, summary?.plannedCost || 0);
 
   function toggleStatusExpanded(status: string) {
     const next = new Set(expandedStatuses);
