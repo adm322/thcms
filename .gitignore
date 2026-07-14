@@ -9,6 +9,25 @@ dev.db-journal
 chrome-log-server/logs/
 chrome-log-server/logs/latest.log
 
+# Local dev scripts and test artifacts (not source code)
+test-*.mjs
+test-*.py
+test-*.pdf
+test-*.docx
+test-*.json
+create_test_doc.py
+run-*.mjs
+run-*.ps1
+
+# JetBrains IDE config
+.idea/
+
+# Runtime uploads
+public/uploads/
+
+# Work-in-progress scratch folder (do not commit)
+.wip/
+
 # InsForge & AI agent skills
 .insforge
 .agent

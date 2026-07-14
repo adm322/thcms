@@ -136,7 +136,7 @@ export function SlideRenderer({
   // shape we have (new HTML or legacy discriminated).
   const html = isHtmlSlide(slide)
     ? slide.html
-    : legacySlideToHtml(slide);
+    : legacySlideToHtml(slide as LegacySlide);
   const sanitized = sanitizeRenderedHtml(html);
   const notes = "speakerNotes" in slide ? (slide as { speakerNotes?: string }).speakerNotes : undefined;
   const slideNumber = isHtmlSlide(slide) ? `s${(slide as { __num?: number }).__num ?? ""}` : "•";

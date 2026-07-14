@@ -24,7 +24,6 @@ import {
   buildSlidePrompt,
   buildQuizPrompt,
   slidesForContentLength,
-  sanitizeSlideHtml,
 } from "@/lib/prompts";
 
 // ─── POST — upload file & generate studio content ───────────────────────────
@@ -175,26 +174,13 @@ export const POST = withAuth(
           .trim();
         const parsed = JSON.parse(cleaned);
         if (Array.isArray(parsed)) {
-          const normalized = parsed.map(
-            (s: {
-              html?: string;
-              speakerNotes?: string;
-              title?: string;
-              text?: string;
-            }) => {
-              const rawHtml =
-                typeof s.html === "string"
-                  ? s.html
-                  : `<section class="slide"><h1>${s.title ?? "Slide"}</h1><p>${s.text ?? ""}</p></section>`;
-              return {
-                type: "html" as const,
-                html: sanitizeSlideHtml(rawHtml),
-                speakerNotes:
-                  typeof s.speakerNotes === "string" ? s.speakerNotes : "",
-              };
-            }
+          // AI returns structured slides: { title, bulletPoints, infographic, speakerNotes }
+          // Validate each has at least a title
+          const valid = parsed.filter(
+            (s: unknown) =>
+              s && typeof s === "object" && typeof (s as Record<string, unknown>).title === "string"
           );
-          slidesJson = JSON.stringify(normalized);
+          if (valid.length > 0) slidesJson = JSON.stringify(valid);
         }
       }
     } catch (err) {
