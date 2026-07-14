@@ -139,7 +139,7 @@ export default function FeedbackDialog({
         }
       />
       
-      <DialogContent className="sm:max-w-[480px] bg-card rounded-lg p-6 shadow-sm border border-border max-h-[85vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md bg-card rounded-lg p-6 shadow-sm border border-border max-h-[85vh] overflow-y-auto">
         <DialogHeader className="space-y-1">
           <DialogTitle className="text-lg font-semibold tracking-tight text-foreground">
             Course Evaluation
@@ -228,7 +228,7 @@ export default function FeedbackDialog({
               <Button 
                 onClick={handleSubmit} 
                 disabled={submitting}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-xs font-medium min-w-[120px]"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-xs font-medium min-w-32"
               >
                 {submitting ? (
                   <>
