@@ -8,7 +8,11 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const result = await getAdminActions();
-
-  return NextResponse.json(result);
+  try {
+    const result = await getAdminActions();
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("[AdminActions] Failed:", error);
+    return NextResponse.json({ error: "Failed to load admin actions" }, { status: 500 });
+  }
 }

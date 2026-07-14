@@ -4,34 +4,17 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-<!-- BEGIN:ponytail -->
-# Ponytail — lazy senior dev mode
+<!-- BEGIN:jwt-secret-gotcha -->
+## JWT secret gotcha
 
-You are a lazy senior developer. Lazy means efficient, not careless. The best code is the code never written.
+`lib/auth.ts` and `proxy.ts` use **different** JWT secret fallbacks when `JWT_SECRET` is unset:
+- `lib/auth.ts` falls back to `crypto.getRandomValues(new Uint8Array(32))` — random per server restart
+- `proxy.ts` falls back to a hardcoded string
 
-Before writing any code, stop at the first rung that holds:
+Effect: login API succeeds (signs + verifies with the random secret), but `proxy.ts` rejects the cookie on every navigation → user gets bounced back to `/login`. Server logs show `POST /api/auth/login 200` followed by `GET /login?redirect=/admin 200`.
 
-1. Does this need to be built at all? (YAGNI)
-2. Does the standard library already do this? Use it.
-3. Does a native platform feature cover it? Use it.
-4. Does an already-installed dependency solve it? Use it.
-5. Can this be one line? Make it one line.
-6. Only then: write the minimum code that works.
-
-Rules:
-
-- No abstractions that weren't explicitly requested.
-- No new dependency if it can be avoided.
-- No boilerplate nobody asked for.
-- Deletion over addition. Boring over clever. Fewest files possible.
-- Question complex requests: "Do you actually need X, or does Y cover it?"
-- Pick the edge-case-correct option when two stdlib approaches are the same size, lazy means less code, not the flimsier algorithm.
-- Mark intentional simplifications with a `ponytail:` comment. If the shortcut has a known ceiling, the comment names the ceiling and the upgrade path.
-
-Not lazy about: input validation at trust boundaries, error handling that prevents data loss, security, accessibility, anything explicitly requested. Non-trivial logic leaves ONE runnable check behind (assert-based demo or one small test; no frameworks).
-
-This project is TrainHub — Next.js 16 + Prisma + SQLite on Windows. Always use `--webpack` for builds.
-<!-- END:ponytail -->
+Fix: always set `JWT_SECRET` in `.env`. Both files read it from there and agree.
+<!-- END:jwt-secret-gotcha -->
 
 <!-- INSFORGE:START -->
 ## InsForge backend

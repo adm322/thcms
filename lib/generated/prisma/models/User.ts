@@ -28,6 +28,8 @@ export type UserMinAggregateOutputType = {
   id: string | null
   email: string | null
   passwordHash: string | null
+  passwordAlgo: string | null
+  mustChangePassword: boolean | null
   name: string | null
   role: string | null
   companyId: string | null
@@ -39,6 +41,8 @@ export type UserMaxAggregateOutputType = {
   id: string | null
   email: string | null
   passwordHash: string | null
+  passwordAlgo: string | null
+  mustChangePassword: boolean | null
   name: string | null
   role: string | null
   companyId: string | null
@@ -50,6 +54,8 @@ export type UserCountAggregateOutputType = {
   id: number
   email: number
   passwordHash: number
+  passwordAlgo: number
+  mustChangePassword: number
   name: number
   role: number
   companyId: number
@@ -63,6 +69,8 @@ export type UserMinAggregateInputType = {
   id?: true
   email?: true
   passwordHash?: true
+  passwordAlgo?: true
+  mustChangePassword?: true
   name?: true
   role?: true
   companyId?: true
@@ -74,6 +82,8 @@ export type UserMaxAggregateInputType = {
   id?: true
   email?: true
   passwordHash?: true
+  passwordAlgo?: true
+  mustChangePassword?: true
   name?: true
   role?: true
   companyId?: true
@@ -85,6 +95,8 @@ export type UserCountAggregateInputType = {
   id?: true
   email?: true
   passwordHash?: true
+  passwordAlgo?: true
+  mustChangePassword?: true
   name?: true
   role?: true
   companyId?: true
@@ -169,6 +181,8 @@ export type UserGroupByOutputType = {
   id: string
   email: string
   passwordHash: string
+  passwordAlgo: string | null
+  mustChangePassword: boolean
   name: string
   role: string
   companyId: string | null
@@ -201,6 +215,8 @@ export type UserWhereInput = {
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
+  passwordAlgo?: Prisma.StringNullableFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.StringFilter<"User"> | string
   companyId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -210,7 +226,6 @@ export type UserWhereInput = {
   trainerProfile?: Prisma.XOR<Prisma.TrainerProfileNullableScalarRelationFilter, Prisma.TrainerProfileWhereInput> | null
   programs?: Prisma.ProgramListRelationFilter
   bookingsAsHR?: Prisma.BookingListRelationFilter
-  reimbursements?: Prisma.ReimbursementListRelationFilter
   sentMessages?: Prisma.MessageListRelationFilter
   receivedMessages?: Prisma.MessageListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
@@ -229,6 +244,8 @@ export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  passwordAlgo?: Prisma.SortOrderInput | Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   companyId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -238,7 +255,6 @@ export type UserOrderByWithRelationInput = {
   trainerProfile?: Prisma.TrainerProfileOrderByWithRelationInput
   programs?: Prisma.ProgramOrderByRelationAggregateInput
   bookingsAsHR?: Prisma.BookingOrderByRelationAggregateInput
-  reimbursements?: Prisma.ReimbursementOrderByRelationAggregateInput
   sentMessages?: Prisma.MessageOrderByRelationAggregateInput
   receivedMessages?: Prisma.MessageOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
@@ -260,6 +276,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   passwordHash?: Prisma.StringFilter<"User"> | string
+  passwordAlgo?: Prisma.StringNullableFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.StringFilter<"User"> | string
   companyId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -269,7 +287,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   trainerProfile?: Prisma.XOR<Prisma.TrainerProfileNullableScalarRelationFilter, Prisma.TrainerProfileWhereInput> | null
   programs?: Prisma.ProgramListRelationFilter
   bookingsAsHR?: Prisma.BookingListRelationFilter
-  reimbursements?: Prisma.ReimbursementListRelationFilter
   sentMessages?: Prisma.MessageListRelationFilter
   receivedMessages?: Prisma.MessageListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
@@ -288,6 +305,8 @@ export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  passwordAlgo?: Prisma.SortOrderInput | Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   companyId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -305,6 +324,8 @@ export type UserScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
+  passwordAlgo?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.StringWithAggregatesFilter<"User"> | string
   companyId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -316,6 +337,8 @@ export type UserCreateInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -324,7 +347,6 @@ export type UserCreateInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -343,6 +365,8 @@ export type UserUncheckedCreateInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -351,7 +375,6 @@ export type UserUncheckedCreateInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -370,6 +393,8 @@ export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,7 +403,6 @@ export type UserUpdateInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -397,6 +421,8 @@ export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -405,7 +431,6 @@ export type UserUncheckedUpdateInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -424,6 +449,8 @@ export type UserCreateManyInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -435,6 +462,8 @@ export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -445,6 +474,8 @@ export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -456,6 +487,8 @@ export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  passwordAlgo?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
@@ -467,6 +500,8 @@ export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  passwordAlgo?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
@@ -478,6 +513,8 @@ export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  passwordAlgo?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
@@ -509,12 +546,16 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
 }
 
 export type UserCreateNestedManyWithoutCompanyInput = {
@@ -615,20 +656,6 @@ export type UserUpdateOneWithoutParticipantProfileNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutParticipantProfileInput, Prisma.UserUpdateWithoutParticipantProfileInput>, Prisma.UserUncheckedUpdateWithoutParticipantProfileInput>
-}
-
-export type UserCreateNestedOneWithoutReimbursementsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReimbursementsInput, Prisma.UserUncheckedCreateWithoutReimbursementsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReimbursementsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutReimbursementsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReimbursementsInput, Prisma.UserUncheckedCreateWithoutReimbursementsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReimbursementsInput
-  upsert?: Prisma.UserUpsertWithoutReimbursementsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReimbursementsInput, Prisma.UserUpdateWithoutReimbursementsInput>, Prisma.UserUncheckedUpdateWithoutReimbursementsInput>
 }
 
 export type UserCreateNestedOneWithoutLeavesApprovedInput = {
@@ -793,6 +820,8 @@ export type UserCreateWithoutCompanyInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -800,7 +829,6 @@ export type UserCreateWithoutCompanyInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -819,6 +847,8 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -826,7 +856,6 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -873,6 +902,8 @@ export type UserScalarWhereInput = {
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
+  passwordAlgo?: Prisma.StringNullableFilter<"User"> | string | null
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.StringFilter<"User"> | string
   companyId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -884,6 +915,8 @@ export type UserCreateWithoutTrainerProfileInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -891,7 +924,6 @@ export type UserCreateWithoutTrainerProfileInput = {
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -910,6 +942,8 @@ export type UserUncheckedCreateWithoutTrainerProfileInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -917,7 +951,6 @@ export type UserUncheckedCreateWithoutTrainerProfileInput = {
   updatedAt?: Date | string
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -952,6 +985,8 @@ export type UserUpdateWithoutTrainerProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -959,7 +994,6 @@ export type UserUpdateWithoutTrainerProfileInput = {
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -978,6 +1012,8 @@ export type UserUncheckedUpdateWithoutTrainerProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -985,7 +1021,6 @@ export type UserUncheckedUpdateWithoutTrainerProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -1004,6 +1039,8 @@ export type UserCreateWithoutProgramsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1011,7 +1048,6 @@ export type UserCreateWithoutProgramsInput = {
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -1030,6 +1066,8 @@ export type UserUncheckedCreateWithoutProgramsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1037,7 +1075,6 @@ export type UserUncheckedCreateWithoutProgramsInput = {
   updatedAt?: Date | string
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -1072,6 +1109,8 @@ export type UserUpdateWithoutProgramsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1079,7 +1118,6 @@ export type UserUpdateWithoutProgramsInput = {
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -1098,6 +1136,8 @@ export type UserUncheckedUpdateWithoutProgramsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1105,7 +1145,6 @@ export type UserUncheckedUpdateWithoutProgramsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -1124,6 +1163,8 @@ export type UserCreateWithoutBookingsAsHRInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1131,7 +1172,6 @@ export type UserCreateWithoutBookingsAsHRInput = {
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -1150,6 +1190,8 @@ export type UserUncheckedCreateWithoutBookingsAsHRInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1157,7 +1199,6 @@ export type UserUncheckedCreateWithoutBookingsAsHRInput = {
   updatedAt?: Date | string
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -1192,6 +1233,8 @@ export type UserUpdateWithoutBookingsAsHRInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1199,7 +1242,6 @@ export type UserUpdateWithoutBookingsAsHRInput = {
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -1218,6 +1260,8 @@ export type UserUncheckedUpdateWithoutBookingsAsHRInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1225,7 +1269,6 @@ export type UserUncheckedUpdateWithoutBookingsAsHRInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -1244,6 +1287,8 @@ export type UserCreateWithoutParticipantProfileInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1252,7 +1297,6 @@ export type UserCreateWithoutParticipantProfileInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -1270,6 +1314,8 @@ export type UserUncheckedCreateWithoutParticipantProfileInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1278,7 +1324,6 @@ export type UserUncheckedCreateWithoutParticipantProfileInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -1312,6 +1357,8 @@ export type UserUpdateWithoutParticipantProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1320,7 +1367,6 @@ export type UserUpdateWithoutParticipantProfileInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -1338,126 +1384,8 @@ export type UserUncheckedUpdateWithoutParticipantProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
-  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
-  bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
-  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
-  receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
-  leavesApproved?: Prisma.LeaveUncheckedUpdateManyWithoutApprovedByNestedInput
-  votes?: Prisma.ProgramVoteUncheckedUpdateManyWithoutHrNestedInput
-  tickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutHrNestedInput
-  changelogs?: Prisma.ChangelogUncheckedUpdateManyWithoutAuthorNestedInput
-  availabilities?: Prisma.TrainerAvailabilityUncheckedUpdateManyWithoutTrainerNestedInput
-  teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
-  trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutReimbursementsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name: string
-  role?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
-  trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
-  programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
-  bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
-  receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
-  leavesApproved?: Prisma.LeaveCreateNestedManyWithoutApprovedByInput
-  votes?: Prisma.ProgramVoteCreateNestedManyWithoutHrInput
-  tickets?: Prisma.SupportTicketCreateNestedManyWithoutHrInput
-  changelogs?: Prisma.ChangelogCreateNestedManyWithoutAuthorInput
-  availabilities?: Prisma.TrainerAvailabilityCreateNestedManyWithoutTrainerInput
-  teamBuildingReqs?: Prisma.TeamBuildingRequestCreateNestedManyWithoutHrInput
-  trainingPlans?: Prisma.TrainingPlanItemCreateNestedManyWithoutHrInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  participantProfile?: Prisma.ParticipantCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutReimbursementsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name: string
-  role?: string
-  companyId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
-  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
-  bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
-  receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
-  leavesApproved?: Prisma.LeaveUncheckedCreateNestedManyWithoutApprovedByInput
-  votes?: Prisma.ProgramVoteUncheckedCreateNestedManyWithoutHrInput
-  tickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutHrInput
-  changelogs?: Prisma.ChangelogUncheckedCreateNestedManyWithoutAuthorInput
-  availabilities?: Prisma.TrainerAvailabilityUncheckedCreateNestedManyWithoutTrainerInput
-  teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedCreateNestedManyWithoutHrInput
-  trainingPlans?: Prisma.TrainingPlanItemUncheckedCreateNestedManyWithoutHrInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  participantProfile?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutReimbursementsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutReimbursementsInput, Prisma.UserUncheckedCreateWithoutReimbursementsInput>
-}
-
-export type UserUpsertWithoutReimbursementsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutReimbursementsInput, Prisma.UserUncheckedUpdateWithoutReimbursementsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutReimbursementsInput, Prisma.UserUncheckedCreateWithoutReimbursementsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutReimbursementsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutReimbursementsInput, Prisma.UserUncheckedUpdateWithoutReimbursementsInput>
-}
-
-export type UserUpdateWithoutReimbursementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
-  trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
-  programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
-  bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
-  receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
-  leavesApproved?: Prisma.LeaveUpdateManyWithoutApprovedByNestedInput
-  votes?: Prisma.ProgramVoteUpdateManyWithoutHrNestedInput
-  tickets?: Prisma.SupportTicketUpdateManyWithoutHrNestedInput
-  changelogs?: Prisma.ChangelogUpdateManyWithoutAuthorNestedInput
-  availabilities?: Prisma.TrainerAvailabilityUpdateManyWithoutTrainerNestedInput
-  teamBuildingReqs?: Prisma.TeamBuildingRequestUpdateManyWithoutHrNestedInput
-  trainingPlans?: Prisma.TrainingPlanItemUpdateManyWithoutHrNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  participantProfile?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutReimbursementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1477,13 +1405,14 @@ export type UserUncheckedUpdateWithoutReimbursementsInput = {
   teamBuildingReqs?: Prisma.TeamBuildingRequestUncheckedUpdateManyWithoutHrNestedInput
   trainingPlans?: Prisma.TrainingPlanItemUncheckedUpdateManyWithoutHrNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  participantProfile?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLeavesApprovedInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1492,7 +1421,6 @@ export type UserCreateWithoutLeavesApprovedInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -1510,6 +1438,8 @@ export type UserUncheckedCreateWithoutLeavesApprovedInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1518,7 +1448,6 @@ export type UserUncheckedCreateWithoutLeavesApprovedInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -1552,6 +1481,8 @@ export type UserUpdateWithoutLeavesApprovedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1560,7 +1491,6 @@ export type UserUpdateWithoutLeavesApprovedInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -1578,6 +1508,8 @@ export type UserUncheckedUpdateWithoutLeavesApprovedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1586,7 +1518,6 @@ export type UserUncheckedUpdateWithoutLeavesApprovedInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -1604,6 +1535,8 @@ export type UserCreateWithoutSentMessagesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1612,7 +1545,6 @@ export type UserCreateWithoutSentMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
   leavesApproved?: Prisma.LeaveCreateNestedManyWithoutApprovedByInput
@@ -1630,6 +1562,8 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1638,7 +1572,6 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
   leavesApproved?: Prisma.LeaveUncheckedCreateNestedManyWithoutApprovedByInput
@@ -1661,6 +1594,8 @@ export type UserCreateWithoutReceivedMessagesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1669,7 +1604,6 @@ export type UserCreateWithoutReceivedMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
   leavesApproved?: Prisma.LeaveCreateNestedManyWithoutApprovedByInput
@@ -1687,6 +1621,8 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1695,7 +1631,6 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
   leavesApproved?: Prisma.LeaveUncheckedCreateNestedManyWithoutApprovedByInput
@@ -1729,6 +1664,8 @@ export type UserUpdateWithoutSentMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1737,7 +1674,6 @@ export type UserUpdateWithoutSentMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
   leavesApproved?: Prisma.LeaveUpdateManyWithoutApprovedByNestedInput
@@ -1755,6 +1691,8 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1763,7 +1701,6 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
   leavesApproved?: Prisma.LeaveUncheckedUpdateManyWithoutApprovedByNestedInput
@@ -1792,6 +1729,8 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1800,7 +1739,6 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
   leavesApproved?: Prisma.LeaveUpdateManyWithoutApprovedByNestedInput
@@ -1818,6 +1756,8 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1826,7 +1766,6 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
   leavesApproved?: Prisma.LeaveUncheckedUpdateManyWithoutApprovedByNestedInput
@@ -1844,6 +1783,8 @@ export type UserCreateWithoutReviewsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1852,7 +1793,6 @@ export type UserCreateWithoutReviewsInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   leavesApproved?: Prisma.LeaveCreateNestedManyWithoutApprovedByInput
@@ -1870,6 +1810,8 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1878,7 +1820,6 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   leavesApproved?: Prisma.LeaveUncheckedCreateNestedManyWithoutApprovedByInput
@@ -1912,6 +1853,8 @@ export type UserUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1920,7 +1863,6 @@ export type UserUpdateWithoutReviewsInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   leavesApproved?: Prisma.LeaveUpdateManyWithoutApprovedByNestedInput
@@ -1938,6 +1880,8 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1946,7 +1890,6 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   leavesApproved?: Prisma.LeaveUncheckedUpdateManyWithoutApprovedByNestedInput
@@ -1964,6 +1907,8 @@ export type UserCreateWithoutVotesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -1972,7 +1917,6 @@ export type UserCreateWithoutVotesInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -1990,6 +1934,8 @@ export type UserUncheckedCreateWithoutVotesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -1998,7 +1944,6 @@ export type UserUncheckedCreateWithoutVotesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -2032,6 +1977,8 @@ export type UserUpdateWithoutVotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2040,7 +1987,6 @@ export type UserUpdateWithoutVotesInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2058,6 +2004,8 @@ export type UserUncheckedUpdateWithoutVotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2066,7 +2014,6 @@ export type UserUncheckedUpdateWithoutVotesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2084,6 +2031,8 @@ export type UserCreateWithoutTicketsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -2092,7 +2041,6 @@ export type UserCreateWithoutTicketsInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -2110,6 +2058,8 @@ export type UserUncheckedCreateWithoutTicketsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -2118,7 +2068,6 @@ export type UserUncheckedCreateWithoutTicketsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -2152,6 +2101,8 @@ export type UserUpdateWithoutTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2160,7 +2111,6 @@ export type UserUpdateWithoutTicketsInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2178,6 +2128,8 @@ export type UserUncheckedUpdateWithoutTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2186,7 +2138,6 @@ export type UserUncheckedUpdateWithoutTicketsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2204,6 +2155,8 @@ export type UserCreateWithoutChangelogsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -2212,7 +2165,6 @@ export type UserCreateWithoutChangelogsInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -2230,6 +2182,8 @@ export type UserUncheckedCreateWithoutChangelogsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -2238,7 +2192,6 @@ export type UserUncheckedCreateWithoutChangelogsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -2272,6 +2225,8 @@ export type UserUpdateWithoutChangelogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2280,7 +2235,6 @@ export type UserUpdateWithoutChangelogsInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2298,6 +2252,8 @@ export type UserUncheckedUpdateWithoutChangelogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2306,7 +2262,6 @@ export type UserUncheckedUpdateWithoutChangelogsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2324,6 +2279,8 @@ export type UserCreateWithoutTeamBuildingReqsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -2332,7 +2289,6 @@ export type UserCreateWithoutTeamBuildingReqsInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -2350,6 +2306,8 @@ export type UserUncheckedCreateWithoutTeamBuildingReqsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -2358,7 +2316,6 @@ export type UserUncheckedCreateWithoutTeamBuildingReqsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -2392,6 +2349,8 @@ export type UserUpdateWithoutTeamBuildingReqsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2400,7 +2359,6 @@ export type UserUpdateWithoutTeamBuildingReqsInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2418,6 +2376,8 @@ export type UserUncheckedUpdateWithoutTeamBuildingReqsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2426,7 +2386,6 @@ export type UserUncheckedUpdateWithoutTeamBuildingReqsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2444,6 +2403,8 @@ export type UserCreateWithoutTrainingPlansInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -2452,7 +2413,6 @@ export type UserCreateWithoutTrainingPlansInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -2470,6 +2430,8 @@ export type UserUncheckedCreateWithoutTrainingPlansInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -2478,7 +2440,6 @@ export type UserUncheckedCreateWithoutTrainingPlansInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -2512,6 +2473,8 @@ export type UserUpdateWithoutTrainingPlansInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2520,7 +2483,6 @@ export type UserUpdateWithoutTrainingPlansInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2538,6 +2500,8 @@ export type UserUncheckedUpdateWithoutTrainingPlansInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2546,7 +2510,6 @@ export type UserUncheckedUpdateWithoutTrainingPlansInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2564,6 +2527,8 @@ export type UserCreateWithoutNotificationsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -2572,7 +2537,6 @@ export type UserCreateWithoutNotificationsInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -2590,6 +2554,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -2598,7 +2564,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -2632,6 +2597,8 @@ export type UserUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2640,7 +2607,6 @@ export type UserUpdateWithoutNotificationsInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2658,6 +2624,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2666,7 +2634,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2684,6 +2651,8 @@ export type UserCreateWithoutAvailabilitiesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -2692,7 +2661,6 @@ export type UserCreateWithoutAvailabilitiesInput = {
   trainerProfile?: Prisma.TrainerProfileCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutHrInput
@@ -2710,6 +2678,8 @@ export type UserUncheckedCreateWithoutAvailabilitiesInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   companyId?: string | null
@@ -2718,7 +2688,6 @@ export type UserUncheckedCreateWithoutAvailabilitiesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedCreateNestedOneWithoutUserInput
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTrainerInput
   bookingsAsHR?: Prisma.BookingUncheckedCreateNestedManyWithoutHrInput
-  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutTrainerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutHrInput
@@ -2752,6 +2721,8 @@ export type UserUpdateWithoutAvailabilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2760,7 +2731,6 @@ export type UserUpdateWithoutAvailabilitiesInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2778,6 +2748,8 @@ export type UserUncheckedUpdateWithoutAvailabilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2786,7 +2758,6 @@ export type UserUncheckedUpdateWithoutAvailabilitiesInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2804,6 +2775,8 @@ export type UserCreateManyCompanyInput = {
   id?: string
   email: string
   passwordHash: string
+  passwordAlgo?: string | null
+  mustChangePassword?: boolean
   name: string
   role?: string
   createdAt?: Date | string
@@ -2814,6 +2787,8 @@ export type UserUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2821,7 +2796,6 @@ export type UserUpdateWithoutCompanyInput = {
   trainerProfile?: Prisma.TrainerProfileUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutHrNestedInput
@@ -2840,6 +2814,8 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2847,7 +2823,6 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   trainerProfile?: Prisma.TrainerProfileUncheckedUpdateOneWithoutUserNestedInput
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutTrainerNestedInput
   bookingsAsHR?: Prisma.BookingUncheckedUpdateManyWithoutHrNestedInput
-  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutTrainerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutHrNestedInput
@@ -2866,6 +2841,8 @@ export type UserUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordAlgo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2880,7 +2857,6 @@ export type UserUncheckedUpdateManyWithoutCompanyInput = {
 export type UserCountOutputType = {
   programs: number
   bookingsAsHR: number
-  reimbursements: number
   sentMessages: number
   receivedMessages: number
   reviews: number
@@ -2898,7 +2874,6 @@ export type UserCountOutputType = {
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   programs?: boolean | UserCountOutputTypeCountProgramsArgs
   bookingsAsHR?: boolean | UserCountOutputTypeCountBookingsAsHRArgs
-  reimbursements?: boolean | UserCountOutputTypeCountReimbursementsArgs
   sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
   receivedMessages?: boolean | UserCountOutputTypeCountReceivedMessagesArgs
   reviews?: boolean | UserCountOutputTypeCountReviewsArgs
@@ -2935,13 +2910,6 @@ export type UserCountOutputTypeCountProgramsArgs<ExtArgs extends runtime.Types.E
  */
 export type UserCountOutputTypeCountBookingsAsHRArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BookingWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountReimbursementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReimbursementWhereInput
 }
 
 /**
@@ -3033,6 +3001,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   email?: boolean
   passwordHash?: boolean
+  passwordAlgo?: boolean
+  mustChangePassword?: boolean
   name?: boolean
   role?: boolean
   companyId?: boolean
@@ -3042,7 +3012,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   trainerProfile?: boolean | Prisma.User$trainerProfileArgs<ExtArgs>
   programs?: boolean | Prisma.User$programsArgs<ExtArgs>
   bookingsAsHR?: boolean | Prisma.User$bookingsAsHRArgs<ExtArgs>
-  reimbursements?: boolean | Prisma.User$reimbursementsArgs<ExtArgs>
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
   receivedMessages?: boolean | Prisma.User$receivedMessagesArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
@@ -3062,6 +3031,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   email?: boolean
   passwordHash?: boolean
+  passwordAlgo?: boolean
+  mustChangePassword?: boolean
   name?: boolean
   role?: boolean
   companyId?: boolean
@@ -3074,6 +3045,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   email?: boolean
   passwordHash?: boolean
+  passwordAlgo?: boolean
+  mustChangePassword?: boolean
   name?: boolean
   role?: boolean
   companyId?: boolean
@@ -3086,6 +3059,8 @@ export type UserSelectScalar = {
   id?: boolean
   email?: boolean
   passwordHash?: boolean
+  passwordAlgo?: boolean
+  mustChangePassword?: boolean
   name?: boolean
   role?: boolean
   companyId?: boolean
@@ -3093,13 +3068,12 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "role" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "passwordAlgo" | "mustChangePassword" | "name" | "role" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   trainerProfile?: boolean | Prisma.User$trainerProfileArgs<ExtArgs>
   programs?: boolean | Prisma.User$programsArgs<ExtArgs>
   bookingsAsHR?: boolean | Prisma.User$bookingsAsHRArgs<ExtArgs>
-  reimbursements?: boolean | Prisma.User$reimbursementsArgs<ExtArgs>
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
   receivedMessages?: boolean | Prisma.User$receivedMessagesArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
@@ -3128,7 +3102,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     trainerProfile: Prisma.$TrainerProfilePayload<ExtArgs> | null
     programs: Prisma.$ProgramPayload<ExtArgs>[]
     bookingsAsHR: Prisma.$BookingPayload<ExtArgs>[]
-    reimbursements: Prisma.$ReimbursementPayload<ExtArgs>[]
     sentMessages: Prisma.$MessagePayload<ExtArgs>[]
     receivedMessages: Prisma.$MessagePayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
@@ -3146,6 +3119,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     email: string
     passwordHash: string
+    /**
+     * * Hash algorithm marker: "bcrypt-10" | "sha256-legacy" | null. Null = legacy.
+     */
+    passwordAlgo: string | null
+    /**
+     * * When true, the user must set a new password on next login.
+     */
+    mustChangePassword: boolean
     name: string
     role: string
     companyId: string | null
@@ -3549,7 +3530,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   trainerProfile<T extends Prisma.User$trainerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$trainerProfileArgs<ExtArgs>>): Prisma.Prisma__TrainerProfileClient<runtime.Types.Result.GetResult<Prisma.$TrainerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   programs<T extends Prisma.User$programsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$programsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bookingsAsHR<T extends Prisma.User$bookingsAsHRArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bookingsAsHRArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reimbursements<T extends Prisma.User$reimbursementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reimbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentMessages<T extends Prisma.User$sentMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   receivedMessages<T extends Prisma.User$receivedMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$receivedMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3594,6 +3574,8 @@ export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
+  readonly passwordAlgo: Prisma.FieldRef<"User", 'String'>
+  readonly mustChangePassword: Prisma.FieldRef<"User", 'Boolean'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly companyId: Prisma.FieldRef<"User", 'String'>
@@ -4081,30 +4063,6 @@ export type User$bookingsAsHRArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.BookingScalarFieldEnum | Prisma.BookingScalarFieldEnum[]
-}
-
-/**
- * User.reimbursements
- */
-export type User$reimbursementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Reimbursement
-   */
-  select?: Prisma.ReimbursementSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Reimbursement
-   */
-  omit?: Prisma.ReimbursementOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReimbursementInclude<ExtArgs> | null
-  where?: Prisma.ReimbursementWhereInput
-  orderBy?: Prisma.ReimbursementOrderByWithRelationInput | Prisma.ReimbursementOrderByWithRelationInput[]
-  cursor?: Prisma.ReimbursementWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ReimbursementScalarFieldEnum | Prisma.ReimbursementScalarFieldEnum[]
 }
 
 /**

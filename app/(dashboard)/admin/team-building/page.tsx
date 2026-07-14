@@ -9,9 +9,9 @@ import { useToast } from "@/components/Toast";
 import { CheckCircle2, XCircle, Search, Eye, FileText, Calendar, Users, MapPin, Building2, Upload, HelpCircle } from "lucide-react";
 import { WorkflowGuideModal } from "@/components/WorkflowGuideModal";
 
-const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-  SUBMITTED: "secondary", REVIEWING: "outline", APPROVED: "default", REJECTED: "destructive",
-  HRDF_SUBMITTED: "default", COMPLETED: "default",
+const statusColors: Record<string, "status-success" | "status-info" | "status-warning" | "status-danger" | "status-neutral"> = {
+  SUBMITTED: "status-info", REVIEWING: "status-info", APPROVED: "status-success", REJECTED: "status-danger",
+  HRDF_SUBMITTED: "status-success", COMPLETED: "status-success",
 };
 
 export default function AdminTeamBuilding() {

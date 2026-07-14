@@ -13,6 +13,7 @@ import {
   Plus, Star, DollarSign, Calendar, ChevronDown, ChevronUp, AlertTriangle,
   Clock, FileText, Users, ArrowRight, MessageSquare, CheckCircle2,
 } from "lucide-react";
+import { MobileViewLink } from "@/components/mobile-dashboard/MobileViewLink";
 
 interface TrainerStats {
   totalPrograms: number;
@@ -364,13 +365,14 @@ export function TrainerDashboardClient({ initialData }: { initialData: any }) {
               <span className="inline-flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded bg-red-400" /> Unavailable
               </span>
-              <Link href="/trainer" className="text-primary hover:underline ml-auto text-xs">
+              <Link href="/trainer/availability" className="text-primary hover:underline ml-auto text-xs">
                 Manage availability →
               </Link>
             </div>
           </CardContent>
         </Card>
       </CollapsibleSection>
+      <MobileViewLink />
     </div>
   );
 }

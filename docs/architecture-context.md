@@ -13,19 +13,23 @@
 ## Project Structure
 ```
 ├── app/
-│   ├── (auth)/login/              # Login page
+│   ├── (auth)/login/              # Login page (with mobile/desktop view selector)
 │   ├── (dashboard)/
 │   │   ├── admin/                  # Dashboard, bookings, invoices, trainers, training-plans, team-building, sales, finance, support
 │   │   ├── trainer/                # Dashboard, programs, quiz builder, materials, earnings, messages, evaluations
-│   │   └── hr/                     # Dashboard, marketplace, bookings, employees, training-planner, team-building, evaluations, leaves, attendance, claims, sop, hrdf-calculator, integration, messages
-│   ├── api/                        # 60+ REST API routes
+│   │   ├── hr/                     # Dashboard, marketplace, bookings, employees, training-planner, team-building, evaluations, leaves, attendance, claims, sop, hrdf-calculator, integration, messages
+│   │   └── participant/            # Dashboard, certificate tracking, quiz history
+│   ├── m/                          # Mobile-first dashboard (full-screen app shell, role-specific views, wizards)
+│   ├── api/                        # 65+ REST API routes
 │   ├── globals.css                 # Vercel-inspired design tokens
 │   └── layout.tsx                  # Root layout with auth provider
 ├── components/
 │   ├── ui/                         # shadcn/ui primitives (Button, Card, Input, Badge, Dialog, Tabs, Skeleton...)
+│   ├── mobile-dashboard/           # Mobile role dashboards (Admin, HR, Trainer, Participant) + MobileViewLink
+│   ├── wizard/                     # Reusable wizard stepper (Stepper.tsx) + navigation (Nav.tsx)
 │   ├── Sidebar.tsx                 # Role-aware sidebar navigation
 │   ├── CalendarView.tsx            # Month/Year training calendar
-│   ├── NextActionBanner.tsx        # Smart contextual action alerts
+│   ├── NotificationBell.tsx        # Unified inbox (notifications + contextual actions, role-aware tabs)
 │   ├── CollapsibleSection.tsx      # Expandable section wrapper
 │   ├── MessagesInbox.tsx           # Split-pane chat inbox
 │   ├── ExportButton.tsx            # Reusable CSV export
@@ -39,7 +43,11 @@
 │   ├── auth.ts                     # JWT session management
 │   ├── malaysia-holidays.ts        # Malaysian public holidays + special periods
 │   ├── utils.ts                    # cn() classname merger
-│   └── format.ts                   # MYR formatting utilities
+│   ├── format.ts                   # MYR formatting utilities
+│   └── services/                   # Shared data-fetching layer
+│       ├── admin.service.ts        # Admin stats, calendar, changelog, training plans, actions
+│       ├── hr.service.ts           # HR stats, actions, AI recommendations
+│       └── trainer.service.ts      # Trainer stats, actions
 ├── prisma/
 │   ├── schema.prisma               # 24 database models
 │   └── seed.ts                     # Seed script (6 companies, 72+ employees, 19 plan items)
@@ -69,13 +77,11 @@
 
 ### Financial
 - **Invoice** — invoice number, amount, status, due date, financial breakdown (program fee, trainer fee, HRDF fee, platform fee, SST, net pay)
-- **Reimbursement** — amount, description, receipt URL, status
 
 ### HR
 - **Employee** — name, IC, email, phone, department, position, date joined, employment type, status
 - **Leave** — type (ANNUAL/MEDICAL/HOSPITALISATION/etc.), dates, days, status
 - **Attendance** — date, clock in/out, status
-- **Claim** — type (MILEAGE/TRAVEL/MEAL/etc.), amount, receipt, status
 - **Payroll** — salary, allowances, deductions, statutory contributions (EPF/SOCSO/EIS/PCB)
 
 ### Planning
@@ -106,7 +112,6 @@
 | `/admin/bookings/[id]` | Booking detail + checklist + HRDF |
 | `/admin/training-plans` | All-company training plan oversight |
 | `/admin/team-building` | Team building request review |
-| `/admin/reimbursements` | Reimbursement management |
 | `/admin/invoices` | Invoice tracking |
 | `/admin/invoices/[id]` | Invoice detail + payment breakdown |
 | `/admin/trainers` | Trainer directory |
@@ -145,7 +150,6 @@
 | `/hr/employees/upload` | Bulk CSV upload |
 | `/hr/leaves` | Leave management |
 | `/hr/attendance` | Attendance tracking |
-| `/hr/claims` | Claims management |
 | `/hr/evaluations` | Evaluation list |
 | `/hr/evaluations/[id]/summary` | Performance graph + QR + PDF |
 | `/hr/evaluations/[id]/blast` | Send evaluation |
@@ -169,3 +173,7 @@ All under `app/api/` with role-based prefixes: `/api/admin/*`, `/api/trainer/*`,
 6. **Production mode for Windows** — Turbopack has NUL device bug on Windows; use `--webpack` for dev or production build
 7. **Notes-based admin approval** — Admin approve/reject uses notes markers (`[Admin Approved]`, `[Admin Rejected]`) instead of separate status field, keeping pipeline simple
 8. **Static holiday data** — Malaysian holidays embedded in code (not API-dependent) for reliability
+9. **Shared service layer** — Core data-fetching logic extracted to `lib/services/*.service.ts`, called by both API routes (thin auth wrappers) and server-rendered pages (direct calls). Eliminates fragile cross-module route-handler imports.
+10. **Mobile/Desktop view toggle** — Login page offers mobile vs desktop dashboard choice, persisted in localStorage. Desktop dashboards show a floating `MobileViewLink` (fixed button, visible on small viewports) to jump to `/m`.
+11. **Wizard pattern** — Reusable `WizardStepper` + `WizardNav` components using CSS custom properties (`--brand`, `--brand-deep`) for role-specific theming without prop drilling. Used by 4 forms: new program, new booking, new employee, invite trainer.
+12. **Mobile app shell** — `/m/layout.tsx` is a self-contained `"use client"` layout with its own top bar (back, title, language toggle, theme toggle, sign out) — bypassing the desktop sidebar/drawer completely.

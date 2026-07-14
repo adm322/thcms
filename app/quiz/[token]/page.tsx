@@ -15,6 +15,9 @@ export default function PublicQuiz({ params }: { params: Promise<{ token: string
   const [score, setScore] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingId, setBookingId] = useState<string | null>(null);
+  const [attemptNumber, setAttemptNumber] = useState(1);
+  const [passed, setPassed] = useState(false);
+  const [previousAttempts, setPreviousAttempts] = useState<{ score: number; passed: boolean; attemptNumber: number; createdAt: string }[]>([]);
 
   useEffect(() => {
     fetch(`/api/quiz/${token}`).then(r => r.json()).then(data => {
@@ -40,6 +43,9 @@ export default function PublicQuiz({ params }: { params: Promise<{ token: string
       if (res.ok) {
         const data = await res.json();
         setScore(data.score);
+        setPassed(data.passed);
+        setAttemptNumber(data.attemptNumber);
+        setPreviousAttempts(data.previousAttempts || []);
         setScreen('results');
       }
     } finally {
@@ -191,28 +197,28 @@ export default function PublicQuiz({ params }: { params: Promise<{ token: string
     );
   }
 
-  const passed = score >= quiz.passingScore;
+  const passedFromState = passed;
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex items-center justify-center p-6 relative overflow-hidden font-sans">
-      <div className={`absolute inset-0 opacity-40 pointer-events-none ${passed ? 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-100/50 via-slate-50 to-slate-50' : 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-100/50 via-slate-50 to-slate-50'}`} />
+      <div className={`absolute inset-0 opacity-40 pointer-events-none ${passedFromState ? 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-100/50 via-slate-50 to-slate-50' : 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-100/50 via-slate-50 to-slate-50'}`} />
       
       <div className="max-w-md w-full z-10 bg-white/90 backdrop-blur-2xl border border-slate-200/60 rounded-[2.5rem] p-10 text-center shadow-xl animate-in zoom-in-95 duration-700 slide-in-from-bottom-10">
-        <div className={`w-28 h-28 mx-auto rounded-full flex items-center justify-center mb-8 relative ${passed ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
-          <div className={`absolute inset-0 rounded-full blur-xl opacity-40 ${passed ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-          {passed ? <Award className="h-14 w-14 relative z-10" /> : <Clock className="h-14 w-14 relative z-10" />}
+        <div className={`w-28 h-28 mx-auto rounded-full flex items-center justify-center mb-8 relative ${passedFromState ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+          <div className={`absolute inset-0 rounded-full blur-xl opacity-40 ${passedFromState ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+          {passedFromState ? <Award className="h-14 w-14 relative z-10" /> : <Clock className="h-14 w-14 relative z-10" />}
         </div>
         
         <h1 className="text-4xl font-extrabold mb-4 tracking-tight text-slate-900 font-sans">
-          {passed ? "Brilliant Work!" : "Assessment Complete"}
+          {passedFromState ? "Brilliant Work!" : "Assessment Complete"}
         </h1>
         <p className="text-slate-500 text-lg mb-10 leading-relaxed font-light font-sans">
-          {passed ? "You've successfully mastered this material and passed the assessment." : "You've finished the assessment. Review the material and try again!"}
+          {passedFromState ? "You've successfully mastered this material and passed the assessment." : "You've finished the assessment. Review the material and try again!"}
         </p>
 
         <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 mb-10 relative overflow-hidden shadow-xs">
-          <div className={`absolute top-0 left-0 w-full h-1 ${passed ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-          <div className="text-sm text-slate-400 font-semibold uppercase tracking-widest mb-2 font-mono">Final Score</div>
-          <div className={`text-7xl font-black tracking-tighter ${passed ? 'text-emerald-600' : 'text-amber-600'}`}>
+          <div className={`absolute top-0 left-0 w-full h-1 ${passedFromState ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+          <div className="text-sm text-slate-400 font-semibold uppercase tracking-widest mb-2 font-mono">Attempt #{attemptNumber}</div>
+          <div className={`text-7xl font-black tracking-tighter ${passedFromState ? 'text-emerald-600' : 'text-amber-600'}`}>
             {score}<span className="text-4xl opacity-50">%</span>
           </div>
           <div className="mt-6 pt-5 border-t border-slate-200/60 flex justify-between items-center text-sm font-sans">
@@ -222,15 +228,35 @@ export default function PublicQuiz({ params }: { params: Promise<{ token: string
         </div>
 
         <div className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-slate-200 bg-white text-sm font-medium shadow-xs mb-8">
-          {passed ? (
+          {passedFromState ? (
             <span className="flex items-center gap-2 text-emerald-600"><CheckCircle2 className="h-5 w-5" /> Passing Grade Achieved</span>
           ) : (
             <span className="flex items-center gap-2 text-amber-600">Did not meet passing score</span>
           )}
         </div>
 
+        {/* Previous attempts history */}
+        {previousAttempts.length > 0 && (
+          <div className="mb-8 text-left">
+            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Previous Attempts</h3>
+            <div className="space-y-2">
+              {previousAttempts.map((a) => (
+                <div key={a.attemptNumber} className="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm">
+                  <span className="text-slate-600 font-medium">Attempt #{a.attemptNumber}</span>
+                  <div className="flex items-center gap-3">
+                    <span className={`font-bold ${a.passed ? 'text-emerald-600' : 'text-amber-600'}`}>{a.score}%</span>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${a.passed ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                      {a.passed ? 'Passed' : 'Failed'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-col gap-3">
-          {!passed && (
+          {!passedFromState && (
             <button 
               onClick={handleRetry} 
               className="w-full bg-slate-900 text-white hover:bg-slate-800 font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all transform active:scale-[0.98] shadow-md font-sans cursor-pointer"
@@ -243,7 +269,7 @@ export default function PublicQuiz({ params }: { params: Promise<{ token: string
               href={`/participant/class/${bookingId}`}
               className="w-full bg-white text-slate-800 border border-slate-200 hover:bg-slate-50 font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all transform active:scale-[0.98] shadow-xs font-sans cursor-pointer"
             >
-              {passed ? "Back to Course Modules" : "Back to Modules to Review"}
+              {passedFromState ? "Back to Course Modules" : "Back to Modules to Review"}
             </a>
           )}
         </div>

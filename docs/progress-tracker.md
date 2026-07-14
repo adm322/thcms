@@ -4,13 +4,12 @@
 
 ### Admin
 - [x] Dashboard with stats, monthly summary bar, calendar + upcoming tabs
-- [x] **Smart Action Banner** — auto-refreshing contextual alerts (pending approvals, HRDF deadlines, reimbursements)
+- [x] **Smart Action Banner** — auto-refreshing contextual alerts (pending approvals, HRDF deadlines)
 - [x] **Collapsible Sections** — programs, quick links, changelog (reduces dashboard clutter)
 - [x] Training Calendar (table-based, month/year views, color-coded by category)
 - [x] Event detail dialog with approve/reject/complete actions
 - [x] All bookings management with status filters + HRDF claim badges
 - [x] Booking detail with participants, training checklist (15 items, localStorage), dual-party HRDF tracking
-- [x] Reimbursement approval (approve/reject)
 - [x] Invoice management with detail, mark-as-paid
 - [x] Trainer directory with profile, stats, programs, availability
 - [x] **Training Plans** — all-company oversight, expandable per-company cards, approve/reject/notes, year selection
@@ -64,7 +63,6 @@
 - [x] **Messages Inbox** — split-pane chat with HR ↔ Trainer conversations
 - [x] **Leave Management** — filter, approve/reject, leave type tracking
 - [x] **Attendance Tracking** — monthly attendance summary
-- [x] **Claims Management** — employee claims with approve/reject
 - [x] **CSV Export** — reusable ExportButton component
 - [x] **Workflow Guide** — 6-step modal showing HRDF claim lifecycle
 
@@ -74,13 +72,20 @@
 - [x] Vercel-inspired design system (Geist, pill buttons, stacked shadows)
 - [x] **Prisma schema** — 24 models including new TrainingPlanItem
 - [x] **Seed data** — 6 companies, 6 HR users, 3 trainers, 1 admin, 72+ employees, 12 programs, 23 bookings, 19 training plan items
-- [x] **60+ REST API routes** across admin, trainer, HR
+- [x] **65+ REST API routes** across admin, trainer, hr, ai
 - [x] **Malaysian holidays utility** — 2026 public holidays, special periods (Ramadan, Hari Raya, CNY), helper functions
 - [x] In-app messaging API (per-booking conversations)
 - [x] Program thumbnails (SVG gradient cards with category labels)
 - [x] Dual-party HRDF claim tracking (employer + trainer) on all bookings and team-building requests
 - [x] Training checklist (15 items with localStorage, pre/during/post phases)
 - [x] Expandable smart action banner (+N more items toggle)
+- [x] **Mobile Dashboard** — Full-featured `/m` app shell with role-specific views (Admin, Trainer, HR, Participant)
+- [x] **Wizard Component Library** — Reusable stepper + nav used by 4 forms (program, booking, employee, invite)
+- [x] **Shared Service Layer** — `lib/services/` (admin, hr, trainer) — data-fetching logic shared by API routes and pages
+- [x] **Mobile/Desktop View Toggle** — Login page selector persisted in localStorage; floating MobileViewLink on desktop dashboards
+- [x] **Participant Role** — Dashboard with class history, quiz scores, certificates, QR scanning
+- [x] **New API Endpoints** — `POST /api/hr/employees`, `POST /api/admin/trainers/invite`, `/api/ai/recommend` with program resolution
+- [x] **Performance Fix** — N+1 query in trainer stats replaced with single `groupBy`
 
 ## 🚧 Remaining Work
 
@@ -93,4 +98,5 @@
 - [ ] Atomic program+module batch creation
 - [ ] Calendar Google/Outlook sync
 - [ ] Certificate auto-generation on quiz pass
-- [ ] Dark mode polish
+- [ ] Dark mode polish (toggle exists, some components not fully themed)
+- [ ] Mobile dark mode FOUC fix (blocking script for theme before paint)

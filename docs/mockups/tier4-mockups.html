@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TrainHub Mobile · Tier 4 Mockups</title>
+<style>
+  :root {
+    --brand-purple: #8b5cf6;
+    --brand-purple-deep: #6d28d9;
+    --brand-purple-soft: #f3e8ff;
+    --brand-orange: #ff5a1f;
+    --brand-orange-deep: #d83b00;
+    --brand-orange-soft: #fff1ea;
+    --brand-blue: #0ea5e9;
+    --brand-blue-deep: #0369a1;
+    --brand-blue-soft: #e0f2fe;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --border: #e5e7eb;
+    --bg: #f8fafc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    background: #1f2937;
+    padding: 24px 16px;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  h2.section {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 32px 0 12px;
+    opacity: 0.85;
+  }
+  h2.section:first-of-type { margin-top: 0; }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: flex-start;
+  }
+  .frame {
+    width: 390px;
+    background: var(--bg);
+    border-radius: 32px;
+    box-shadow: 0 18px 50px -10px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+    border: 4px solid #111827;
+  }
+  .frame .notch {
+    height: 24px;
+    background: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .frame .notch::after {
+    content: "";
+    width: 80px;
+    height: 16px;
+    background: #111827;
+    border-radius: 0 0 12px 12px;
+  }
+  .frame .screen {
+    padding: 16px;
+    padding-bottom: 80px;
+    background: var(--bg);
+    min-height: 700px;
+  }
+  .header-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  .eyebrow.purple { color: var(--brand-purple); }
+  .eyebrow.orange { color: var(--brand-orange); }
+  .eyebrow.blue   { color: var(--brand-blue); }
+  h1.title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-top: 4px;
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .muted-small {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .hero {
+    border-radius: 24px;
+    padding: 20px;
+    color: #fff;
+    margin-bottom: 20px;
+    box-shadow: 0 14px 30px -10px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero.purple { background-image: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-deep)); }
+  .hero.orange { background-image: linear-gradient(135deg, var(--brand-orange), var(--brand-orange-deep)); }
+  .hero.blue   { background-image: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-deep)); }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .hero-stats .v {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-stats .l {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+  .pill-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 0 16px;
+  }
+  .pill-row::-webkit-scrollbar { display: none; }
+  .pill {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .pill.active.purple { background: var(--brand-purple); border-color: var(--brand-purple); color: #fff; }
+  .pill.active.orange { background: var(--brand-orange); border-color: var(--brand-orange); color: #fff; }
+  .pill.active.blue   { background: var(--brand-blue);   border-color: var(--brand-blue);   color: #fff; }
+  ul.list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  li.card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .icon-tile {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .icon-tile.purple { background: var(--brand-purple-soft); color: var(--brand-purple-deep); }
+  .icon-tile.orange { background: var(--brand-orange-soft); color: var(--brand-orange-deep); }
+  .icon-tile.blue   { background: var(--brand-blue-soft);   color: var(--brand-blue-deep); }
+  .body { flex: 1; min-width: 0; }
+  .body .title { font-size: 14px; font-weight: 700; line-height: 1.25; }
+  .badges {
+    display: inline-flex;
+    gap: 4px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .badge.b-emerald { background: #d1fae5; color: #065f46; }
+  .badge.b-amber   { background: #fef3c7; color: #92400e; }
+  .badge.b-rose    { background: #ffe4e6; color: #9f1239; }
+  .badge.b-slate   { background: #f1f5f9; color: #475569; }
+  .badge.b-sky     { background: #e0f2fe; color: #075985; }
+  .badge.b-violet  { background: #ede9fe; color: #5b21b6; }
+  .badge.b-orange  { background: #ffedd5; color: #9a3412; }
+  .badge.b-cyan    { background: #cffafe; color: #155e75; }
+  .badge.b-yellow  { background: #fef9c3; color: #854d0e; }
+  .meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .chev {
+    color: var(--muted);
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .right-amount {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .right-amount .v {
+    font-size: 14px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .right-amount .l { font-size: 10px; color: var(--muted); }
+  .empty {
+    border-radius: 16px;
+    border: 1px dashed var(--border);
+    background: rgba(255,255,255,0.5);
+    padding: 60px 16px;
+    text-align: center;
+  }
+  .empty svg { width: 32px; height: 32px; color: rgba(100,116,139,0.6); margin-bottom: 8px; }
+  .empty h3 { font-size: 14px; font-weight: 600; }
+  .empty p  { font-size: 12px; color: var(--muted); margin-top: 4px; max-width: 280px; margin-left: auto; margin-right: auto; }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .kpi {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 10px 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  }
+  .kpi .ico {
+    width: 16px;
+    height: 16px;
+    margin: 0 auto 4px;
+  }
+  .kpi .ico.e { color: #059669; }
+  .kpi .ico.v { color: #7c3aed; }
+  .kpi .ico.r { color: #e11d48; }
+  .kpi .ico.a { color: #d97706; }
+  .kpi .l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  .kpi .v { font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .kpi .v.e { color: #059669; }
+  .kpi .v.v { color: #7c3aed; }
+  .kpi .v.r { color: #e11d48; }
+  .kpi .v.a { color: #d97706; }
+
+  .h2-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 16px 0 10px;
+  }
+  .h2-row h2 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .h2-row a {
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .h2-row a.purple { color: var(--brand-purple); }
+  .h2-row a.orange { color: var(--brand-orange); }
+  .h2-row a.blue   { color: var(--brand-blue); }
+
+  /* class detail */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid;
+    flex-shrink: 0;
+  }
+  .status-pill.present { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+  .status-pill.pending { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+  .status-pill.absent  { background: #ffe4e6; color: #9f1239; border-color: #fecdd3; }
+
+  .facts {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .fact {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+  }
+  .fact .ico {
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .fact .lbl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .scan-cta {
+    width: 100%;
+    border-radius: 999px;
+    color: #fff;
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 14px 30px -10px rgba(14,165,233,0.55);
+    margin-bottom: 20px;
+  }
+  .scan-cta.blue { background-image: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-deep)); }
+  .module-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  }
+  .module-row .name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+  .module-row .ico {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+  .module-row .ico.brain { color: var(--brand-blue); }
+  .module-row .name span {
+    font-size: 13px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .module-row .count {
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .count.emerald { color: #059669; }
+  .count.amber   { color: #d97706; }
+  .count.muted   { color: var(--muted); }
+
+  .checkpoint-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .checkpoint {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  }
+  .checkpoint .v {
+    font-size: 20px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .checkpoint .v.blue { color: var(--brand-blue-deep); }
+  .checkpoint .l {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .claim-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .open-desktop {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid var(--border);
+    background: #fff;
+  }
+  .legend {
+    font-size: 10px;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .claims-stat {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+<h2 style="color:#fff; font-size:18px; margin-bottom:24px;">TrainHub Mobile · Tier 4 Mockups — Admin · HR · Participant</h2>
+
+<h2 class="section">Admin · /m/admin/programs</h2>
+<div class="grid">
+  <div class="frame">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="header-back">← Back</div>
+      <div class="eyebrow purple">Catalog</div>
+      <div class="header-row">
+        <h1 class="title">Programs</h1>
+        <div class="muted-small">12 shown</div>
+      </div>
+
+      <div class="hero purple">
+        <div class="hero-stats">
+          <div><div class="v">8</div><div class="l">Live</div></div>
+          <div><div class="v">3</div><div class="l">Drafts</div></div>
+          <div><div class="v">1</div><div class="l">Archived</div></div>
+        </div>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill active purple">All (12)</span>
+        <span class="pill">Live (8)</span>
+        <span class="pill">Drafts (3)</span>
+        <span class="pill">Archived (1)</span>
+      </div>
+
+      <ul class="list">
+        <li class="card">
+          <div class="icon-tile purple">📚</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-emerald">Published</span>
+              <span class="badge b-rose">Leadership</span>
+              <span class="badge b-yellow">⭐ Featured</span>
+            </div>
+            <div class="title">Strategic Leadership in 2026</div>
+            <div class="meta">by Aiman Razak · 8h · RM 450/pax</div>
+            <div class="meta">👥 14 bookings</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+        <li class="card">
+          <div class="icon-tile purple">📚</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-emerald">Published</span>
+              <span class="badge b-orange">Team Building</span>
+            </div>
+            <div class="title">Escape Room: Innovation Lab</div>
+            <div class="meta">by Lina Putri · 4h · RM 280/pax</div>
+            <div class="meta">👥 22 bookings</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+        <li class="card">
+          <div class="icon-tile purple">📚</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-amber">Draft</span>
+              <span class="badge b-violet">Soft Skills</span>
+            </div>
+            <div class="title">Negotiation Mastery Workshop</div>
+            <div class="meta">by Daniel Voon · 6h · RM 380/pax</div>
+            <div class="meta">👥 0 bookings</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+        <li class="card">
+          <div class="icon-tile purple">📚</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-emerald">Published</span>
+              <span class="badge b-emerald">Technical</span>
+            </div>
+            <div class="title">Cloud Architecture Bootcamp</div>
+            <div class="meta">by Sarah Tan · 12h · RM 600/pax</div>
+            <div class="meta">👥 7 bookings</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 class="section">Admin · /m/admin/finance</h2>
+<div class="grid">
+  <div class="frame">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="header-back">← Back</div>
+      <div class="eyebrow purple">Platform Money</div>
+      <h1 class="title">Finance</h1>
+
+      <div class="hero purple">
+        <div style="display:flex; align-items:baseline; gap:6px;">
+          <span style="font-size:16px;">$</span>
+          <div class="eyebrow" style="color:#fff; opacity:0.85;">Paid program fees</div>
+        </div>
+        <div style="font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; margin-top:6px;">RM 187,400</div>
+        <div style="font-size:11px; opacity:0.85; margin-top:4px;">42 paid invoices · across 56 total</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px;">
+        <div style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:14px; box-shadow:0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:0.04em; color:var(--muted); font-weight:700;">Platform revenue</div>
+          <div style="font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; margin-top:4px; color:var(--brand-purple-deep);">RM 22,488</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:2px;">12% effective rate</div>
+        </div>
+        <div style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:14px; box-shadow:0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:0.04em; color:var(--muted); font-weight:700;">Pending collection</div>
+          <div style="font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; margin-top:4px; color:#b45309;">RM 28,640</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:2px;">PENDING + SENT</div>
+        </div>
+      </div>
+
+      <div class="kpi-row">
+        <div class="kpi"><div class="ico e">💰</div><div class="l">Trainer fee</div><div class="v e">164k</div></div>
+        <div class="kpi"><div class="ico v">📈</div><div class="l">Platform</div><div class="v v">22.4k</div></div>
+        <div class="kpi"><div class="ico r">🏛️</div><div class="l">SST 8%</div><div class="v r">1,799</div></div>
+        <div class="kpi"><div class="ico a">🏢</div><div class="l">HRDF 1%</div><div class="v a">1,874</div></div>
+      </div>
+
+      <div class="h2-row">
+        <h2>Recent invoices</h2>
+        <a class="purple">See all →</a>
+      </div>
+
+      <ul class="list">
+        <li class="card">
+          <div class="icon-tile purple">🧾</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-emerald">Paid</span>
+              <span class="badge b-slate" style="font-family:monospace;">INV-0042</span>
+            </div>
+            <div class="title">Strategic Leadership in 2026</div>
+            <div class="meta">Acme Sdn Bhd · 14 Mar</div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-purple-deep);">RM 12,600</div>
+            <div class="l">program fee</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+        <li class="card">
+          <div class="icon-tile purple">🧾</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-amber">Sent</span>
+              <span class="badge b-slate" style="font-family:monospace;">INV-0041</span>
+            </div>
+            <div class="title">Escape Room: Innovation Lab</div>
+            <div class="meta">Beta Corp · 11 Mar</div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-purple-deep);">RM 6,160</div>
+            <div class="l">program fee</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+        <li class="card">
+          <div class="icon-tile purple">🧾</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-emerald">Paid</span>
+              <span class="badge b-slate" style="font-family:monospace;">INV-0040</span>
+            </div>
+            <div class="title">Cloud Architecture Bootcamp</div>
+            <div class="meta">Gamma Tech · 8 Mar</div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-purple-deep);">RM 14,400</div>
+            <div class="l">program fee</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 class="section">Admin · /m/admin/invoices</h2>
+<div class="grid">
+  <div class="frame">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="header-back">← Back</div>
+      <div class="eyebrow purple">Billing</div>
+      <div class="header-row">
+        <h1 class="title">Invoices</h1>
+        <div class="muted-small">56 total</div>
+      </div>
+
+      <div class="hero purple">
+        <div class="hero-stats">
+          <div><div class="v">216k</div><div class="l">Total</div></div>
+          <div><div class="v">187k</div><div class="l">Paid</div></div>
+          <div><div class="v">28k</div><div class="l">Pending</div></div>
+        </div>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill active purple">All (56)</span>
+        <span class="pill">Paid (42)</span>
+        <span class="pill">Pending (9)</span>
+        <span class="pill">Sent (5)</span>
+        <span class="pill">Overdue (0)</span>
+      </div>
+
+      <ul class="list">
+        <li class="card">
+          <div class="icon-tile purple">🧾</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-emerald">Paid</span>
+              <span class="badge b-slate" style="font-family:monospace;">INV-0042</span>
+            </div>
+            <div class="title">Strategic Leadership in 2026</div>
+            <div class="meta">Acme Sdn Bhd · 📅 14 Mar · 👥 28</div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-purple-deep);">RM 12,600</div>
+            <div class="l">issued 14 Mar</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+        <li class="card">
+          <div class="icon-tile purple">🧾</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-amber">Sent</span>
+              <span class="badge b-slate" style="font-family:monospace;">INV-0041</span>
+            </div>
+            <div class="title">Escape Room: Innovation Lab</div>
+            <div class="meta">Beta Corp · 📅 11 Mar · 👥 22</div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-purple-deep);">RM 6,160</div>
+            <div class="l">issued 11 Mar</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+        <li class="card">
+          <div class="icon-tile purple">🧾</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-rose">Overdue</span>
+              <span class="badge b-slate" style="font-family:monospace;">INV-0039</span>
+            </div>
+            <div class="title">Compliance Refresher</div>
+            <div class="meta">Delta Holdings · 📅 2 Mar · 👥 14</div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-purple-deep);">RM 4,200</div>
+            <div class="l">issued 2 Mar</div>
+          </div>
+          <span class="chev">›</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 class="section">HR · /m/hr/claims</h2>
+<div class="grid">
+  <div class="frame">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="header-back">← Back</div>
+      <div class="eyebrow orange">Approval Queue</div>
+      <div class="header-row">
+        <h1 class="title">Claims</h1>
+        <div class="muted-small">24 total</div>
+      </div>
+
+      <div class="hero orange">
+        <div class="hero-stats">
+          <div><div class="v">6</div><div class="l">Pending</div></div>
+          <div><div class="v">12</div><div class="l">Approved</div></div>
+          <div><div class="v">1,840</div><div class="l">To Pay</div></div>
+        </div>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill active orange">All (24)</span>
+        <span class="pill">Pending (6)</span>
+        <span class="pill">Approved (12)</span>
+        <span class="pill">Rejected (3)</span>
+        <span class="pill">Paid (3)</span>
+      </div>
+
+      <ul class="list">
+        <li class="card">
+          <div class="icon-tile orange">💵</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-amber">Pending</span>
+              <span class="badge b-sky">Travel</span>
+            </div>
+            <div class="title">Aiman Razak</div>
+            <div class="meta">Engineering · 14 Mar</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:4px;">Grab from KL Sentral to client site for offsite workshop.</div>
+            <div class="claim-actions">
+              <div class="open-desktop">› Open on desktop</div>
+              <span class="legend">✓ ✗</span>
+              <span class="legend">Tap desktop to act</span>
+            </div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-orange-deep);">RM 184</div>
+          </div>
+        </li>
+        <li class="card">
+          <div class="icon-tile orange">💵</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-amber">Pending</span>
+              <span class="badge b-orange">Meal</span>
+            </div>
+            <div class="title">Lina Putri</div>
+            <div class="meta">Sales · 12 Mar</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:4px;">Team dinner with prospective client.</div>
+            <div class="claim-actions">
+              <div class="open-desktop">› Open on desktop</div>
+              <span class="legend">✓ ✗</span>
+            </div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-orange-deep);">RM 320</div>
+          </div>
+        </li>
+        <li class="card">
+          <div class="icon-tile orange">💵</div>
+          <div class="body">
+            <div class="badges">
+              <span class="badge b-emerald">Approved</span>
+              <span class="badge b-violet">Optical</span>
+            </div>
+            <div class="title">Daniel Voon</div>
+            <div class="meta">Engineering · 8 Mar</div>
+          </div>
+          <div class="right-amount">
+            <div class="v" style="color:var(--brand-orange-deep);">RM 450</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 class="section">Participant · /m/participant/class/[id]</h2>
+<div class="grid">
+  <div class="frame">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="header-back">← Back</div>
+      <div class="eyebrow blue">Class Detail</div>
+      <div style="display:flex; align-items:flex-start; gap:8px; justify-content:space-between;">
+        <div style="min-width:0; flex:1;">
+          <h1 class="title">Strategic Leadership in 2026</h1>
+          <div style="font-size:13px; color:var(--muted); margin-top:2px;">Acme Sdn Bhd</div>
+        </div>
+        <span class="status-pill pending">Pending</span>
+      </div>
+
+      <div class="hero blue" style="margin-top:16px;">
+        <div class="hero-stats">
+          <div><div class="v">8h</div><div class="l">Duration</div></div>
+          <div><div class="v">4</div><div class="l">Modules</div></div>
+          <div><div class="v">2/4</div><div class="l">Quizzes</div></div>
+        </div>
+      </div>
+
+      <div class="facts">
+        <div class="fact">
+          <span class="ico">📅</span>
+          <div>
+            <div class="lbl">When</div>
+            <div>Wed, 15 Apr 2026</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="ico">🕒</span>
+          <div>
+            <div class="lbl">Time</div>
+            <div>09:00 · 8h</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="ico">📍</span>
+          <div>
+            <div class="lbl">Where</div>
+            <div>Level 12, KL Sentral · onsite</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="ico">📚</span>
+          <div>
+            <div class="lbl">Category</div>
+            <div>Leadership</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scan-cta blue">
+        ⊞ Scan QR to Check In
+      </div>
+
+      <div class="h2-row">
+        <h2>Modules</h2>
+      </div>
+
+      <div class="module-row">
+        <div class="name"><span class="ico brain">🧠</span><span>Strategic Vision &amp; Mission</span></div>
+        <div class="count emerald">1/1 ✓</div>
+      </div>
+      <div class="module-row">
+        <div class="name"><span class="ico brain">🧠</span><span>Decision-Making Frameworks</span></div>
+        <div class="count emerald">1/1 ✓</div>
+      </div>
+      <div class="module-row">
+        <div class="name"><span class="ico brain">🧠</span><span>Leading High-Performance Teams</span></div>
+        <div class="count amber">0/1</div>
+      </div>
+      <div class="module-row">
+        <div class="name"><span class="ico brain">🧠</span><span>Change Management</span></div>
+        <div class="count muted">0/1</div>
+      </div>
+
+      <div class="h2-row" style="margin-top:16px;">
+        <h2>Checkpoint Scores</h2>
+      </div>
+
+      <div class="checkpoint-grid">
+        <div class="checkpoint">
+          <div class="v blue">85%</div>
+          <div class="l">Avg Score</div>
+        </div>
+        <div class="checkpoint">
+          <div class="v">2/4</div>
+          <div class="l">Completed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

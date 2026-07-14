@@ -29,7 +29,7 @@ interface Message {
   createdAt: string;
 }
 
-export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" }) {
+export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" | "ADMIN" }) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [selected, setSelected] = useState<Conversation | null>(null);
@@ -135,7 +135,7 @@ export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" }) {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Messages</h1>
         <p className="text-muted-foreground">
-          Chat with {role === "HR" ? "trainers" : "HR representatives"} about your bookings
+          {role === "ADMIN" ? "View all conversations across the platform" : `Chat with ${role === "HR" ? "trainers" : "HR representatives"} about your bookings`}
         </p>
       </div>
 
@@ -207,7 +207,7 @@ export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" }) {
                   <p className="text-xs text-muted-foreground">{selected.companyName}</p>
                 </div>
                 <Link
-                  href={`/${role === "HR" ? "hr" : "trainer"}/bookings/${selected.bookingId}`}
+                  href={`/${role === "HR" ? "hr" : role === "ADMIN" ? "admin" : "trainer"}/bookings/${selected.bookingId}`}
                   className="text-xs text-primary hover:underline flex-shrink-0 ml-2"
                 >
                   View booking
