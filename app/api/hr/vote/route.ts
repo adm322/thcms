@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 // GET: list programs with vote counts
 export async function GET() {
-  const session = await getSession();
-  if (!session || session.role !== "HR") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   // Get all published programs
   const programs = await prisma.program.findMany({
@@ -70,17 +68,13 @@ export async function GET() {
 
 // POST: cast a vote
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
-  let body: any;
-  try { body = await request.json(); } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { programId } = body;
+  const { programId } = body as Record<string, string>;
   if (!programId) return NextResponse.json({ error: "programId required" }, { status: 400 });
 
   // Check existing vote

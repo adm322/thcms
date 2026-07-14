@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 
 // HRDF Allowable Cost Matrix (ACM) rates — Malaysia 2025/2026
 const HRDF_RATES = {
@@ -63,10 +63,8 @@ const HRDF_RATES = {
 };
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "HR") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("HR");
+  if (session instanceof NextResponse) return session;
 
   const { searchParams } = new URL(request.url);
   const action = searchParams.get("action");

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole, parseBody } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole();
+  if (session instanceof NextResponse) return session;
 
   const { searchParams } = request.nextUrl;
   const bookingId = searchParams.get("bookingId");
@@ -74,13 +74,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole();
+  if (session instanceof NextResponse) return session;
 
-  let body: any;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const body = await parseBody(request);
+  if (body instanceof NextResponse) return body;
 
-  const { bookingId, content, receiverId } = body;
+  const { bookingId, content, receiverId } = body as Record<string, string>;
   if (!bookingId || !content || !receiverId) {
     return NextResponse.json({ error: "bookingId, content, receiverId required" }, { status: 400 });
   }

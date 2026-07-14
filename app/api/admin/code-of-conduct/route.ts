@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
@@ -11,8 +11,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
   const { title, content, status } = await req.json();
   const doc = await prisma.codeOfConduct.create({ data: { title, content, status: status || "ACTIVE" } });
@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireRole("ADMIN");
+  if (auth instanceof NextResponse) return auth;
 
   const { id, status, title, content } = await req.json();
   const data: any = {};

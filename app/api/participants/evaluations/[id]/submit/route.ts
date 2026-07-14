@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(
@@ -7,10 +7,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getSession();
-    if (!session || session.role !== "PARTICIPANT") {
-      return NextResponse.json({ error: "Unauthorized. Participants only." }, { status: 401 });
-    }
+    const session = await requireRole("PARTICIPANT");
+    if (session instanceof NextResponse) return session;
 
     const { id } = await params;
     const body = await req.json();
