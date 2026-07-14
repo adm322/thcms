@@ -131,7 +131,7 @@ export default function HRMarketplace() {
         </div>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {programs.map((p, index) => {
+          {programs.map((p, i) => {
             const gradient = categoryGradients[p.category] || "from-gray-500 to-gray-600";
             const icon = categoryIcons[p.category] || "📚";
             return (
@@ -147,12 +147,11 @@ export default function HRMarketplace() {
                       <Image
                         src={p.thumbnailUrl}
                         alt={p.title}
-                        width={400}
-                        height={300}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        priority={index === 0}
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        priority={i < 3}
+                        onError={(e) => { (e.target as HTMLElement).style.display = "none"; }}
                       />
                     )}
                     <div className="absolute top-3 left-3 z-10">

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, use, useRef } from "react";
+import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Star, Download, QrCode, FileText, BarChart3, Sparkles } from "lucide-react";
-import Image from "next/image";
 
 export default function EvaluationSummary({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -207,10 +207,10 @@ export default function EvaluationSummary({ params }: { params: Promise<{ id: st
             <CardContent className="flex flex-col items-center space-y-4">
               {qrDataUrl ? (
                 <div className="rounded-xl border bg-white p-6">
-                  <Image src={qrDataUrl} alt="QR Code" width={200} height={200} priority className="size-52" />
+                  <Image src={qrDataUrl} alt="QR Code" width={200} height={200} className="w-52 h-52" />
                 </div>
               ) : (
-                <div className="size-52 bg-muted rounded-xl animate-pulse" />
+                <div className="w-52 h-52 bg-muted rounded-xl animate-pulse" />
               )}
               <p className="text-sm text-muted-foreground text-center max-w-sm">
                 Scan to open this evaluation. Print or share with stakeholders.

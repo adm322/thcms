@@ -480,7 +480,7 @@ function CarouselCard({ item }: { item: CarouselItem }) {
     <Link
       href={item.href ?? "#"}
       className={cn(
-        "shrink-0 snap-start w-60 rounded-2xl p-4 shadow-sm active:scale-[0.98] transition-transform",
+        "shrink-0 snap-start w-56 rounded-2xl p-4 shadow-sm active:scale-[0.98] transition-transform",
         tone.bg,
       )}
     >

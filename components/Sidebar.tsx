@@ -9,7 +9,7 @@ import {
   LayoutDashboard, GraduationCap, BookOpen, Users, ClipboardList, FileText,
   DollarSign, Star, Calendar, Compass, MapPin, ThumbsUp, MessageSquare,
   TrendingUp, Sparkles, MessageCircle, Clock, FileSpreadsheet, Calculator,
-  BookMarked, HelpCircle, ScrollText, Bell, CalendarCheck, User,
+  BookMarked, HelpCircle, ScrollText, Bell, CalendarCheck, User, Settings2,
 } from "lucide-react";
 
 interface NavItem {
@@ -46,6 +46,9 @@ const adminGroups: NavGroup[] = [
   ]},
   { label: "Communication", items: [
     { href: "/admin/messages", label: "Messages", icon: MessageSquare },
+  ]},
+  { label: "System", items: [
+    { href: "/admin/settings", label: "Settings", icon: Settings2 },
   ]},
 ];
 

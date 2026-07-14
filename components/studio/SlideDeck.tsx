@@ -17,8 +17,10 @@ import {
   Code2,
 } from "lucide-react";
 import { SlideRenderer, resetSlideNumber } from "./SlideRenderer";
+import { SlideViewer } from "./SlideViewer";
 import { PresentationMode } from "./PresentationMode";
-import type { Slide, SlideType } from "./slide-types";
+import type { Slide, SlideType, StructuredSlide } from "./slide-types";
+import { isStructuredSlide } from "./slide-types";
 
 interface SlideDeckProps {
   slidesJson: string;
@@ -151,7 +153,7 @@ export function SlideDeck({ slidesJson, programTitle, className }: SlideDeckProp
   }
 
   const current = slides[currentIndex];
-  const currentType = current?.type;
+  const currentType = current && "type" in current ? current.type : undefined;
   const TypeIcon = currentType ? TYPE_ICONS[currentType] : LayoutTemplate;
 
   return (
@@ -207,13 +209,14 @@ export function SlideDeck({ slidesJson, programTitle, className }: SlideDeckProp
         {/* Left thumbnail strip */}
         <div className="flex flex-col gap-2 w-16 shrink-0 overflow-y-auto max-h-[500px] pr-1">
           {slides.map((slide, i) => {
-            const Icon = TYPE_ICONS[slide.type] ?? LayoutTemplate;
+            const slideType = slide && "type" in slide ? slide.type : undefined;
+            const Icon = slideType ? TYPE_ICONS[slideType] : LayoutTemplate;
             const isActive = i === currentIndex;
             return (
               <button
                 key={i}
                 onClick={() => setCurrentIndex(i)}
-                aria-label={`Go to slide ${i + 1}: ${TYPE_LABELS[slide.type]}`}
+                aria-label={`Go to slide ${i + 1}: ${slideType ? TYPE_LABELS[slideType] : "Slide"}`}
                 aria-current={isActive ? "step" : undefined}
                 className={`
                   group relative shrink-0 rounded-lg border-2 transition-all
@@ -233,11 +236,25 @@ export function SlideDeck({ slidesJson, programTitle, className }: SlideDeckProp
 
         {/* Main slide area */}
         <div className="flex-1 min-w-0">
-          <SlideRenderer
-            slide={current}
-            totalSlides={slides.length}
-            programTitle={programTitle}
-          />
+          {isStructuredSlide(current) ? (
+            <SlideViewer
+              slide={{
+                index: currentIndex,
+                title: current.title,
+                bulletPoints: current.bulletPoints,
+                infographic: current.infographic as { type: "stat"|"quote"|"list"|"comparison"|"process"; title?: string; data?: Record<string, unknown> } | undefined,
+                speakerNotes: current.speakerNotes,
+              }}
+              totalSlides={slides.length}
+              programTitle={programTitle}
+            />
+          ) : (
+            <SlideRenderer
+              slide={current}
+              totalSlides={slides.length}
+              programTitle={programTitle}
+            />
+          )}
 
           {/* Bottom nav */}
           <div className="flex items-center justify-between mt-4 px-1">
