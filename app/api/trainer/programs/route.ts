@@ -49,20 +49,24 @@ export async function POST(request: NextRequest) {
 
   const { title, description, category, durationHours, maxParticipants, pricePerPax, locationType, syllabus } = result.data;
 
-  const program = await prisma.program.create({
-    data: {
-      trainerId: session.id,
-      title,
-      description: description || "",
-      category: category || "Other",
-      durationHours: durationHours || 4,
-      maxParticipants: maxParticipants || 20,
-      pricePerPax: pricePerPax || 0,
-      locationType: locationType || "onsite",
-      syllabus: JSON.stringify(syllabus || []),
-      status: "DRAFT",
-    },
-  });
-
-  return NextResponse.json(program, { status: 201 });
+  try {
+    const program = await prisma.program.create({
+      data: {
+        trainerId: session.id,
+        title,
+        description: description || "",
+        category: category || "Other",
+        durationHours: durationHours || 4,
+        maxParticipants: maxParticipants || 20,
+        pricePerPax: pricePerPax || 0,
+        locationType: locationType || "onsite",
+        syllabus: JSON.stringify(syllabus || []),
+        status: "DRAFT",
+      },
+    });
+    return NextResponse.json(program, { status: 201 });
+  } catch (err) {
+    console.error("Failed to create program:", err);
+    return NextResponse.json({ error: "Failed to create program" }, { status: 500 });
+  }
 }

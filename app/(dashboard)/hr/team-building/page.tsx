@@ -77,7 +77,7 @@ export default function TeamBuildingPlanner() {
       .catch(console.error)
       .finally(() => setLoading(false));
     fetch("/api/hr/team-building?list=true")
-      .then(r => r.json()).then(setSubmissions).catch(() => {});
+      .then(r => r.json()).then(setSubmissions).catch(console.error);
   }, []);
 
   async function analyzeActivity(activity: any) {

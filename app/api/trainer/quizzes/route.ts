@@ -26,24 +26,31 @@ export async function POST(request: NextRequest) {
   const session = await requireRole("TRAINER");
   if (session instanceof NextResponse) return session;
 
-  const { title, description, passingScore, timeLimitMins, questions } = await request.json();
+  let body: any;
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const { title, description, passingScore, timeLimitMins, questions } = body;
 
-  const quiz = await prisma.quiz.create({
-    data: {
-      title, description, passingScore: passingScore || 50, timeLimitMins: timeLimitMins || 30,
-      standalone: true, shareToken: crypto.randomBytes(6).toString("hex"),
-    },
-  });
-
-  if (questions?.length) {
-    await prisma.question.createMany({
-      data: questions.map((q: any, i: number) => ({
-        quizId: quiz.id, text: q.text, type: q.type || "MCQ",
-        options: JSON.stringify(q.options || []), correctAnswer: q.correctAnswer || "",
-        points: q.points || 1, orderIndex: i,
-      })),
+  try {
+    const quiz = await prisma.quiz.create({
+      data: {
+        title, description, passingScore: passingScore || 50, timeLimitMins: timeLimitMins || 30,
+        standalone: true, shareToken: crypto.randomBytes(6).toString("hex"),
+      },
     });
-  }
 
-  return NextResponse.json({ ...quiz, shareUrl: `/quiz/${quiz.shareToken}` }, { status: 201 });
+    if (questions?.length) {
+      await prisma.question.createMany({
+        data: questions.map((q: any, i: number) => ({
+          quizId: quiz.id, text: q.text, type: q.type || "MCQ",
+          options: JSON.stringify(q.options || []), correctAnswer: q.correctAnswer || "",
+          points: q.points || 1, orderIndex: i,
+        })),
+      });
+    }
+
+    return NextResponse.json({ ...quiz, shareUrl: `/quiz/${quiz.shareToken}` }, { status: 201 });
+  } catch (err) {
+    console.error("Failed to create quiz:", err);
+    return NextResponse.json({ error: "Failed to create quiz" }, { status: 500 });
+  }
 }

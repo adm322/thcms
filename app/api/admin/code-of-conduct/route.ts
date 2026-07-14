@@ -3,6 +3,9 @@ import { requireRole } from "@/lib/api-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const docs = await prisma.codeOfConduct.findMany({ orderBy: { updatedAt: "desc" } });
   return NextResponse.json(docs);
 }

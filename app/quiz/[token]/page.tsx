@@ -29,7 +29,7 @@ export default function PublicQuiz({ params }: { params: Promise<{ token: string
       } else {
         setScreen('results');
       }
-    }).catch(() => setScreen('results'));
+    }).catch((e) => { console.error("Failed to load quiz:", e); setScreen('results'); });
   }, [token]);
 
   async function submit() {

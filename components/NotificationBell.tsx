@@ -342,7 +342,7 @@ export function NotificationBell({ role }: NotificationBellProps = {}) {
         <Bell className="h-5 w-5" />
         {totalBadge > 0 && (
           <span className={cn(
-            "absolute top-0.5 right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[9px] font-bold text-white border-2 border-background",
+            "absolute top-0.5 right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[9px] font-bold text-white border-2 border-background",
             criticalCount > 0 ? "bg-red-600" : "bg-red-500"
           )}>
             {totalBadge > 99 ? "99+" : totalBadge}
@@ -384,7 +384,7 @@ export function NotificationBell({ role }: NotificationBellProps = {}) {
                   {tab.label}
                   {count > 0 && (
                     <span className={cn(
-                      "min-w-[14px] h-3.5 rounded-full px-1 flex items-center justify-center text-[8px]",
+                      "min-w-3.5 h-3.5 rounded-full px-1 flex items-center justify-center text-[8px]",
                       activeTab === tab.id ? "bg-primary-foreground/20" : "bg-accent"
                     )}>
                       {count}

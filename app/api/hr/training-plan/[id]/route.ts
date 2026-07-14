@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireRole, parseBody } from "@/lib/api-utils";
+import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await requireRole("HR");
-  if (session instanceof NextResponse) return session;
+  const session = await getSession();
+  if (!session || session.role !== "HR" || !session.companyId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { id } = await params;
 
@@ -17,16 +19,13 @@ export async function PATCH(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const body = await parseBody(request);
-  if (body instanceof NextResponse) return body;
+  let body: any;
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
 
   const {
     title, category, department, targetCount, targetMonth, targetYear,
     estimatedCost, priority, status, matchedProgramId, bookingId, notes,
-  } = body as {
-    title?: string; category?: string; department?: string; targetCount?: number; targetMonth?: number; targetYear?: number;
-    estimatedCost?: number; priority?: string; status?: string; matchedProgramId?: string | null; bookingId?: string; notes?: string | null;
-  };
+  } = body;
 
   // If converting to SCHEDULED via one-click book, verify the booking exists and belongs to same company
   if (status === "SCHEDULED" && bookingId) {
@@ -50,46 +49,53 @@ export async function PATCH(
   if (bookingId !== undefined) data.bookingId = bookingId;
   if (notes !== undefined) data.notes = notes;
 
-  const updated = await prisma.trainingPlanItem.update({
-    where: { id },
-    data,
-    include: {
-      booking: {
-        select: {
-          id: true,
-          programDate: true,
-          totalFee: true,
-          status: true,
-          program: { select: { title: true, category: true, trainer: { select: { name: true } } } },
+  try {
+    const updated = await prisma.trainingPlanItem.update({
+      where: { id },
+      data,
+      include: {
+        booking: {
+          select: {
+            id: true,
+            programDate: true,
+            totalFee: true,
+            status: true,
+            program: { select: { title: true, category: true, trainer: { select: { name: true } } } },
+          },
         },
       },
-    },
-  });
+    });
 
-  return NextResponse.json({
-    ...updated,
-    createdAt: updated.createdAt.toISOString(),
-    updatedAt: updated.updatedAt.toISOString(),
-    booking: updated.booking
-      ? {
-          id: updated.booking.id,
-          programDate: updated.booking.programDate.toISOString(),
-          totalFee: updated.booking.totalFee,
-          status: updated.booking.status,
-          programTitle: updated.booking.program.title,
-          programCategory: updated.booking.program.category,
-          trainerName: updated.booking.program.trainer.name,
-        }
-      : null,
-  });
+    return NextResponse.json({
+      ...updated,
+      createdAt: updated.createdAt.toISOString(),
+      updatedAt: updated.updatedAt.toISOString(),
+      booking: updated.booking
+        ? {
+            id: updated.booking.id,
+            programDate: updated.booking.programDate.toISOString(),
+            totalFee: updated.booking.totalFee,
+            status: updated.booking.status,
+            programTitle: updated.booking.program.title,
+            programCategory: updated.booking.program.category,
+            trainerName: updated.booking.program.trainer.name,
+          }
+        : null,
+    });
+  } catch (err) {
+    console.error("Failed to update training plan item:", err);
+    return NextResponse.json({ error: "Failed to update training plan item" }, { status: 500 });
+  }
 }
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await requireRole("HR");
-  if (session instanceof NextResponse) return session;
+  const session = await getSession();
+  if (!session || session.role !== "HR" || !session.companyId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { id } = await params;
 
@@ -98,7 +104,12 @@ export async function DELETE(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  await prisma.trainingPlanItem.delete({ where: { id } });
+  try {
+    await prisma.trainingPlanItem.delete({ where: { id } });
+  } catch (err) {
+    console.error("Failed to delete training plan item:", err);
+    return NextResponse.json({ error: "Failed to delete training plan item" }, { status: 500 });
+  }
 
   return NextResponse.json({ success: true });
 }

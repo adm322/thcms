@@ -13,11 +13,17 @@ export async function POST(
   const program = await prisma.program.findUnique({ where: { id: programId } });
   if (!program || program.trainerId !== session.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const { title, description, orderIndex, durationMins } = await request.json();
+  let body: any;
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const { title, description, orderIndex, durationMins } = body;
 
-  const mod = await prisma.module.create({
-    data: { programId, title, description, orderIndex: orderIndex || 0, durationMins: durationMins || 60 },
-  });
-
-  return NextResponse.json(mod, { status: 201 });
+  try {
+    const mod = await prisma.module.create({
+      data: { programId, title, description, orderIndex: orderIndex || 0, durationMins: durationMins || 60 },
+    });
+    return NextResponse.json(mod, { status: 201 });
+  } catch (err) {
+    console.error("Failed to create module:", err);
+    return NextResponse.json({ error: "Failed to create module" }, { status: 500 });
+  }
 }

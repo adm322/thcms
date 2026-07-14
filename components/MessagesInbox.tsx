@@ -55,7 +55,7 @@ export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" | "ADMI
       fetch("/api/messages?list=true")
         .then((r) => r.json())
         .then(setConversations)
-        .catch(() => {});
+        .catch(() => {}); // ponytail: silent catch for polling — avoid console spam on transient network blips
     }, 10000);
     return () => clearInterval(interval);
   }, []);
@@ -98,7 +98,7 @@ export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" | "ADMI
       setMessages((prev) => [...prev, msg]);
       setNewMsg("");
       // Refresh unread counts
-      fetch("/api/messages?list=true").then(r => r.json()).then(setConversations).catch(() => {});
+      fetch("/api/messages?list=true").then(r => r.json()).then(setConversations).catch(console.error);
     } else {
       toast("Failed to send message", "error");
     }
