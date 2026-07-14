@@ -207,10 +207,10 @@ export default function EvaluationSummary({ params }: { params: Promise<{ id: st
             <CardContent className="flex flex-col items-center space-y-4">
               {qrDataUrl ? (
                 <div className="rounded-xl border bg-white p-6">
-                  <Image src={qrDataUrl} alt="QR Code" width={200} height={200} className="w-full max-w-[200px] aspect-square" />
+                  <Image src={qrDataUrl} alt="QR Code" width={200} height={200} className="w-52 h-52" />
                 </div>
               ) : (
-                <div className="w-full max-w-[200px] aspect-square bg-muted rounded-xl animate-pulse" />
+                <div className="w-52 h-52 bg-muted rounded-xl animate-pulse" />
               )}
               <p className="text-sm text-muted-foreground text-center max-w-sm">
                 Scan to open this evaluation. Print or share with stakeholders.

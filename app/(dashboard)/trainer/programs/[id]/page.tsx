@@ -12,14 +12,20 @@ import { StudioStatusBanner } from "@/components/studio/StudioStatusBanner";
 export default function ProgramDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [program, setProgram] = useState<any>(null);
+  const [fetchErr, setFetchErr] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/trainer/programs/${id}`)
-      .then((r) => r.json())
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 15000);
+    fetch(`/api/trainer/programs/${id}`, { signal: ctrl.signal })
+      .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
       .then(setProgram)
-      .catch(console.error);
+      .catch(() => setFetchErr(true))
+      .finally(() => clearTimeout(t));
+    return () => { ctrl.abort(); clearTimeout(t); };
   }, [id]);
 
+  if (fetchErr) return <div className="py-20 text-center"><p className="text-rose-600 font-semibold">Failed to load program.</p><p className="text-sm text-muted-foreground mt-1">Try refreshing the page.</p></div>;
   if (!program) return <div className="py-20 text-center text-muted-foreground">Loading...</div>;
 
   return (

@@ -79,7 +79,8 @@ export const ModelName = {
   CodeOfConduct: 'CodeOfConduct',
   LearningStudio: 'LearningStudio',
   RAGChunk: 'RAGChunk',
-  TrainerAvailability: 'TrainerAvailability'
+  TrainerAvailability: 'TrainerAvailability',
+  SystemSetting: 'SystemSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -576,6 +577,16 @@ export const TrainerAvailabilityScalarFieldEnum = {
 } as const
 
 export type TrainerAvailabilityScalarFieldEnum = (typeof TrainerAvailabilityScalarFieldEnum)[keyof typeof TrainerAvailabilityScalarFieldEnum]
+
+
+export const SystemSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
 
 
 export const SortOrder = {

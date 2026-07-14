@@ -1,7 +1,0 @@
-{
-  "type": "JavaScript Error",
-  "message": "from server-side test",
-  "url": "http://localhost:3000",
-  "time": "2026-07-03T08:50:00.000Z",
-  "note": "this is a server-side test, not browser"
-}

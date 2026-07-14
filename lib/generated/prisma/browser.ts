@@ -162,3 +162,8 @@ export type RAGChunk = Prisma.RAGChunkModel
  * 
  */
 export type TrainerAvailability = Prisma.TrainerAvailabilityModel
+/**
+ * Model SystemSetting
+ * 
+ */
+export type SystemSetting = Prisma.SystemSettingModel

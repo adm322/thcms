@@ -1,6 +1,0 @@
-{
-  "type": "Interceptor Ready",
-  "message": "chrome-log-server interceptor installed on http://localhost:3000/login",
-  "url": "http://localhost:3000/login",
-  "time": "2026-07-02T17:03:39.002Z"
-}

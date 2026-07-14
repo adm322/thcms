@@ -412,7 +412,8 @@ export const ModelName = {
   CodeOfConduct: 'CodeOfConduct',
   LearningStudio: 'LearningStudio',
   RAGChunk: 'RAGChunk',
-  TrainerAvailability: 'TrainerAvailability'
+  TrainerAvailability: 'TrainerAvailability',
+  SystemSetting: 'SystemSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -428,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "company" | "trainerProfile" | "program" | "module" | "quiz" | "quizResult" | "question" | "material" | "booking" | "participant" | "evaluation" | "invoice" | "employee" | "leave" | "attendance" | "message" | "review" | "programVote" | "supportTicket" | "changelog" | "itineraryItem" | "teamBuildingRequest" | "trainingPlanItem" | "notification" | "codeOfConduct" | "learningStudio" | "rAGChunk" | "trainerAvailability"
+    modelProps: "user" | "company" | "trainerProfile" | "program" | "module" | "quiz" | "quizResult" | "question" | "material" | "booking" | "participant" | "evaluation" | "invoice" | "employee" | "leave" | "attendance" | "message" | "review" | "programVote" | "supportTicket" | "changelog" | "itineraryItem" | "teamBuildingRequest" | "trainingPlanItem" | "notification" | "codeOfConduct" | "learningStudio" | "rAGChunk" | "trainerAvailability" | "systemSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2578,6 +2579,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SystemSetting: {
+      payload: Prisma.$SystemSettingPayload<ExtArgs>
+      fields: Prisma.SystemSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SystemSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SystemSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.SystemSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SystemSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+        }
+        findMany: {
+          args: Prisma.SystemSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
+        }
+        create: {
+          args: Prisma.SystemSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+        }
+        createMany: {
+          args: Prisma.SystemSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SystemSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.SystemSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+        }
+        update: {
+          args: Prisma.SystemSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.SystemSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SystemSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SystemSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.SystemSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.SystemSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSystemSetting>
+        }
+        groupBy: {
+          args: Prisma.SystemSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SystemSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SystemSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SystemSettingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3097,6 +3172,16 @@ export const TrainerAvailabilityScalarFieldEnum = {
 export type TrainerAvailabilityScalarFieldEnum = (typeof TrainerAvailabilityScalarFieldEnum)[keyof typeof TrainerAvailabilityScalarFieldEnum]
 
 
+export const SystemSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3331,6 +3416,7 @@ export type GlobalOmitConfig = {
   learningStudio?: Prisma.LearningStudioOmit
   rAGChunk?: Prisma.RAGChunkOmit
   trainerAvailability?: Prisma.TrainerAvailabilityOmit
+  systemSetting?: Prisma.SystemSettingOmit
 }
 
 /* Types for Logging */
