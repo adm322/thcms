@@ -3,10 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { requireRole, parseBody } from "@/lib/api-utils";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session || session.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireRole("ADMIN");
+  if (session instanceof NextResponse) return session;
 
   const entries = await prisma.changelog.findMany({
     include: { author: { select: { name: true } } },
