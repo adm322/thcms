@@ -156,7 +156,7 @@ export function MarketplaceClient() {
                         fill
                         className="object-cover"
                         sizes="64px"
-                        priority={i < 4}
+                        priority={i === 0 ? true : undefined}
                         onError={(e) => { (e.target as HTMLElement).style.display = "none"; }}
                       />
                     )}

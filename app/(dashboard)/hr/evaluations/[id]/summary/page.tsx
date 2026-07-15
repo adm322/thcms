@@ -126,7 +126,7 @@ export default function EvaluationSummary({ params }: { params: Promise<{ id: st
                   return (
                     <div key={i} className="space-y-1">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="truncate max-w-[70%]">{q.question}</span>
+                        <span className="truncate max-w-xs">{q.question}</span>
                         <span className="font-semibold flex items-center gap-1">
                           {q.avg.toFixed(1)} <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                         </span>
@@ -207,7 +207,7 @@ export default function EvaluationSummary({ params }: { params: Promise<{ id: st
             <CardContent className="flex flex-col items-center space-y-4">
               {qrDataUrl ? (
                 <div className="rounded-xl border bg-white p-6">
-                  <Image src={qrDataUrl} alt="QR Code" width={200} height={200} className="w-52 h-52" />
+                  <Image src={qrDataUrl} alt="QR Code" width={200} height={200} sizes="208px" className="w-52 h-52" />
                 </div>
               ) : (
                 <div className="w-52 h-52 bg-muted rounded-xl animate-pulse" />
