@@ -86,8 +86,8 @@ export default function PublicQuiz({ params }: { params: Promise<{ token: string
   if (screen === 'intro') {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-violet-500/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-fuchsia-500/10 blur-[120px] pointer-events-none" />
+        <div className="absolute top-[-20%] left-[-10%] size-3/5 rounded-full bg-violet-500/10 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] size-2/5 rounded-full bg-fuchsia-500/10 blur-[120px] pointer-events-none" />
         
         <div className="max-w-xl w-full z-10 space-y-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="space-y-4 text-center">
