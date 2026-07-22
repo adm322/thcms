@@ -22,7 +22,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   });
   if (!quiz) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const questions = await prisma.question.findMany({ where: { quizId: quiz.id }, orderBy: { orderIndex: "asc" } });
+  const questions = await prisma.question.findMany({ where: { quizId: quiz.id }, orderBy: { orderIndex: "asc" },
+      take: 100,
+      skip: 0
+});
 
   let bookingId: string | null = null;
   try {

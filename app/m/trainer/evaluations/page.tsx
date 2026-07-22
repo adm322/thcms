@@ -34,7 +34,8 @@ export default async function MobileTrainerEvaluationsPage() {
     },
     orderBy: { completedAt: { sort: "desc", nulls: "last" } },
     take: 50,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   // Aggregate ratings.
   const completed = evaluations.filter((e) => e.completedAt != null);

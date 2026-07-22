@@ -6,7 +6,10 @@ export async function GET() {
   const session = await requireRole("ADMIN");
   if (session instanceof NextResponse) return session;
 
-  const docs = await prisma.codeOfConduct.findMany({ orderBy: { updatedAt: "desc" } });
+  const docs = await prisma.codeOfConduct.findMany({ orderBy: { updatedAt: "desc" },
+      take: 100,
+      skip: 0
+});
   return NextResponse.json(docs);
 }
 

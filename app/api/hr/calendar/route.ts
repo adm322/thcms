@@ -13,7 +13,9 @@ export async function GET() {
       _count: { select: { participants: true } },
     },
     orderBy: { programDate: "asc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   const now = new Date();
   const upcoming = bookings

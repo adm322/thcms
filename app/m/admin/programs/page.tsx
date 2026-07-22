@@ -52,6 +52,7 @@ export default async function MobileAdminProgramsPage({
       },
       orderBy: [{ featured: "desc" }, { updatedAt: "desc" }],
       take: 80,
+        skip: 0
     }).catch(() => []),
     prisma.program.groupBy({ by: ["status"], _count: true }).catch(() => []),
   ]);

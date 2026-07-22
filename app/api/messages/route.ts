@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
       },
       orderBy: { updatedAt: "desc" },
       take: 50,
+        skip: 0
     });
 
     return NextResponse.json(
@@ -62,7 +63,9 @@ export async function GET(request: NextRequest) {
     where: { bookingId },
     include: { sender: { select: { id: true, name: true, role: true } } },
     orderBy: { createdAt: "asc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   // Mark as read
   await prisma.message.updateMany({

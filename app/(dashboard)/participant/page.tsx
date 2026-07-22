@@ -54,8 +54,10 @@ export default async function ParticipantDashboard() {
       booking: {
         programDate: "asc"
       }
-    }
-  });
+    },
+      take: 100,
+      skip: 0
+});
 
   // Calculate statistics
   const completedParticipations = participations.filter(p => p.attendanceStatus === "PRESENT");

@@ -14,7 +14,9 @@ export async function GET() {
       trainer: { select: { name: true } },
     },
     orderBy: { createdAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   // Count HR votes per program
   const hrVotes = await prisma.programVote.groupBy({
@@ -49,7 +51,9 @@ export async function GET() {
   const userVotes = await prisma.programVote.findMany({
     where: { hrId: session.id },
     select: { programId: true },
-  });
+      take: 100,
+      skip: 0
+});
   const votedIds = new Set(userVotes.map((v) => v.programId));
 
   return NextResponse.json(

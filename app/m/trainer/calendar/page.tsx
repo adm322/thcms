@@ -46,7 +46,8 @@ export default async function MobileTrainerCalendarPage() {
     },
     orderBy: { programDate: "asc" },
     take: 30,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   const totalPax     = bookings.reduce((s, b) => s + b.participants.length, 0);
   const totalRevenue = bookings.reduce((s, b) => s + b.totalFee * 0.85, 0);

@@ -40,6 +40,8 @@ export default async function MobileTrainerAvailabilityPage({
     prisma.trainerAvailability.findMany({
       where: { trainerId: session.id, date: { gte: monthStart, lte: monthEnd } },
       orderBy: { date: "asc" },
+        take: 100,
+        skip: 0
     }).catch(() => []),
     prisma.booking.findMany({
       where: {
@@ -48,6 +50,8 @@ export default async function MobileTrainerAvailabilityPage({
         programDate: { gte: monthStart, lte: monthEnd },
       },
       select: { id: true, programDate: true },
+        take: 100,
+        skip: 0
     }).catch(() => []),
   ]);
 

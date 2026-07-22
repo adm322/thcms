@@ -13,7 +13,9 @@ export async function GET() {
       _count: { select: { participants: true } },
     },
     orderBy: { createdAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(
     bookings.map((b) => ({

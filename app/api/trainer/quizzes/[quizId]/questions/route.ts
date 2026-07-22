@@ -17,7 +17,9 @@ export async function GET(
   const questions = await prisma.question.findMany({
     where: { quizId },
     orderBy: { orderIndex: "asc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(questions.map((q) => ({ ...q, options: JSON.parse(q.options || "[]") })));
 }

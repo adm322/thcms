@@ -21,6 +21,8 @@ export const GET = withAuth(
         booking: { include: { program: { select: { title: true } } } },
       },
       orderBy: { createdAt: "desc" },
+        take: 100,
+        skip: 0
     });
 
     return NextResponse.json(

@@ -9,22 +9,29 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const year = searchParams.get("year") ? parseInt(searchParams.get("year")!) : new Date().getFullYear();
 
-  // Get all plan items for this year
-  const planItems = await prisma.trainingPlanItem.findMany({
-    where: { companyId: session.companyId, targetYear: year },
-  });
-
-  // Get all actual bookings for this year (for spent tracking)
-  const bookings = await prisma.booking.findMany({
-    where: {
-      companyId: session.companyId,
-      programDate: {
-        gte: new Date(`${year}-01-01`),
-        lt: new Date(`${year + 1}-01-01`),
+    // Get all plan items, bookings, and employee counts concurrently
+  const [planItems, bookings, employeeCount] = await Promise.all([
+    prisma.trainingPlanItem.findMany({
+      where: { companyId: session.companyId, targetYear: year },
+      take: 100,
+      skip: 0
+    }),
+    prisma.booking.findMany({
+      where: {
+        companyId: session.companyId,
+        programDate: {
+          gte: new Date(`${year}-01-01`),
+          lt: new Date(`${year + 1}-01-01`),
+        },
+        status: { not: "CANCELLED" },
       },
-      status: { not: "CANCELLED" },
-    },
-  });
+      take: 100,
+      skip: 0
+    }),
+    prisma.employee.count({ where: { companyId: session.companyId, status: "ACTIVE" } })
+  ]);
+
+
 
   // Calculate budget metrics
   const totalSpent = bookings.reduce((sum, b) => sum + b.totalFee, 0);
@@ -74,7 +81,6 @@ export async function GET(request: NextRequest) {
   }
 
   // HRDF levy estimate (1% of payroll — rough estimate based on employee count)
-  const employeeCount = await prisma.employee.count({ where: { companyId: session.companyId, status: "ACTIVE" } });
   const estimatedPayroll = employeeCount * 4500 * 12; // rough: RM 4,500 avg monthly × 12
   const hrdfLevyEstimate = Math.round(estimatedPayroll * 0.01);
 

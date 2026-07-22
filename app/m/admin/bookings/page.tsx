@@ -61,7 +61,8 @@ export default async function MobileAdminBookingsPage({
     },
     orderBy: [{ status: "asc" }, { programDate: "desc" }],
     take: 60,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   return (
     <main className="px-4 pt-5 pb-24">

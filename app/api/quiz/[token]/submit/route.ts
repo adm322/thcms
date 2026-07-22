@@ -74,7 +74,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
             quizId: quiz.id
           },
           orderBy: { attemptNumber: "desc" },
-          select: { attemptNumber: true, score: true, passed: true, createdAt: true }
+          select: { attemptNumber: true, score: true, passed: true, createdAt: true },
+            take: 100,
+            skip: 0
         });
 
         if (existingResults.length > 0) {
@@ -109,6 +111,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
                 module: { programId: quiz.module!.program.id },
               },
               select: { id: true, passingScore: true },
+                take: 100,
+                skip: 0
             });
 
             if (programQuizzes.length > 0) {
@@ -120,7 +124,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
                   passed: true,
                 },
                 select: { quizId: true },
-              });
+                  take: 100,
+                  skip: 0
+            });
 
               const passedQuizIds = new Set(quizResults.map((r) => r.quizId));
               const allPassed = programQuizzes.every((q) => passedQuizIds.has(q.id));

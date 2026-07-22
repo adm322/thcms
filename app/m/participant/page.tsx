@@ -44,7 +44,9 @@ export default async function MobileParticipantClassesPage({
       },
     },
     orderBy: { booking: { programDate: "asc" } },
-  }).catch(() => []);
+      take: 100,
+      skip: 0
+}).catch(() => []);
 
   const now     = new Date();
   const upcoming = participations.filter((p) => p.attendanceStatus === "PENDING" && p.booking && new Date(p.booking.programDate) >= now);

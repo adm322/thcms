@@ -48,6 +48,7 @@ export default async function MobileAdminInvoicesPage({
       },
       orderBy: { issuedAt: "desc" },
       take: 80,
+        skip: 0
     }).catch(() => []),
     prisma.invoice.groupBy({ by: ["status"], _count: true }).catch(() => []),
   ]);

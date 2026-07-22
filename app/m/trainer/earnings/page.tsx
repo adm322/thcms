@@ -28,7 +28,8 @@ export default async function MobileTrainerEarningsPage() {
     },
     orderBy: { programDate: "desc" },
     take: 60,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   const TOTAL_RATE   = 0.85; // trainer's cut
   const now          = new Date();

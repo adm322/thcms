@@ -16,7 +16,9 @@ export async function GET(
   const modules = await prisma.module.findMany({
     where: { programId },
     include: { quizzes: { include: { _count: { select: { questions: true } } } } },
-  });
+      take: 100,
+      skip: 0
+});
 
   const quizzes = modules.flatMap((m) =>
     m.quizzes.map((q) => ({

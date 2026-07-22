@@ -12,6 +12,7 @@ export const GET = withAuth(
         _count: { select: { programs: true } },
       },
       take: 200,
+        skip: 0
     });
 
     return NextResponse.json(

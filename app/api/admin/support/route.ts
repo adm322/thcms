@@ -9,7 +9,9 @@ export async function GET() {
   const tickets = await prisma.supportTicket.findMany({
     include: { hr: { select: { name: true, email: true } }, company: { select: { name: true } } },
     orderBy: { updatedAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
   return NextResponse.json(tickets);
 }
 

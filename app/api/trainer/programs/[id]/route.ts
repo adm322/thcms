@@ -94,24 +94,34 @@ export async function DELETE(
   }
 
   // Cascade delete: bookings → participants, evaluations, invoices, messages, reviews
-  const bookings = await prisma.booking.findMany({ where: { programId: id }, select: { id: true } });
+  const bookings = await prisma.booking.findMany({ where: { programId: id }, select: { id: true },
+      take: 100,
+      skip: 0
+});
   const bookingIds = bookings.map((b) => b.id);
   if (bookingIds.length > 0) {
-    await prisma.review.deleteMany({ where: { bookingId: { in: bookingIds } } });
-    await prisma.invoice.deleteMany({ where: { bookingId: { in: bookingIds } } });
-    await prisma.message.deleteMany({ where: { bookingId: { in: bookingIds } } });
-    await prisma.evaluation.deleteMany({ where: { bookingId: { in: bookingIds } } });
-    await prisma.participant.deleteMany({ where: { bookingId: { in: bookingIds } } });
+    await Promise.all([
+      prisma.review.deleteMany({ where: { bookingId: { in: bookingIds } } }),
+      prisma.invoice.deleteMany({ where: { bookingId: { in: bookingIds } } }),
+      prisma.message.deleteMany({ where: { bookingId: { in: bookingIds } } }),
+      prisma.evaluation.deleteMany({ where: { bookingId: { in: bookingIds } } }),
+      prisma.participant.deleteMany({ where: { bookingId: { in: bookingIds } } })
+    ]);
   }
   await prisma.booking.deleteMany({ where: { programId: id } });
   
   // Modules cascade to quizzes, questions, materials
-  const modules = await prisma.module.findMany({ where: { programId: id }, select: { id: true } });
+  const modules = await prisma.module.findMany({ where: { programId: id }, select: { id: true },
+      take: 100,
+      skip: 0
+});
   const moduleIds = modules.map((m) => m.id);
   if (moduleIds.length > 0) {
-    await prisma.question.deleteMany({ where: { quiz: { moduleId: { in: moduleIds } } } });
-    await prisma.quiz.deleteMany({ where: { moduleId: { in: moduleIds } } });
-    await prisma.material.deleteMany({ where: { moduleId: { in: moduleIds } } });
+    await Promise.all([
+      prisma.question.deleteMany({ where: { quiz: { moduleId: { in: moduleIds } } } }),
+      prisma.quiz.deleteMany({ where: { moduleId: { in: moduleIds } } }),
+      prisma.material.deleteMany({ where: { moduleId: { in: moduleIds } } })
+    ]);
   }
   await prisma.module.deleteMany({ where: { programId: id } });
 

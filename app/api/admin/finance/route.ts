@@ -46,6 +46,8 @@ export const GET = withAuth(
         },
       },
       orderBy: { issuedAt: "desc" },
+        take: 100,
+        skip: 0
     });
 
     // Pure read — compute breakdown in memory; never write on GET.

@@ -10,7 +10,9 @@ export async function GET(
   const items = await prisma.itineraryItem.findMany({
     where: { programId: id },
     orderBy: { orderIndex: "asc" },
-  });
+      take: 100,
+      skip: 0
+});
   return NextResponse.json(items);
 }
 

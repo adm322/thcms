@@ -78,6 +78,7 @@ export async function GET(request: NextRequest) {
       where: { hrId: session.id },
       orderBy: { createdAt: "desc" },
       take: 20,
+        skip: 0
     });
     return NextResponse.json(submissions);
   }
@@ -114,7 +115,9 @@ export async function POST(request: NextRequest) {
       const emps = await prisma.employee.findMany({
         where: { companyId: session.companyId },
         select: { name: true, dateJoined: true },
-      });
+          take: 100,
+          skip: 0
+    });
       // Approximate age from dateJoined (assume joined at ~25 years old)
       ages = emps.map(e => {
         if (!e.dateJoined) return 30;
