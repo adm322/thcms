@@ -15,10 +15,14 @@ export async function GET() {
     prisma.invoice.findMany({
       include: { booking: { select: { program: { select: { category: true } }, company: { select: { name: true } } } } },
       orderBy: { issuedAt: "asc" },
+        take: 100,
+        skip: 0
     }),
     prisma.booking.findMany({
       where: { status: { in: ["CONFIRMED", "PENDING", "COMPLETED"] } },
       include: { program: { select: { category: true } } },
+        take: 100,
+        skip: 0
     }),
   ]);
 

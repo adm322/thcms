@@ -28,6 +28,7 @@ export default async function MobileNotificationsPage() {
       where: { userId: session.id },
       orderBy: { createdAt: "desc" },
       take: 50,
+        skip: 0
     })
     .catch(() => []);
 

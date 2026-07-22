@@ -17,7 +17,9 @@ export async function GET() {
       programDate: { gte: twelveWeeksAgo, lte: now },
     },
     select: { programDate: true },
-  });
+      take: 100,
+      skip: 0
+});
 
   // Group by date
   const activityMap: Record<string, number> = {};

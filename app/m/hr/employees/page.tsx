@@ -50,7 +50,8 @@ export default async function MobileHREmployeesPage({
     },
     orderBy: { name: "asc" },
     take: 100,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   // Aggregate by department for the eyebrow stat.
   const departments = new Set(employees.map((e) => e.department).filter(Boolean));

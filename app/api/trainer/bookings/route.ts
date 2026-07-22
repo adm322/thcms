@@ -25,7 +25,9 @@ export async function GET(req: NextRequest) {
       participants: { select: { id: true } },
     },
     orderBy: { programDate: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   let filtered = bookings;
   if (search) {

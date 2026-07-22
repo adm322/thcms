@@ -26,10 +26,14 @@ export async function GET(request: NextRequest) {
         programDate: { gte: startOfMonth, lte: endOfMonth },
       },
       select: { programDate: true, program: { select: { title: true } }, company: { select: { name: true } } },
+        take: 100,
+        skip: 0
     }),
     prisma.trainerAvailability.findMany({
       where: { trainerId, status: "UNAVAILABLE", date: { gte: startOfMonth, lte: endOfMonth } },
       select: { date: true, reason: true },
+        take: 100,
+        skip: 0
     }),
   ]);
 

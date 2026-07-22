@@ -21,7 +21,8 @@ export const GET = withAuth(
         },
         orderBy: { featuredAt: "desc" },
         take: 6,
-      }),
+          skip: 0
+    }),
       prisma.program.findMany({
         where: { status: "PUBLISHED" },
         include: {
@@ -30,7 +31,8 @@ export const GET = withAuth(
         },
         orderBy: { createdAt: "desc" },
         take: 8,
-      }),
+          skip: 0
+    }),
     ]);
 
     return NextResponse.json({

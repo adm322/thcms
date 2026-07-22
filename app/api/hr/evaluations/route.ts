@@ -10,7 +10,9 @@ export async function GET() {
     where: { booking: { companyId: session.companyId } },
     include: { booking: { select: { program: { select: { title: true } } } } },
     orderBy: { createdAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(
     evaluations.map((e) => ({

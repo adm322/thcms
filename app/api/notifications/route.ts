@@ -11,6 +11,7 @@ export async function GET() {
       where: { userId: session.id },
       orderBy: { createdAt: "desc" },
       take: 50,
+        skip: 0
     });
 
     const unreadCount = await prisma.notification.count({

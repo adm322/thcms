@@ -13,7 +13,9 @@ export async function GET() {
       company: { select: { name: true } },
     },
     orderBy: { programDate: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   const data = bookings.map((b) => ({
     id: b.id,

@@ -11,7 +11,9 @@ export async function GET() {
     where: { moduleId: null, standalone: true }, // only standalone quizzes
     include: { _count: { select: { questions: true, quizResults: true } } },
     orderBy: { createdAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(quizzes.map(q => ({
     id: q.id, title: q.title, description: q.description,

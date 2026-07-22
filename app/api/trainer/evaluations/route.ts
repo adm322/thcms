@@ -19,7 +19,9 @@ export async function GET() {
       },
     },
     orderBy: { createdAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(
     evaluations.map((e) => ({

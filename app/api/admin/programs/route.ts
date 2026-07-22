@@ -34,7 +34,9 @@ export async function GET(request: NextRequest) {
           _count: { select: { bookings: true, modules: true } },
         },
         orderBy: [{ featured: "desc" }, { updatedAt: "desc" }],
-      }),
+          take: 100,
+          skip: 0
+    }),
       prisma.program.groupBy({
         by: ["status"],
         _count: true,

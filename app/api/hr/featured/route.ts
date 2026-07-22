@@ -10,7 +10,9 @@ export async function GET() {
       _count: { select: { bookings: true, modules: true } },
     },
     orderBy: { featuredAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(
     featured.map((p) => ({

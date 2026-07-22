@@ -21,7 +21,9 @@ export async function GET() {
       }
     },
     orderBy: { issuedAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(
     invoices.map((i) => ({

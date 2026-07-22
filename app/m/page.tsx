@@ -112,7 +112,9 @@ export default async function MobileHomePage() {
           },
         },
         orderBy: { booking: { programDate: "asc" } },
-      })
+          take: 100,
+          skip: 0
+    })
       .catch(() => []);
 
     const completed = participations.filter((p) => p.attendanceStatus === "PRESENT");

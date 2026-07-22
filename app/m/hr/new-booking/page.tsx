@@ -20,7 +20,8 @@ export default async function MobileHRNewBookingPage() {
     },
     orderBy: { createdAt: "desc" },
     take: 60,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   const options: ProgramOption[] = programs.map((p) => ({
     id: p.id,

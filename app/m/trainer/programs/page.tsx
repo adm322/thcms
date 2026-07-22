@@ -26,7 +26,8 @@ export default async function MobileTrainerProgramsPage() {
     },
     orderBy: { createdAt: "desc" },
     take: 60,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   const liveCount = programs.filter((p) => p.status === "PUBLISHED").length;
   const draftCount = programs.filter((p) => p.status === "DRAFT").length;

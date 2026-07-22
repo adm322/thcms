@@ -43,7 +43,8 @@ export default async function MobileHRCalendarPage() {
     },
     orderBy: { programDate: "asc" },
     take: 30,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   if (bookings.length === 0) {
     return (

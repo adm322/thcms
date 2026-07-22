@@ -21,7 +21,9 @@ export async function GET(request: NextRequest) {
     where,
     include: { employee: { select: { name: true, department: true } } },
     orderBy: { date: "asc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   // Build employee summary
   const empMap: Record<string, { name: string; dept: string; present: number; late: number; absent: number }> = {};

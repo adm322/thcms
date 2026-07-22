@@ -9,7 +9,9 @@ export async function GET() {
   const tickets = await prisma.supportTicket.findMany({
     where: { companyId: session.companyId },
     orderBy: { updatedAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(tickets);
 }

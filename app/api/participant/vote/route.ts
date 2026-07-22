@@ -14,7 +14,9 @@ export async function GET() {
       trainer: { select: { name: true } },
     },
     orderBy: { createdAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   const companyId = session.companyId;
   const employeeVoteMap = new Map<string, number>();
@@ -43,7 +45,9 @@ export async function GET() {
   const userVotes = await prisma.programVote.findMany({
     where: { hrId: session.id },
     select: { programId: true },
-  });
+      take: 100,
+      skip: 0
+});
   const votedIds = new Set(userVotes.map((v) => v.programId));
 
   return NextResponse.json(

@@ -20,7 +20,9 @@ export async function GET(
     where: { quizId },
     include: { participant: { select: { id: true, name: true, department: true, attendanceStatus: true } } },
     orderBy: { participant: { name: "asc" } },
-  });
+      take: 100,
+      skip: 0
+});
 
   const participants = results.map(r => ({ ...r.participant, quizScore: r.score }));
 

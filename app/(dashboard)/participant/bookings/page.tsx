@@ -42,6 +42,8 @@ export default async function ParticipantBookingsPage() {
         quizResults: { select: { id: true, score: true } },
       },
       orderBy: { booking: { programDate: "asc" } },
+        take: 100,
+        skip: 0
     })
     .catch(() => []);
 

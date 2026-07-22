@@ -36,7 +36,8 @@ export default async function MobileAdminTrainersPage({
     },
     orderBy: { createdAt: "desc" },
     take: 50,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   // Aggregate ratings across all trainers' completed bookings.
   const allEvalRows = await prisma.evaluation.findMany({
@@ -47,7 +48,9 @@ export default async function MobileAdminTrainersPage({
       },
     },
     select: { summaryScore: true, booking: { select: { program: { select: { trainerId: true } } } } },
-  }).catch(() => []);
+      take: 100,
+      skip: 0
+}).catch(() => []);
 
   const ratingByTrainer = new Map<string, { sum: number; count: number }>();
   allEvalRows.forEach((e) => {

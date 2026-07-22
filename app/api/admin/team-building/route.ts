@@ -19,7 +19,9 @@ export async function GET(request: NextRequest) {
       company: { select: { name: true } },
     },
     orderBy: { createdAt: "desc" },
-  });
+      take: 100,
+      skip: 0
+});
 
   return NextResponse.json(requests.map(r => ({
     id: r.id, eventName: r.eventName, hrName: r.hr.name, hrEmail: r.hr.email,

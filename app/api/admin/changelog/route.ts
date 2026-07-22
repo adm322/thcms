@@ -10,7 +10,8 @@ export async function GET() {
     include: { author: { select: { name: true } } },
     orderBy: { createdAt: "desc" },
     take: 20,
-  });
+      skip: 0
+});
 
   return NextResponse.json(entries);
 }

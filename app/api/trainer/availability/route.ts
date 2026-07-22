@@ -22,7 +22,9 @@ export async function GET(request: NextRequest) {
       programDate: { gte: startOfMonth, lte: endOfMonth },
     },
     select: { programDate: true, program: { select: { title: true } }, company: { select: { name: true } } },
-  });
+      take: 100,
+      skip: 0
+});
 
   // Get trainer's unavailable dates
   const unavailable = await prisma.trainerAvailability.findMany({
@@ -32,7 +34,9 @@ export async function GET(request: NextRequest) {
       date: { gte: startOfMonth, lte: endOfMonth },
     },
     select: { date: true, reason: true },
-  });
+      take: 100,
+      skip: 0
+});
 
   // Build day-by-day grid
   const daysInMonth = endOfMonth.getDate();

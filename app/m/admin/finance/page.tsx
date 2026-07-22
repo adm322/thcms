@@ -51,7 +51,8 @@ export default async function MobileAdminFinancePage() {
     },
     orderBy: { issuedAt: "desc" },
     take: 60,
-  }).catch(() => []);
+      skip: 0
+}).catch(() => []);
 
   // Aggregate paid invoices
   const withBd = invoices.map((inv) => ({ ...inv, ...breakdown(inv) }));
