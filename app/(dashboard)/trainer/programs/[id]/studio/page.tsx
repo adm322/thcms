@@ -346,7 +346,7 @@ export default function StudioPage({ params }: PageProps) {
             <RAGChat
               programId={id}
               programTitle={studio.programTitle}
-              className="h-[500px]"
+              className="h-[32rem]"
             />
           </TabsContent>
         </Tabs>

@@ -20,8 +20,8 @@ function AdminDashboardSkeleton() {
         ))}
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <Skeleton className="col-span-4 h-[400px] rounded-xl" />
-        <Skeleton className="col-span-3 h-[400px] rounded-xl" />
+        <Skeleton className="col-span-4 h-96 rounded-xl" />
+        <Skeleton className="col-span-3 h-96 rounded-xl" />
       </div>
     </div>
   );

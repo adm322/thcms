@@ -371,7 +371,7 @@ export function AdminDashboardSkeleton() {
             <Skeleton className="h-8 w-24" />
           </div>
           {/* Calendar grid */}
-          <Skeleton className="h-[400px] w-full rounded-lg" />
+          <Skeleton className="h-96 w-full rounded-lg" />
         </CardContent>
       </Card>
 

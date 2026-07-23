@@ -163,7 +163,7 @@ export function SlideRenderer({
             TH
           </div>
           {programTitle ? (
-            <span className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 truncate max-w-[180px]">
+            <span className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 truncate max-w-44">
               {programTitle}
             </span>
           ) : null}

@@ -18,7 +18,7 @@ export function MonthGrid({
   isToday,
   onEventClick,
 }: MonthGridProps) {
-  const cellHeight = compact ? "h-[70px]" : "h-[100px]";
+  const cellHeight = compact ? "h-16" : "h-24";
   const textSize = compact ? "text-[9px]" : "text-[10px]";
 
   const weeks: (number | null)[][] = [];
@@ -129,7 +129,7 @@ export function MonthGrid({
               return (
                 <div
                   key={`empty-${idx}`}
-                  className="min-h-[85px] bg-muted/5 rounded-md border-0"
+                  className="min-h-20 bg-muted/5 rounded-md border-0"
                 />
               );
             }
@@ -141,7 +141,7 @@ export function MonthGrid({
               <div
                 key={`day-${day}`}
                 className={cn(
-                  "min-h-[85px] bg-card hover:bg-accent/30 rounded-md p-1 flex flex-col justify-between transition-colors border-0",
+                  "min-h-20 bg-card hover:bg-accent/30 rounded-md p-1 flex flex-col justify-between transition-colors border-0",
                   isCellToday && "ring-1 ring-primary/30 bg-primary/5"
                 )}
               >

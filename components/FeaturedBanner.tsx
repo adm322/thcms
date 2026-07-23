@@ -59,7 +59,7 @@ export function FeaturedBanner({ programs }: { programs: FeaturedProgram[] }) {
 
       {/* Content */}
       <div className="relative z-10">
-        <div className="flex flex-col lg:flex-row min-h-[280px]">
+        <div className="flex flex-col lg:flex-row min-h-72">
           {/* Left: Program Info */}
           <div className="flex-1 p-8 lg:p-10 flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-3">

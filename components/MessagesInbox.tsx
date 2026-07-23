@@ -123,7 +123,7 @@ export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" | "ADMI
             {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-lg" />)}
           </div>
           <div className="lg:col-span-2">
-            <Skeleton className="h-[500px] w-full rounded-lg" />
+            <Skeleton className="h-[32rem] w-full rounded-lg" />
           </div>
         </div>
       </div>
@@ -139,7 +139,7 @@ export default function MessagesInbox({ role }: { role: "HR" | "TRAINER" | "ADMI
         </p>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3 h-[calc(100vh-220px)] min-h-[500px]">
+      <div className="grid gap-4 lg:grid-cols-3 h-[calc(100vh-220px)] min-h-[32rem]">
         {/* Conversation list */}
         <Card className="lg:col-span-1 overflow-hidden flex flex-col">
           <div className="border-b px-4 py-3">

@@ -115,8 +115,8 @@ export default function MobilePublicQuiz({
   if (screen === "intro") {
     return (
       <div className="min-h-dvh bg-slate-50 text-slate-800 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-violet-500/10 blur-[80px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-fuchsia-500/10 blur-[80px] pointer-events-none" />
+        <div className="absolute top-[-20%] left-[-10%] w-3/5 h-3/5 rounded-full bg-violet-500/10 blur-[80px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-2/5 h-2/5 rounded-full bg-fuchsia-500/10 blur-[80px] pointer-events-none" />
 
         {/* Back link */}
         <Link
