@@ -129,7 +129,7 @@ export default function ScanQRPage() {
 
           {!success && !checkingIn && (
             <div className="space-y-4">
-              <div className="relative w-full min-h-[300px] bg-muted flex items-center justify-center rounded-lg overflow-hidden border">
+              <div className="relative w-full min-h-72 bg-muted flex items-center justify-center rounded-lg overflow-hidden border">
                 {/* ponytail: keep reader completely empty of React children so html5-qrcode can manipulate the DOM without React conflicts */}
                 <div id="reader" className="w-full" />
                 

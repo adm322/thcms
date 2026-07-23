@@ -205,7 +205,7 @@ export default function FeedbackDialog({
                       placeholder="Type your response here..."
                       value={answers[idx]?.comment || ""}
                       onChange={(e) => handleCommentChange(idx, e.target.value)}
-                      className="min-h-[80px] rounded-md text-sm text-foreground border-input focus-visible:ring-ring bg-card mt-1"
+                      className="min-h-20 rounded-md text-sm text-foreground border-input focus-visible:ring-ring bg-card mt-1"
                     />
                   )}
                 </div>

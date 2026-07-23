@@ -207,7 +207,7 @@ export function SlideDeck({ slidesJson, programTitle, className }: SlideDeckProp
 
       <div className="flex gap-4 h-full">
         {/* Left thumbnail strip */}
-        <div className="flex flex-col gap-2 w-16 shrink-0 overflow-y-auto max-h-[500px] pr-1">
+        <div className="flex flex-col gap-2 w-16 shrink-0 overflow-y-auto max-h-[32rem] pr-1">
           {slides.map((slide, i) => {
             const slideType = slide && "type" in slide ? slide.type : undefined;
             const Icon = slideType ? TYPE_ICONS[slideType] : LayoutTemplate;

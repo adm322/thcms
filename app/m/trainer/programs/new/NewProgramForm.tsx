@@ -104,7 +104,7 @@ export function NewProgramForm({ categories, locationTypes }: Props) {
       <WizardStepper steps={STEPS.map((s) => ({ label: s.label, icon: s.icon }))} current={step} />
 
       <div
-        className="bg-card border border-border rounded-3xl shadow-sm p-5 min-h-[280px]"
+        className="bg-card border border-border rounded-3xl shadow-sm p-5 min-h-72"
         key={step /* re-mount on step change so animations feel snappy */}
       >
         {err && (

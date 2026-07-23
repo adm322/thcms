@@ -227,7 +227,7 @@ export function RAGChat({ programId, className, programTitle }: RAGChatProps) {
           onKeyDown={handleKeyDown}
           placeholder="Ask about the program content…"
           rows={1}
-          className="min-h-[44px] max-h-[120px] resize-none"
+          className="min-h-11 max-h-32 resize-none"
         />
         <Button
           size="icon"

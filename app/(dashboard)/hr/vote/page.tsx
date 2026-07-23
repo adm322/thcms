@@ -146,7 +146,7 @@ export default function VotePage() {
                       size="sm"
                       variant={p.voted ? "default" : "outline"}
                       onClick={() => toggleVote(p.id)}
-                      className="min-w-[80px]"
+                      className="min-w-20"
                     >
                       {p.voted ? "Voted ✓" : "Vote"}
                     </Button>

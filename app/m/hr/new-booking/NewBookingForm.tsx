@@ -140,7 +140,7 @@ export function NewBookingForm({ programs }: { programs: ProgramOption[] }) {
       <WizardStepper steps={STEPS.map((s) => ({ label: s.label, icon: s.icon }))} current={step} />
 
       <div
-        className="bg-card border border-border rounded-3xl shadow-sm p-5 min-h-[280px]"
+        className="bg-card border border-border rounded-3xl shadow-sm p-5 min-h-72"
         key={step}
       >
         {err && (
@@ -226,7 +226,7 @@ function ProgramStep({
 
       <div>
         <Label>Program</Label>
-        <div className="space-y-2 max-h-[280px] overflow-y-auto -mx-1 px-1">
+        <div className="space-y-2 max-h-72 overflow-y-auto -mx-1 px-1">
           {programs.map((p) => {
             const active = p.id === selectedId;
             return (

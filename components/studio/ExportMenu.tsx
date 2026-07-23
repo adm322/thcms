@@ -111,7 +111,7 @@ export function ExportMenu({ programId, disabled, className }: ExportMenuProps) 
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-20 mt-2 min-w-[200px] rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg overflow-hidden"
+          className="absolute right-0 z-20 mt-2 min-w-48 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg overflow-hidden"
         >
           <button
             type="button"
